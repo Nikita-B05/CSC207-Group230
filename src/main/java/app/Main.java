@@ -5,6 +5,7 @@ import javax.swing.JFrame;
 /**
  * The Main class of our application.
  */
+
 public class Main {
     /**
      * Builds and runs the CA architecture of the application.
