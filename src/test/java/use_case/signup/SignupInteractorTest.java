@@ -1,6 +1,6 @@
 package use_case.signup;
 
-import data_access.InMemoryUserDataAccessObject;
+import data_access.DBUserDataAccessObject;
 import entity.CommonUserFactory;
 import entity.User;
 import entity.UserFactory;
@@ -15,7 +15,7 @@ class SignupInteractorTest {
     @Test
     void successTest() {
         SignupInputData inputData = new SignupInputData("Paul", "password", "password");
-        SignupUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
+        SignupUserDataAccessInterface userRepository = new DBUserDataAccessObject(new CommonUserFactory());
 
         // This creates a successPresenter that tests whether the test case is as we expect.
         SignupOutputBoundary successPresenter = new SignupOutputBoundary() {
@@ -44,7 +44,7 @@ class SignupInteractorTest {
     @Test
     void failurePasswordMismatchTest() {
         SignupInputData inputData = new SignupInputData("Paul", "password", "wrong");
-        SignupUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
+        SignupUserDataAccessInterface userRepository = new DBUserDataAccessObject(new CommonUserFactory());
 
         // This creates a presenter that tests whether the test case is as we expect.
         SignupOutputBoundary failurePresenter = new SignupOutputBoundary() {
@@ -72,7 +72,7 @@ class SignupInteractorTest {
     @Test
     void failureUserExistsTest() {
         SignupInputData inputData = new SignupInputData("Paul", "password", "wrong");
-        SignupUserDataAccessInterface userRepository = new InMemoryUserDataAccessObject();
+        SignupUserDataAccessInterface userRepository = new DBUserDataAccessObject(new CommonUserFactory());
 
         // Add Paul to the repo so that when we check later they already exist
         UserFactory factory = new CommonUserFactory();
