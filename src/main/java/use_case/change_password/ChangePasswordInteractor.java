@@ -21,12 +21,19 @@ public class ChangePasswordInteractor implements ChangePasswordInputBoundary {
 
     @Override
     public void execute(ChangePasswordInputData changePasswordInputData) {
-        final User user = userFactory.create(changePasswordInputData.getUsername(),
-                                             changePasswordInputData.getPassword());
-        userDataAccessObject.changePassword(user);
+         if (changePasswordInputData.getPassword().isEmpty()) {
+             userPresenter.prepareFailView("Password cannot be empty.");
+        }
+        else if (changePasswordInputData.getPassword().length() < 8) {
+             userPresenter.prepareFailView("Password must be at least 8 characters.");
+        } else {
+             final User user = userFactory.create(changePasswordInputData.getUsername(),
+                     changePasswordInputData.getPassword());
+             userDataAccessObject.changePassword(user);
 
-        final ChangePasswordOutputData changePasswordOutputData = new ChangePasswordOutputData(user.getName(),
-                                                                                  false);
-        userPresenter.prepareSuccessView(changePasswordOutputData);
+             final ChangePasswordOutputData changePasswordOutputData = new ChangePasswordOutputData(user.getName(),
+                     false);
+             userPresenter.prepareSuccessView(changePasswordOutputData);
+         }
     }
 }
