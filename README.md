@@ -6,6 +6,10 @@ decisions. Players guide a character through life stages, facing real-world fina
 worth, happiness, and quality of life. By simulating financial decision-making, the game offers a fun, practical way to
 build financial literacy and understand the long-term effects of money management.
 
+**Wireframe** - [Figma Design](https://www.figma.com/design/0SzucedTjg2vrtVMyMrMeA/CSC207-Group230---Finance-Game-Wireframe?node-id=0-1&t=UUBZOjHSskBEjrA8-1)
+
+---
+
 ### Team Members
 - Nikita Banetski - [Nikita-B05](https://github.com/Nikita-B05)
 - Hrithik Shah - [hrithik-shah](https://github.com/hrithik-shah)
