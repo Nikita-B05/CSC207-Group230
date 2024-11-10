@@ -10,7 +10,7 @@ build financial literacy and understand the long-term effects of money managemen
 
 ---
 
-### Team Members
+## Team Members
 - Nikita Banetski - [Nikita-B05](https://github.com/Nikita-B05)
 - Hrithik Shah - [hrithik-shah](https://github.com/hrithik-shah)
 - Abhi Prajapati - [abhi-praj](https://github.com/abhi-praj)
@@ -18,9 +18,42 @@ build financial literacy and understand the long-term effects of money managemen
 
 ---
 
-### User Stories, Cases, and Interactions
+## Entities
 
-#### **User Story 1: Playing the Finance Game**
+### User
+  - name: String
+  - character: Image
+  - happiness: int
+  - qualityOfLife: int
+  - assets: Assets
+  - liabilities: Liabilities
+  - newWorth: int
+  - decisions: ArrayList<HashMap<String, Object>>
+
+### Assets
+  - home: int
+  - stocks: ArrayList<Stock>
+  - cash: int
+  - car: int
+
+### Liabilities
+  - loan: int
+  - creditCard: int
+  - other recuring expenses
+
+### Stock
+  - stockCode: String
+  - quantity: int
+  - buyPrice: double
+  - sellPrice: double
+  - netResult: double
+  - multiplier: int
+
+---
+
+## User Stories, Cases, and Interactions
+
+#### **User Story 1: Playing the Finance Game - Nikita**
 *As a student, I want to play a finance game where I make financial decisions that shape my character’s net worth,
 happiness, and quality of life so that I can learn how financial choices impact long-term outcomes.*
 
@@ -34,7 +67,7 @@ happiness, and quality of life so that I can learn how financial choices impact 
 
 ---
 
-#### **User Story 2: Logging In / Signing Up**
+#### **User Story 2: Logging In / Signing Up - Hrithik/Nikita**
 *As a new user, I want to sign up with a unique username and password so that I can create a secure account for the
 game. As a returning user, I want to log in with my username and password so that I can access my account.*
 
@@ -47,7 +80,7 @@ game. As a returning user, I want to log in with my username and password so tha
 
 ---
 
-#### **User Story 3: Character Customization**
+#### **User Story 3: Character Customization - Hrithik**
 *As a player, I want to customize my character by selecting an avatar and setting a character name so that I can
 personalize my gaming experience.*
 
@@ -60,7 +93,7 @@ personalize my gaming experience.*
 
 ---
 
-#### **User Story 4: Viewing Logs of Previous Decisions**
+#### **User Story 4: Viewing Logs of Previous Decisions - Marina**
 *As a player, I want to view the logs of my past decisions to see how they impacted my character’s metrics so that I
 can reflect on my choices and learn from them.*
 
@@ -72,7 +105,7 @@ can reflect on my choices and learn from them.*
 
 ---
 
-#### **User Story 5: Profile Settings Management**
+#### **User Story 5: Profile Settings Management - Abhi**
 *As a user, I want to manage my profile settings, including changing my password and logging out, so that I can keep
 my account secure and control my access.*
 
