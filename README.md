@@ -112,10 +112,12 @@ my account secure and control my access.*
 - **Use Cases**:
     - **Change Password**: Users update their password.
     - **Log Out**: Users sign out of their account.
+    - **Changing UI Mode**: Users can select the UI of their program to be in dark mode or light
 
 - **User Interactions**:
     - Use the “Change Password” button to go to a page for password updates.
     - Use the “Log Out” button to return to the login page.
+    - Use the Dark Mode checkbox to switch dark mode on or off.
 
 
 ---
