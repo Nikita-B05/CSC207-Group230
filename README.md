@@ -80,7 +80,7 @@ game. As a returning user, I want to log in with my username and password so tha
 
 ---
 
-#### **User Story 3: Character Customization - Hrithik**
+#### **User Story 3: Character Customization - Nikita**
 *As a player, I want to customize my character by selecting an avatar and setting a character name so that I can
 personalize my gaming experience.*
 
