@@ -9,20 +9,20 @@ public interface HomepageOutputBoundary {
     /**
      * Switches to the Character View.
      */
-    void switchToCharacterView();
+    void switchToAvatarView(HomepageOutputData homepageOutputData);
 
     /**
      * Switches to the Game View.
      */
-    void switchToGameView();
+    void switchToPlayGameView(HomepageOutputData homepageOutputData);
 
     /**
      * Switches to the Decision View.
      */
-    void switchToDecisionView();
+    void switchToDecisionLogView(HomepageOutputData homepageOutputData);
 
     /**
      * Switches to the Profile View.
      */
-    void switchToProfileView();
+    void switchToProfileSettingsView(HomepageOutputData homepageOutputData);
 }

@@ -5,26 +5,26 @@ import java.util.HashMap;
 import java.util.Objects;
 
 public class HomepageInputData {
-    private final int character;
+    private final String username;
     private final String name;
-    private final ArrayList<HashMap<String, Objects>> decisions;
+    private final Avatar avatar;
 
-    public HomepageInputData(String name, ArrayList<HashMap<String, Objects>> decisions, int character) {
+    public HomepageInputData(String username, String name, Avatar avatar) {
+        this.username = username;
         this.name = name;
-        this.decisions = decisions;
-        this.character = character;
+        this.avatar = avatar;
     }
 
+
+    public String getUsername() {
+        return username;
+    }
 
     public String getName() {
         return name;
     }
 
-    public int getCharacter() {
-        return character;
-    }
-
-    public ArrayList<HashMap<String, Objects>> getDecisions() {
-        return decisions;
+    public Avatar getAvatar() {
+        return avatar;
     }
 }

@@ -15,14 +15,22 @@ public class HomepageInteractor implements HomepageInputBoundary  {
     }
 
     @Override
-    public void switchToCharacterView() { homepagePresenter.switchToCharacterView(); }
+    public void switchToAvatarView(HomepageInputData homepageInputData) {
+        homepagePresenter.switchToAvatarView(new HomepageOutputData(homepageInputData.getUsername()));
+    }
 
     @Override
-    public void switchToGameView() { homepagePresenter.switchToGameView(); }
+    public void switchToPlayGameView(HomepageInputData homepageInputData) {
+        homepagePresenter.switchToPlayGameView(new HomepageOutputData(homepageInputData.getUsername()));
+    }
 
     @Override
-    public void switchToDecisionView() { homepagePresenter.switchToDecisionView(); }
+    public void switchToDecisionLogView(HomepageInputData homepageInputData) {
+        homepagePresenter.switchToDecisionLogView(new HomepageOutputData(homepageInputData.getUsername()));
+    }
 
     @Override
-    public void switchToProfileView() { homepagePresenter.switchToProfileView(); }
+    public void switchToProfileSettingsView(HomepageInputData homepageInputData) {
+        homepagePresenter.switchToProfileSettingsView(new HomepageOutputData(homepageInputData.getUsername()));
+    }
 }
