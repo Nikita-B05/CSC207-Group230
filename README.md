@@ -72,8 +72,8 @@ happiness, and quality of life so that I can learn how financial choices impact 
 game. As a returning user, I want to log in with my username and password so that I can access my account.*
 
 - **Use Cases**:
-    - **Sign Up**: Create a unique username and password (minimum of 8 characters).
-    - **Login**: Enter username and password to access the game.
+    - Sign Up: Create a unique username and password (minimum of 8 characters).
+    - Login: Enter username and password to access the game.
 
 - **User Interactions**:
     - Enter username and password to sign up or log in.
@@ -110,14 +110,27 @@ can reflect on my choices and learn from them.*
 my account secure and control my access.*
 
 - **Use Cases**:
-    - **Change Password**: Users update their password.
-    - **Log Out**: Users sign out of their account.
-    - **Changing UI Mode**: Users can select the UI of their program to be in dark mode or light
+    - Change Password: Users update their password.
+    - Log Out: Users sign out of their account.
+    - Changing UI Mode: Users can select the UI of their program to be in dark mode or light
 
 - **User Interactions**:
     - Use the “Change Password” button to go to a page for password updates.
     - Use the “Log Out” button to return to the login page.
     - Use the Dark Mode checkbox to switch dark mode on or off.
 
+
+---
+
+#### **User Story 6: Homepage - Hrithik**
+*As a player, I want to access the homepage to see general information about the game so that I can learn about
+its purpose and how to play.*
+
+- **Use Case**:
+    - View Homepage: Users access the homepage to learn about the game and its features.
+
+- **User Interactions**:
+    - Access the homepage to learn about the game and its features.
+    - View general information about the game, including its purpose and how to play.
 
 ---
