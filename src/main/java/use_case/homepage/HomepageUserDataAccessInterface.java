@@ -1,5 +1,6 @@
 package use_case.homepage;
 
+import entity.GameUser;
 import entity.User;
 
 /**
@@ -7,4 +8,10 @@ import entity.User;
  */
 public interface HomepageUserDataAccessInterface {
     // TODO
+    /**
+     * Returns the user with the given username.
+     * @param username the username to look up
+     * @return the user with the given username
+     */
+    GameUser get(String username);
 }
