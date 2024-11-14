@@ -3,8 +3,8 @@ package entity;
 import java.util.ArrayList;
 
 public class GameUser implements User{
-    private final String name
-    private final String password;
+    private String name;
+    private String password;
 
     private String characterName;
     private Avatar avatar;
@@ -17,6 +17,28 @@ public class GameUser implements User{
     public GameUser(String name, String password) {
         this.name = name;
         this.password = password;
+    }
+
+    public GameUser(
+            String name,
+            String password,
+            String characterName,
+            Avatar avatar,
+            int happiness,
+            int qualiftyOfLife,
+            Assets assets,
+            Liabilities liabilities,
+            ArrayList<Decision> decisions
+    ) {
+        this.name = name;
+        this.password = password;
+        this.characterName = characterName;
+        this.avatar = avatar;
+        this.happiness = happiness;
+        this.qualiftyOfLife = qualiftyOfLife;
+        this.assets = assets;
+        this.liabilities = liabilities;
+        this.decisions = decisions;
     }
 
     @Override
@@ -87,5 +109,13 @@ public class GameUser implements User{
 
     public int getNetWork() {
         return assets.getTotal() - liabilities.getTotal();
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
