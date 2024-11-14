@@ -27,7 +27,6 @@ build financial literacy and understand the long-term effects of money managemen
   - qualityOfLife: int
   - assets: Assets
   - liabilities: Liabilities
-  - newWorth: int
   - decisions: ArrayList<Decision>
 
 ### Assets
@@ -51,6 +50,7 @@ build financial literacy and understand the long-term effects of money managemen
 
 ### Decision
   - type: String
+  - question: String
   - value: String
 
 ---
