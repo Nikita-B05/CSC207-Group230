@@ -84,4 +84,8 @@ public class GameUser implements User{
     public void setDecisions(ArrayList<Decision> decisions) {
         this.decisions = decisions;
     }
+
+    public int getNetWork() {
+        return assets.getTotal() - liabilities.getTotal();
+    }
 }

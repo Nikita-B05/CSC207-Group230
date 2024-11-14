@@ -26,7 +26,7 @@ public class Assets {
         return home;
     }
 
-    public ArrayList<Stock> getStocks {
+    public ArrayList<Stock> getStocks() {
         return stocks;
     }
 
@@ -36,5 +36,16 @@ public class Assets {
 
     public int getCar() {
         return car;
+    }
+
+    public int getTotal() {
+        int total = 0;
+        total += home;
+        for (Stock stock : stocks) {
+            total += stock.getTotal();
+        }
+        total += cash;
+        total += car;
+        return total;
     }
 }
