@@ -26,7 +26,7 @@ public class DecisionHistoryPage extends JPanel {
         add(scrollPane, BorderLayout.CENTER);
 
         // Add a button to go back to the homepage
-        JButton backButton = new JButton("Back to Homepage");
+        JButton backButton = new JButton("Homepage");
         backButton.addActionListener(e -> {
             // Logic to navigate back to the homepage (this could be implemented by switching panels)
             System.out.println("Back to Homepage clicked");
