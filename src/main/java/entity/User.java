@@ -17,4 +17,14 @@ public interface User {
      */
     String getPassword();
 
+    /**
+     * Returns the ui mode of the user
+     * @return the boolean that represents if the user is on darkmode or not
+     */
+    Boolean getDarkMode();
+
+    /**
+     * Sets whether the user is using dark mode or not
+     */
+    void setDarkMode(Boolean darkMode);
 }

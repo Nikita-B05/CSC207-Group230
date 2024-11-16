@@ -7,10 +7,12 @@ public class CommonUser implements User {
 
     private final String name;
     private final String password;
+    private Boolean darkMode;
 
     public CommonUser(String name, String password) {
         this.name = name;
         this.password = password;
+        this.darkMode = false;
     }
 
     @Override
@@ -23,4 +25,11 @@ public class CommonUser implements User {
         return password;
     }
 
+    public Boolean getDarkMode() {
+        return darkMode;
+    }
+
+    public void setDarkMode(Boolean darkMode) {
+        this.darkMode = darkMode;
+    }
 }
