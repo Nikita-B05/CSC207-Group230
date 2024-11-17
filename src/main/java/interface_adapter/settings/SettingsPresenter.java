@@ -1,5 +1,6 @@
 package interface_adapter.settings;
 
+import interface_adapter.ViewManagerModel;
 import use_case.settings.SettingsOutputBoundary;
 import use_case.settings.SettingsOutputData;
 
@@ -8,14 +9,17 @@ import use_case.settings.SettingsOutputData;
  */
 public class SettingsPresenter implements SettingsOutputBoundary {
     private final SettingsViewModel viewModel;
+    private final ViewManagerModel viewManagerModel;
 
-    public SettingsPresenter(SettingsViewModel viewModel) {
+    public SettingsPresenter(SettingsViewModel viewModel, ViewManagerModel viewManagerModel) {
         this.viewModel = viewModel;
+        this.viewManagerModel = viewManagerModel;
     }
 
     @Override
     public void prepareChangePasswordView() {
-        viewModel.firePropertyChanged("navigateToChangePassword");
+        viewManagerModel.setState("changePassword");
+        viewManagerModel.firePropertyChanged("viewChange");
     }
 
     @Override

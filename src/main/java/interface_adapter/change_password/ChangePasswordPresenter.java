@@ -1,6 +1,5 @@
 package interface_adapter.change_password;
 
-import interface_adapter.signup.SignupState;
 import use_case.change_password.ChangePasswordOutputBoundary;
 import use_case.change_password.ChangePasswordOutputData;
 
@@ -9,27 +8,23 @@ import use_case.change_password.ChangePasswordOutputData;
  */
 public class ChangePasswordPresenter implements ChangePasswordOutputBoundary {
 
-    private final LoggedInViewModel loggedInViewModel;
+    private final ChangePasswordViewModel changePasswordViewModel;
 
-    public ChangePasswordPresenter(LoggedInViewModel loggedInViewModel) {
-        this.loggedInViewModel = loggedInViewModel;
+    public ChangePasswordPresenter(ChangePasswordViewModel changePasswordViewModel) {
+        this.changePasswordViewModel = changePasswordViewModel;
     }
 
     @Override
     public void prepareSuccessView(ChangePasswordOutputData outputData) {
-        // currently there isn't anything to change based on the output data,
-        // since the output data only contains the username, which remains the same.
-        // We still fire the property changed event, but just to let the view know that
-        // it can alert the user that their password was changed successfully.
-        loggedInViewModel.firePropertyChanged("password");
+        changePasswordViewModel.firePropertyChanged("passwordChanged");
     }
 
     @Override
     public void prepareFailView(String error) {
-        final LoggedInState loggedInState = loggedInViewModel.getState();
+        final LoggedInState loggedInState = changePasswordViewModel.getState();
         loggedInState.setPasswordError(error);
-        loggedInViewModel.firePropertyChanged();
+        changePasswordViewModel.firePropertyChanged();
         loggedInState.setPasswordError(null);
-        loggedInViewModel.firePropertyChanged();
+        changePasswordViewModel.firePropertyChanged();
     }
 }
