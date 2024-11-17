@@ -6,4 +6,6 @@ package use_case.settings;
 public interface SettingsUserDataAccessInterface {
     String getCurrentUsername();
     void setCurrentUsername(String username);
+    void setDarkMode(boolean darkModeEnabled);
+    boolean isDarkModeEnabled();
 }

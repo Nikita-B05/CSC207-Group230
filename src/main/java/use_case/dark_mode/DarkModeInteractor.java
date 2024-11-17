@@ -1,13 +1,16 @@
 package use_case.dark_mode;
 
+import data_access.DBUserDataAccessObject;
 import entity.User;
 
+/**
+ * Dark Mode Interactor directly using DBUserDataAccessObject.
+ */
 public class DarkModeInteractor implements DarkModeInputBoundary {
     private final DarkModeOutputBoundary outputBoundary;
-    private final DarkModeUserDataAccessInterface userDataAccess;
+    private final DBUserDataAccessObject userDataAccess;
 
-    public DarkModeInteractor(DarkModeOutputBoundary outputBoundary,
-                              DarkModeUserDataAccessInterface userDataAccess) {
+    public DarkModeInteractor(DarkModeOutputBoundary outputBoundary, DBUserDataAccessObject userDataAccess) {
         this.outputBoundary = outputBoundary;
         this.userDataAccess = userDataAccess;
     }
