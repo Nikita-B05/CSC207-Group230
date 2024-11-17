@@ -17,4 +17,13 @@ public class SettingsViewModel extends ViewModel<SettingsState> {
         getState().setDarkModeEnabled(!currentMode);
         firePropertyChanged("darkMode");
     }
+
+    public void setDarkMode(boolean isDarkMode) {
+        getState().setDarkModeEnabled(isDarkMode);
+        firePropertyChanged("darkMode");
+    }
+
+    public void navigateToChangePasswordView() {
+        firePropertyChanged("navigateToChangePassword");
+    }
 }

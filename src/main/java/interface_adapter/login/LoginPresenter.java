@@ -1,7 +1,8 @@
 package interface_adapter.login;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.change_password.LoggedInState;
+import interface_adapter.settings.SettingsViewModel;
+import interface_adapter.settings.SettingsState;  // Import SettingsState
 import interface_adapter.signup.SignupViewModel;
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginOutputData;
@@ -12,42 +13,42 @@ import use_case.login.LoginOutputData;
 public class LoginPresenter implements LoginOutputBoundary {
 
     private final LoginViewModel loginViewModel;
-    private final LoggedInViewModel loggedInViewModel;
+    private final SettingsViewModel settingsViewModel;
     private final ViewManagerModel viewManagerModel;
-    private SignupViewModel signupViewModel;
+    private final SignupViewModel signupViewModel;
 
     public LoginPresenter(ViewManagerModel viewManagerModel,
-                          LoggedInViewModel loggedInViewModel,
+                          SettingsViewModel settingsViewModel,
                           LoginViewModel loginViewModel,
                           SignupViewModel signupViewModel) {
         this.viewManagerModel = viewManagerModel;
-        this.loggedInViewModel = loggedInViewModel;
+        this.settingsViewModel = settingsViewModel;
         this.loginViewModel = loginViewModel;
         this.signupViewModel = signupViewModel;
     }
 
     @Override
     public void prepareSuccessView(LoginOutputData response) {
-        // On success, switch to the logged in view.
+        SettingsState newState = new SettingsState();
+        newState.setUsername(response.getUsername());
+        newState.setDarkModeEnabled(false);
 
-        final LoggedInState loggedInState = loggedInViewModel.getState();
-        loggedInState.setUsername(response.getUsername());
-        this.loggedInViewModel.setState(loggedInState);
-        this.loggedInViewModel.firePropertyChanged();
+        settingsViewModel.setState(newState);
 
-        this.viewManagerModel.setState(loggedInViewModel.getViewName());
-        this.viewManagerModel.firePropertyChanged();
+        viewManagerModel.setState(settingsViewModel.getViewName());
+        viewManagerModel.firePropertyChanged("view");
     }
 
     @Override
     public void prepareFailView(String error) {
-        final LoginState loginState = loginViewModel.getState();
+        LoginState loginState = loginViewModel.getState();
         loginState.setLoginError(error);
-        loginViewModel.firePropertyChanged();
+        loginViewModel.firePropertyChanged("loginError");
     }
+
     @Override
     public void switchToSignUpView() {
         viewManagerModel.setState(signupViewModel.getViewName());
-        viewManagerModel.firePropertyChanged();
+        viewManagerModel.firePropertyChanged("view");
     }
 }

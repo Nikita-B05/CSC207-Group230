@@ -21,9 +21,16 @@ public class SignupController {
      * @param password2 the password repeated
      */
     public void execute(String username, String password1, String password2) {
+        System.out.println("Executing Signup Use Case with:");
+        System.out.println("Username: " + username);
+        System.out.println("Password1: " + password1);
+        System.out.println("Password2: " + password2);
         final SignupInputData signupInputData = new SignupInputData(
                 username, password1, password2);
-
+        System.out.println("SignupInputData created with:");
+        System.out.println("Username: " + signupInputData.getUsername());
+        System.out.println("Password1: " + signupInputData.getPassword());
+        System.out.println("Password2: " + signupInputData.getRepeatPassword());
         userSignupUseCaseInteractor.execute(signupInputData);
     }
 

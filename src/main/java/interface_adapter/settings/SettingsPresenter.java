@@ -27,4 +27,10 @@ public class SettingsPresenter implements SettingsOutputBoundary {
         viewModel.getState().setUsername(outputData.getUsername());
         viewModel.firePropertyChanged("logout");
     }
+
+    @Override
+    public void updateDarkMode(boolean darkModeEnabled) {
+        viewModel.getState().setDarkModeEnabled(darkModeEnabled);
+        viewModel.firePropertyChanged("darkMode");
+    }
 }

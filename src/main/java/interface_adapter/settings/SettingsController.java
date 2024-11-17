@@ -4,7 +4,7 @@ import use_case.settings.SettingsInputBoundary;
 import use_case.settings.SettingsInputData;
 
 /**
- * Controller for the Settings Use Case.
+ * Controller for the Settings use case.
  */
 public class SettingsController {
     private final SettingsInputBoundary settingsInteractor;
@@ -13,17 +13,16 @@ public class SettingsController {
         this.settingsInteractor = settingsInteractor;
     }
 
-    /**
-     * Navigates to the Change Password view.
-     */
+    public void toggleDarkMode(boolean darkMode) {
+        SettingsInputData inputData = new SettingsInputData(darkMode);
+        settingsInteractor.toggleDarkMode(inputData);
+    }
+
     public void navigateToChangePassword(String username) {
         SettingsInputData inputData = new SettingsInputData(username);
         settingsInteractor.navigateToChangePassword(inputData);
     }
 
-    /**
-     * Logs out the current user.
-     */
     public void logout(String username) {
         SettingsInputData inputData = new SettingsInputData(username);
         settingsInteractor.logout(inputData);
