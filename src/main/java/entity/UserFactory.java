@@ -12,4 +12,12 @@ public interface UserFactory {
      */
     User create(String name, String password);
 
+    /**
+     * Creates a new User.
+     * @param name the name of the new user
+     * @param password the password of the new user
+     * @param darkMode the UI mode of the user
+     * @return the new user
+     */
+    User create(String name, String password, boolean darkMode);
 }

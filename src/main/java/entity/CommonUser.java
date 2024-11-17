@@ -15,6 +15,12 @@ public class CommonUser implements User {
         this.darkMode = false;
     }
 
+    public CommonUser(String name, String password, boolean darkMode) {
+        this.name = name;
+        this.password = password;
+        this.darkMode = darkMode;
+    }
+
     @Override
     public String getName() {
         return name;
