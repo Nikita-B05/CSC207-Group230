@@ -1,25 +1,33 @@
 package entity;
 
+import java.time.LocalDateTime;
+
 public class Decision {
-    private final String type;
-    private final String question;
-    private final String response;
+    private final LocalDateTime timestamp;
+    private final String decisionText;
+    private final double netWorthChange;
+    private final double happinessChange;
 
-    public Decision(String type, String question, String response) {
-        this.type = type;
-        this.question = question;
-        this.response = response;
+    public Decision(LocalDateTime timestamp, String decisionText, double netWorthChange, double happinessChange) {
+        this.timestamp = timestamp;
+        this.decisionText = decisionText;
+        this.netWorthChange = netWorthChange;
+        this.happinessChange = happinessChange;
     }
 
-    public String getType() {
-        return type;
+    public LocalDateTime getTimestamp() {
+        return timestamp;
     }
 
-    public String getQuestion() {
-        return question;
+    public String getDecisionText() {
+        return decisionText;
     }
 
-    public String getResponse() {
-        return response;
+    public double getNetWorthChange() {
+        return netWorthChange;
+    }
+
+    public double getHappinessChange() {
+        return happinessChange;
     }
 }
