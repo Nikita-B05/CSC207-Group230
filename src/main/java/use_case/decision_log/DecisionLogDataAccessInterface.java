@@ -1,9 +1,12 @@
 package use_case.decision_log;
 
+import entity.Decision;
 import entity.User;
 
+import java.util.List;
+
 /**
- * DAO for the Decision Log Use Case. okay no clue whats going on here do it later
+ * DAO for the Decision Log Use Case. okay no clue what's going on here do it later
  */
 public interface DecisionLogDataAccessInterface {
     /**
@@ -25,4 +28,8 @@ public interface DecisionLogDataAccessInterface {
      * @param user The user.
      */
     void deleteDecisionLog(User user);
+
+    List<Decision> getDecisions(String username);
+
+    List<Decision> getCurrentUsername(String username);
 }

@@ -7,6 +7,10 @@ public interface DecisionLogOutputBoundary {
     /**
      * Switches to the Homepage View.
      */
-    void switchToHomepageView();
 
+    void switchToHomePageView();
+
+    void prepareFailView(String s);
+
+    <DecisionLogOutputData> void prepareSuccessView(DecisionLogOutputData outputData);
 }

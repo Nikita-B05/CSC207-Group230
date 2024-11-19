@@ -1,4 +1,4 @@
-package user_case.DecisionLog;
+package use_case.decision_log;
 
 /**
  * Input Boundary for actions which are related to decision log.
