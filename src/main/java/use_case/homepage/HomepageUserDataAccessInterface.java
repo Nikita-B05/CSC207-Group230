@@ -13,5 +13,5 @@ public interface HomepageUserDataAccessInterface {
      * @param username the username to look up
      * @return the user with the given username
      */
-    GameUser get(String username);
+//    GameUser get(String username);
 }

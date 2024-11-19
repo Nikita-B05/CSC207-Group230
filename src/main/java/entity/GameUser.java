@@ -3,7 +3,7 @@ package entity;
 import java.util.ArrayList;
 
 public class GameUser implements User{
-    private final String name
+    private final String name;
     private final String password;
 
     private String characterName;

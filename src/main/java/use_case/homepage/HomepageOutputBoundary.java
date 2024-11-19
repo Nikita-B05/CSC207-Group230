@@ -9,7 +9,7 @@ public interface HomepageOutputBoundary {
     /**
      * Switches to the Character View.
      */
-    void switchToAvatarView(HomepageOutputData homepageOutputData);
+    void switchToChooseAvatarView(HomepageOutputData homepageOutputData);
 
     /**
      * Switches to the Game View.

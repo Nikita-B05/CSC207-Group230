@@ -15,8 +15,8 @@ public class HomepageInteractor implements HomepageInputBoundary  {
     }
 
     @Override
-    public void switchToAvatarView(HomepageInputData homepageInputData) {
-        homepagePresenter.switchToAvatarView(new HomepageOutputData(homepageInputData.getUsername()));
+    public void switchToChooseAvatarView(HomepageInputData homepageInputData) {
+        homepagePresenter.switchToChooseAvatarView(new HomepageOutputData(homepageInputData.getUsername()));
     }
 
     @Override
