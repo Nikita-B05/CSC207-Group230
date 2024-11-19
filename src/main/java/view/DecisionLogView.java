@@ -1,16 +1,19 @@
 package view;
 
+import entity.Decision;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.List;  // Import the correct List from java.util
 
-public class DecisionHistoryPage extends JPanel {
+public class DecisionLogView extends JPanel {
     private JTable historyTable;
     private JScrollPane scrollPane;
 
-    public DecisionHistoryPage(List<Decision> decisions) {
+    public DecisionLogView(List<Decision> decisions) {  // Use List<Decision> from java.util
         setLayout(new BorderLayout());
-        String[] columns = {"Timestamp", "Decision", "Net Worth Change", "Happiness Change", "Quality of Life Change"};
+        String[] columns = {"Timestamp", "Decision", "Net Worth Change", "Happiness Change"};
         // Quality of Life can be Health
 
         // Prepare data for the table
