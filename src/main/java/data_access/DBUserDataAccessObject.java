@@ -1,7 +1,13 @@
 package data_access;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
+import entity.Decision;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -162,4 +168,40 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     public String getCurrentUsername() {
         return null;
     }
+
+    public List<Decision> getUserDecisions(String username) {
+        final OkHttpClient client = new OkHttpClient().newBuilder().build();
+        final Request request = new Request.Builder()
+                .url(String.format("http://vm003.teach.cs.toronto.edu:20112/decisions?username=%s", username))
+                .addHeader("Content-Type", CONTENT_TYPE_JSON)
+                .build();
+
+        try {
+            final Response response = client.newCall(request).execute();
+            final JSONObject responseBody = new JSONObject(response.body().string());
+
+            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
+                final JSONArray decisionsArray = responseBody.getJSONArray("decisions");
+                final List<Decision> decisions = new ArrayList<>();
+
+                for (int i = 0; i < decisionsArray.length(); i++) {
+                    final JSONObject decisionObject = decisionsArray.getJSONObject(i);
+                    final String timestampString = decisionObject.getString("timestamp");
+                    LocalDateTime timestamp = LocalDateTime.parse(timestampString, DateTimeFormatter.ISO_DATE_TIME);
+                    final String description = decisionObject.getString("description");
+                    final int happinessImpact = decisionObject.getInt("happinessImpact");
+                    final int netWorthImpact = decisionObject.getInt("netWorthImpact");
+
+                    decisions.add(new Decision(timestamp, description, happinessImpact, netWorthImpact));
+                }
+
+                return decisions;
+            } else {
+                throw new RuntimeException(responseBody.getString(MESSAGE));
+            }
+        } catch (IOException | JSONException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
 }
