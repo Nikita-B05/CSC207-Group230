@@ -15,7 +15,7 @@ import java.beans.PropertyChangeListener;
 /**
  * The View for the HomePage Use Case.
  */
-public class HomePageView extends JPanel implements ActionListener, PropertyChangeListener {
+public class HomepageView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "homepage";
 
     private final HomepageViewModel homePageViewModel;
@@ -37,8 +37,8 @@ public class HomePageView extends JPanel implements ActionListener, PropertyChan
         cardPanel.setLayout(cardLayout);
         final ViewManagerModel viewManagerModel = new ViewManagerModel();
 
-        final HomepageViewModel homepageViewModel = new HomepageViewModel("example");
-        final HomePageView homePageView = new HomePageView(homepageViewModel);
+        final HomepageViewModel homepageViewModel = new HomepageViewModel();
+        final HomepageView homePageView = new HomepageView(homepageViewModel);
         cardPanel.add(homePageView, homePageView.getViewName());
 
         frame.add(cardPanel);
@@ -50,7 +50,7 @@ public class HomePageView extends JPanel implements ActionListener, PropertyChan
         frame.setVisible(true);
     }
 
-    public HomePageView(HomepageViewModel homePageViewModel) {
+    public HomepageView(HomepageViewModel homePageViewModel) {
         this.homePageViewModel = homePageViewModel;
         homePageViewModel.addPropertyChangeListener(this);
 

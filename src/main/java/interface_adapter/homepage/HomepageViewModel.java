@@ -13,8 +13,8 @@ public class HomepageViewModel extends ViewModel<HomepageState> {
     public static final String DECISION_LOG_LABEL = "Decision Log";
     public static final String PROFILE_SETTINGS_LABEL = "Profile Settings";
 
-    public HomepageViewModel(String username) {
+    public HomepageViewModel() {
         super("homepage");
-        setState(new HomepageState(username));
+        setState(new HomepageState());
     }
 }

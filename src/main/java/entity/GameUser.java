@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class GameUser implements User{
     private final String name;
     private final String password;
+    private final boolean isDarkMode;
 
     private String characterName;
     private Avatar avatar;
@@ -17,6 +18,13 @@ public class GameUser implements User{
     public GameUser(String name, String password) {
         this.name = name;
         this.password = password;
+        this.isDarkMode = false;
+    }
+
+    public GameUser(String name, String password, boolean isDarkMode) {
+        this.name = name;
+        this.password = password;
+        this.isDarkMode = isDarkMode;
     }
 
     @Override
@@ -27,6 +35,11 @@ public class GameUser implements User{
     @Override
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public boolean isDarkMode() {
+        return isDarkMode;
     }
 
     public String getCharacterName() {

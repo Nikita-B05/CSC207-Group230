@@ -26,7 +26,6 @@ public class Avatar {
         return imagePath;
     }
 
-    @Override
     public boolean equals(Avatar o) {
         return id.equals(o.id);
     }

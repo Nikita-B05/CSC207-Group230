@@ -32,6 +32,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private static final String STATUS_CODE_LABEL = "status_code";
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
+    private static final String DARKMODE = "darkmode";
     private static final String MESSAGE = "message";
     private final UserFactory userFactory;
 

@@ -17,4 +17,6 @@ public interface User {
      */
     String getPassword();
 
+    boolean isDarkMode();
+
 }
