@@ -1,5 +1,6 @@
 package view;
 
+import entity.Avatar;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.homepage.HomepageController;
 import interface_adapter.homepage.HomepageState;
@@ -11,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.net.URL;
 
 /**
  * The View for the HomePage Use Case.
@@ -28,7 +30,7 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
 
     public static void main(String[] args) {
         final JFrame frame = new JFrame("Homepage Example");
-        frame.setSize(5000, 6000);  // Set frame size to 500x600px
+        frame.setSize(500, 600);  // Set frame size to 500x600px
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // Just to see the view
@@ -38,6 +40,7 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
         final ViewManagerModel viewManagerModel = new ViewManagerModel();
 
         final HomepageViewModel homepageViewModel = new HomepageViewModel();
+        homepageViewModel.getState().setName("Example Name");
         final HomepageView homePageView = new HomepageView(homepageViewModel);
         cardPanel.add(homePageView, homePageView.getViewName());
 
@@ -54,14 +57,42 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
         this.homePageViewModel = homePageViewModel;
         homePageViewModel.addPropertyChangeListener(this);
 
+        HomepageState homepageState = homePageViewModel.getState();
+
         chooseAvatar = new JButton(HomepageViewModel.CHOOSE_AVATAR_LABEL);
         playGame = new JButton(HomepageViewModel.PLAY_GAME_LABEL);
         decisionLog = new JButton(HomepageViewModel.DECISION_LOG_LABEL);
         profileSettings = new JButton(HomepageViewModel.PROFILE_SETTINGS_LABEL);
 
-        // Use BoxLayout to align components vertically and center them
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));  // Stack buttons vertically
+        // Set the layout to BoxLayout and add padding
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+        // Add greeting at the top
+        if (homepageState.getName() != null) {
+            JLabel greetingLabel = new JLabel("Hi, " + homepageState.getName());
+            greetingLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the greeting
+            this.add(greetingLabel); // Add greeting at the top
+            this.add(Box.createVerticalStrut(20)); // Add space below the image
+        }
+
+        // Add the image above the buttons
+        String imagePath = System.getProperty("user.dir") + homepageState.getAvatar().getImagePath();
+        ImageIcon imageIcon = null;
+        try {
+            imageIcon = new ImageIcon(imagePath);
+        } catch (Exception e) {
+            System.err.println("Could not load image: " + imagePath);
+        }
+        if (imageIcon != null) {
+            Image scaledImage = imageIcon.getImage().getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+            ImageIcon resizedIcon = new ImageIcon(scaledImage);
+
+            JLabel imageLabel = new JLabel(resizedIcon);
+            imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the image
+            this.add(imageLabel); // Add image at the top
+            this.add(Box.createVerticalStrut(20)); // Add space below the image
+        }
 
         // Center the buttons horizontally using alignment
         chooseAvatar.setAlignmentX(Component.CENTER_ALIGNMENT);

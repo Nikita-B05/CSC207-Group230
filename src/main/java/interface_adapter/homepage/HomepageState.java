@@ -7,9 +7,9 @@ import entity.Avatar;
  */
 public class HomepageState {
 
-    private String username;
-    private Avatar avatar;
-    private String name;
+    private String username = null;
+    private Avatar avatar = new Avatar("default", "rickroll", "/images/rickroll.png");
+    private String name = null;
 
     public String getUsername() {
         return username;
