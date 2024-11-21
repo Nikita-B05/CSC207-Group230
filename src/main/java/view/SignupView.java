@@ -48,6 +48,11 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         inputPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         inputPanel.setMaximumSize(new Dimension(1000, 120));
 
+        //        inputPanel.add(title);
+        inputPanel.add(usernameInfo);
+        inputPanel.add(passwordInfo);
+        inputPanel.add(repeatPasswordInfo);
+
         final JPanel buttons = new JPanel();
         toLogin = new JButton(SignupViewModel.TO_LOGIN_BUTTON_LABEL);
         buttons.add(toLogin);
@@ -84,11 +89,6 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         addRepeatPasswordListener();
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-//        inputPanel.add(title);
-        inputPanel.add(usernameInfo);
-        inputPanel.add(passwordInfo);
-        inputPanel.add(repeatPasswordInfo);
 
         this.add(Box.createVerticalGlue());
         this.add(inputPanel);
