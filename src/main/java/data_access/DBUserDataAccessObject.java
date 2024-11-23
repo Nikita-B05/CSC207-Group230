@@ -67,18 +67,21 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
             if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
                 final JSONObject userJSONObject = responseBody.getJSONObject("user");
-                final String dbUsername = userJSONObject.getString(USERNAME);
-                final String password = userJSONObject.getString(PASSWORD);
-                final boolean isDarkMode = userJSONObject.getBoolean(DARK_MODE);
-                final String characterName = userJSONObject.getString(CHARACTER_NAME);
-                final Avatar avatar = converter.toAvatar(userJSONObject.getJSONObject(AVATAR));
-                final int happiness = userJSONObject.getInt(HAPPINESS);
-                final int salary = userJSONObject.getInt(SALARY);
-                final Assets assets = converter.toAssets(userJSONObject.getJSONObject(ASSETS));
-                final Liabilities liabilities = converter
-                        .toLiabilities(userJSONObject.getJSONObject(LIABILITIES));
-                final ArrayList<Decision> decisions = converter
-                        .toArrayListOfDecision(userJSONObject.getJSONArray(DECISIONS));
+                String dbUsername = userJSONObject.has(USERNAME) ? userJSONObject.getString(USERNAME) : username;
+                final String password = userJSONObject.has(PASSWORD) ? userJSONObject.getString(PASSWORD) : null;
+                final boolean isDarkMode = userJSONObject.has(DARK_MODE) ? userJSONObject.getBoolean(DARK_MODE) : false;
+                final String characterName = userJSONObject.has(CHARACTER_NAME) ?
+                        userJSONObject.getString(CHARACTER_NAME) : null;
+                final Avatar avatar = userJSONObject.has(AVATAR) ?
+                        converter.toAvatar(userJSONObject.getJSONObject(AVATAR)) : null;
+                final int happiness = userJSONObject.has(HAPPINESS) ? userJSONObject.getInt(HAPPINESS) : 0;
+                final int salary = userJSONObject.has(SALARY) ? userJSONObject.getInt(SALARY) : 0;
+                final Assets assets = userJSONObject.has(ASSETS) ?
+                        converter.toAssets(userJSONObject.getJSONObject(ASSETS)) : null;
+                final Liabilities liabilities = userJSONObject.has(LIABILITIES) ?
+                        converter.toLiabilities(userJSONObject.getJSONObject(LIABILITIES)) : null;
+                final ArrayList<Decision> decisions = userJSONObject.has(DECISIONS) ?
+                        converter.toArrayListOfDecision(userJSONObject.getJSONArray(DECISIONS)) : null;
 
                 return userFactory.create(
                         dbUsername,
