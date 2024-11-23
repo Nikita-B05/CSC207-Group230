@@ -1,6 +1,5 @@
 package use_case.homepage;
 
-import entity.GameUser;
 import entity.User;
 
 /**

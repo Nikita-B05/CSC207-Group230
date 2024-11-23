@@ -1,11 +1,9 @@
 package view;
 
-import entity.Avatar;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.homepage.HomepageController;
 import interface_adapter.homepage.HomepageState;
 import interface_adapter.homepage.HomepageViewModel;
-import interface_adapter.login.LoginController;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +11,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.net.URL;
 
 /**
  * The View for the HomePage Use Case.
@@ -21,8 +18,11 @@ import java.net.URL;
 public class HomepageView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "homepage";
 
-    private final HomepageViewModel homePageViewModel;
+    private final HomepageViewModel homepageViewModel;
     private HomepageController homepageController;
+
+    private final JLabel greetingLabel;
+    private final JLabel imageLabel = new JLabel();
 
     private final JButton chooseAvatar;
     private final JButton playGame;
@@ -55,11 +55,11 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
         frame.setVisible(true);
     }
 
-    public HomepageView(HomepageViewModel homePageViewModel) {
-        this.homePageViewModel = homePageViewModel;
-        homePageViewModel.addPropertyChangeListener(this);
+    public HomepageView(HomepageViewModel homepageViewModel) {
+        this.homepageViewModel = homepageViewModel;
+        this.homepageViewModel.addPropertyChangeListener(this);
 
-        HomepageState homepageState = homePageViewModel.getState();
+        HomepageState homepageState = homepageViewModel.getState();
 
         chooseAvatar = new JButton(HomepageViewModel.CHOOSE_AVATAR_LABEL);
         playGame = new JButton(HomepageViewModel.PLAY_GAME_LABEL);
@@ -71,10 +71,12 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
         this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Add greeting at the top
-        JLabel greetingLabel = new JLabel("Hi, " + homepageState.getUsername());
-        // If user has set a name, use that instead
+
+        // If user has set a name, use that. Otherwise, use their username
         if (homepageState.getName() != null) {
             greetingLabel = new JLabel("Hi, " + homepageState.getName());
+        } else {
+            greetingLabel = new JLabel("Hi, " + homepageState.getUsername());
         }
         greetingLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the greeting
         this.add(greetingLabel); // Add greeting at the top
@@ -89,7 +91,7 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
             System.err.println("Could not load image: " + imagePath);
         }
         if (imageIcon != null) {
-            Image scaledImage = imageIcon.getImage().getScaledInstance(200, 150, Image.SCALE_SMOOTH);
+            Image scaledImage = imageIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
             ImageIcon resizedIcon = new ImageIcon(scaledImage);
 
             JLabel imageLabel = new JLabel(resizedIcon);
@@ -116,53 +118,29 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
         // Add action listeners for buttons
         chooseAvatar.addActionListener(evt -> {
             if (evt.getSource().equals(chooseAvatar)) {
-                final HomepageState currentState = homePageViewModel.getState();
-                homepageController.switchToAvatarView(
-                        currentState.getUsername(),
-                        currentState.getName(),
-                        currentState.getAvatar(),
-                        currentState.isDarkMode(),
-                        currentState.getDecisions()
-                );
+                final HomepageState currentState = homepageViewModel.getState();
+                homepageController.switchToAvatarView(currentState.getUsername());
             }
         });
 
         playGame.addActionListener(evt -> {
             if (evt.getSource().equals(playGame)) {
-                final HomepageState currentState = homePageViewModel.getState();
-                homepageController.switchToPlayGameView(
-                        currentState.getUsername(),
-                        currentState.getName(),
-                        currentState.getAvatar(),
-                        currentState.isDarkMode(),
-                        currentState.getDecisions()
-                );
+                final HomepageState currentState = homepageViewModel.getState();
+                homepageController.switchToPlayGameView(currentState.getUsername());
             }
         });
 
         decisionLog.addActionListener(evt -> {
             if (evt.getSource().equals(decisionLog)) {
-                final HomepageState currentState = homePageViewModel.getState();
-                homepageController.switchToDecisionLogView(
-                        currentState.getUsername(),
-                        currentState.getName(),
-                        currentState.getAvatar(),
-                        currentState.isDarkMode(),
-                        currentState.getDecisions()
-                );
+                final HomepageState currentState = homepageViewModel.getState();
+                homepageController.switchToDecisionLogView(currentState.getUsername());
             }
         });
 
         profileSettings.addActionListener(evt -> {
             if (evt.getSource().equals(profileSettings)) {
-                final HomepageState currentState = homePageViewModel.getState();
-                homepageController.switchToProfileSettingsView(
-                        currentState.getUsername(),
-                        currentState.getName(),
-                        currentState.getAvatar(),
-                        currentState.isDarkMode(),
-                        currentState.getDecisions()
-                );
+                final HomepageState currentState = homepageViewModel.getState();
+                homepageController.switchToProfileSettingsView(currentState.getUsername());
             }
         });
     }
@@ -175,7 +153,24 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         final HomepageState state = (HomepageState) evt.getNewValue();
-        // do something
+        setFields(state);
+    }
+
+    private void setFields(HomepageState state) {
+        greetingLabel.setText(state.getUsername());
+
+        // Add the image above the buttons
+        String imagePath = System.getProperty("user.dir") + state.getAvatar().getImagePath();
+
+        // if possible update avatar
+        try {
+            ImageIcon imageIcon = new ImageIcon(imagePath);
+            Image scaledImage = imageIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+            ImageIcon resizedIcon = new ImageIcon(scaledImage);
+            imageLabel.setIcon(resizedIcon);
+        } catch (Exception e) {
+            System.err.println("Could not load image: " + imagePath);
+        }
     }
 
     public String getViewName() {

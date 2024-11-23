@@ -157,7 +157,8 @@ public class AppBuilder {
     public AppBuilder addHomepageUseCase() {
         final HomepageOutputBoundary homepageOutputBoundary = new HomepagePresenter(viewManagerModel,
                 homepageViewModel);
-        final HomepageInputBoundary homepageInteractor = new HomepageInteractor(homepageOutputBoundary);
+        final HomepageInputBoundary homepageInteractor = new HomepageInteractor(
+                userDataAccessObject, homepageOutputBoundary);
 
         final HomepageController homepageController = new HomepageController(homepageInteractor);
         homepageView.setHomepageController(homepageController);
