@@ -1,12 +1,11 @@
 package data_access;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
+import converters.EntityConverterInterface;
+import converters.EntityConverter;
 import entity.*;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,37 +36,19 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private static final String DARK_MODE = "darkMode";
     private static final String CHARACTER_NAME = "characterName";
     private static final String AVATAR = "avatar";
-    private static final String AVATAR_ID = "avatarId";
-    private static final String IMAGE_PATH = "imagePath";
     private static final String HAPPINESS = "happiness";
     private static final String SALARY = "salary";
     private static final String ASSETS = "assets";
-    private static final String HOME = "home";
-    private static final String STOCKS = "stocks";
-    private static final String CASH = "cash";
-    private static final String CAR = "car";
-    private static final String STOCK_CODE = "stockCode";
-    private static final String QUANTITY = "quantity";
-    private static final String BUY_PRICE = "buyPrice";
-    private static final String SELL_PRICE = "sellPrice";
-    private static final String MULTIPLIER = "multiplier";
     private static final String LIABILITIES = "liabilities";
-    private static final String LOAN = "loan";
-    private static final String CREDIT_CARD = "creditCard";
     private static final String DECISIONS = "decisions";
-    private static final String TIMESTAMP = "timestamp";
-    private static final String DECISION_TEXT = "decisionText";
-    private static final String DECISION_RESPONSE = "decisionResponse";
-    private static final String NET_WORTH_CHANGE = "netWorthChange";
-    private static final String HAPPINESS_CHANGE = "happinessChange";
-
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     private static final String MESSAGE = "failed to get user from database";
     private final UserFactory userFactory;
+    private final EntityConverterInterface converter;
 
     public DBUserDataAccessObject(UserFactory userFactory) {
         this.userFactory = userFactory;
+        this.converter = new EntityConverter();
         // No need to do anything to reinitialize a user list! The data is the cloud that may be miles away.
     }
 
@@ -90,12 +71,14 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                 final String password = userJSONObject.getString(PASSWORD);
                 final boolean isDarkMode = userJSONObject.getBoolean(DARK_MODE);
                 final String characterName = userJSONObject.getString(CHARACTER_NAME);
-                final Avatar avatar = JSONObjectToAvatar(userJSONObject.getJSONObject(AVATAR));
+                final Avatar avatar = converter.toAvatar(userJSONObject.getJSONObject(AVATAR));
                 final int happiness = userJSONObject.getInt(HAPPINESS);
                 final int salary = userJSONObject.getInt(SALARY);
-                final Assets assets = JSONObjectToAssets(userJSONObject.getJSONObject(ASSETS));
-                final Liabilities liabilities = JSONObjectToLiabilities(userJSONObject.getJSONObject(LIABILITIES));
-                final ArrayList<Decision> decisions = JSONArrayToListOfDecision(userJSONObject.getJSONArray(DECISIONS));
+                final Assets assets = converter.toAssets(userJSONObject.getJSONObject(ASSETS));
+                final Liabilities liabilities = converter
+                        .toLiabilities(userJSONObject.getJSONObject(LIABILITIES));
+                final ArrayList<Decision> decisions = converter
+                        .toArrayListOfDecision(userJSONObject.getJSONArray(DECISIONS));
 
                 return userFactory.create(
                         dbUsername,
@@ -213,103 +196,5 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     @Override
     public String getCurrentUsername() {
         return null;
-    }
-
-    private static Avatar JSONObjectToAvatar(JSONObject object) {
-        if (object == null) {
-            return null;
-        }
-        final String id = object.getString(AVATAR_ID);
-        final String imagePath = object.getString(IMAGE_PATH);
-
-        return new Avatar(id, imagePath);
-    }
-
-    private static Assets JSONObjectToAssets(JSONObject object) {
-        if (object == null) {
-            return null;
-        }
-        final int home = object.getInt(HOME);
-        final ArrayList<Stock> stocks = JSONArrayToListOfStock(object.getJSONArray(STOCKS));
-        final int cash = object.getInt(CASH);
-        final int car = object.getInt(CAR);
-
-        return new Assets(home, stocks, cash, car);
-    }
-
-    private static ArrayList<Stock> JSONArrayToListOfStock(JSONArray array) {
-        final ArrayList<Stock> stocks = new ArrayList<Stock>();
-        if (array == null) {
-            return stocks;
-        }
-        for (int i = 0; i < array.length(); i++) {
-            final JSONObject jsonStockObject = array.getJSONObject(i);
-            final Stock stock = JSONObjectToStock(jsonStockObject);
-            if (stock != null) {
-                stocks.add(stock);
-            } else {
-                throw new RuntimeException("JSONObject could not be converted to Stock: " + jsonStockObject.toString());
-            }
-        }
-        return stocks;
-    }
-
-    private static Stock JSONObjectToStock(JSONObject object) {
-        if (object == null) {
-            return null;
-        }
-        final String code = object.getString(STOCK_CODE);
-        final int quantity = object.getInt(QUANTITY);
-        final int price = object.getInt(BUY_PRICE);
-        final int sellPrice = object.getInt(SELL_PRICE);
-        final int multiplier = object.getInt(MULTIPLIER);
-
-        return new Stock(code, quantity, price, sellPrice, multiplier);
-    }
-
-    private static Liabilities JSONObjectToLiabilities(JSONObject object) {
-        if (object == null) {
-            return null;
-        }
-        final int loan = object.getInt(LOAN);
-        final int creditCard = object.getInt(CREDIT_CARD);
-
-        return new Liabilities(loan, creditCard);
-    }
-
-    private static ArrayList<Decision> JSONArrayToListOfDecision(JSONArray array) {
-        final ArrayList<Decision> decisions = new ArrayList<>();
-        if (array == null) {
-            return decisions;
-        }
-        for (int i = 0; i < array.length(); i++) {
-            final JSONObject jsonDecisionObject = array.getJSONObject(i);
-            final Decision decision = JSONObjectToDecision(jsonDecisionObject);
-            if (decision != null) {
-                decisions.add(decision);
-            } else {
-                throw new RuntimeException(
-                        "JSONObject could not be converted to Decision: " + jsonDecisionObject.toString());
-            }
-        }
-        return decisions;
-    }
-
-    private static Decision JSONObjectToDecision(JSONObject object) {
-        if (object == null) {
-            return null;
-        }
-
-        final String timeStampString = object.getString(TIMESTAMP);
-        if (timeStampString == null) {
-            throw new RuntimeException("JSONDecisionObject is not null and has null timestamp: " + object.toString());
-        }
-        final LocalDateTime timestamp = LocalDateTime.parse(timeStampString, formatter);
-        final String decisionText = object.getString(DECISION_TEXT);
-        final String decisionReponse = object.getString(DECISION_RESPONSE);
-        final int netWorthChange = object.getInt(NET_WORTH_CHANGE);
-        final int happinessChange = object.getInt(HAPPINESS_CHANGE);
-
-        return new Decision(timestamp, decisionText, decisionReponse, netWorthChange, happinessChange);
     }
 }
