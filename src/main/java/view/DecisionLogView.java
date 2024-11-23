@@ -13,13 +13,13 @@ public class DecisionLogView extends JPanel {
 
     public DecisionLogView(List<Decision> decisions) {  // Use List<Decision> from java.util
         setLayout(new BorderLayout());
-        String[] columns = {"Timestamp", "Decision", "Net Worth Change", "Happiness Change"};
+        String[] columns = {"Timestamp", "Decision", "Your answer", "Net Worth Change", "Happiness Change"};
         // Quality of Life can be Health
 
         // Prepare data for the table
         DefaultTableModel model = new DefaultTableModel(columns, 0);
         for (Decision decision : decisions) {
-            Object[] row = {decision.getTimestamp(), decision.getDecisionText(),
+            Object[] row = {decision.getTimestamp(), decision.getDecisionText(), decision.getDecisionResponse(),
                     decision.getNetWorthChange(), decision.getHappinessChange()};
             model.addRow(row);
         }
