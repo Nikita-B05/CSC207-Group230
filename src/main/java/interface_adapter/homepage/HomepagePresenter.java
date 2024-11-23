@@ -3,6 +3,8 @@ package interface_adapter.homepage;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.change_password.LoggedInState;
 import interface_adapter.change_password.LoggedInViewModel;
+import interface_adapter.login.LoginViewModel;
+import interface_adapter.signup.SignupViewModel;
 import use_case.change_password.ChangePasswordOutputBoundary;
 import use_case.change_password.ChangePasswordOutputData;
 import use_case.homepage.HomepageOutputBoundary;
@@ -19,9 +21,20 @@ public class HomepagePresenter implements HomepageOutputBoundary {
 //    private final ProfileSettingsViewModel profileSettingsViewModel;
     private final ViewManagerModel viewManagerModel;
 
-    public HomepagePresenter(HomepageViewModel homepageViewModel) {
+    public HomepagePresenter(
+        ViewManagerModel viewManagerModel,
+        HomepageViewModel homepageViewModel
+//        ChooseAvatarViewModel chooseAvatarViewModel,
+//        PlayGameViewModel playGameViewModel,
+//        DecisionLogViewModel decisionLogViewModel,
+//        ProfileSettingsViewModel profileSettingsViewModel
+    ) {
+        this.viewManagerModel = viewManagerModel;
         this.homepageViewModel = homepageViewModel;
-        this.viewManagerModel = new ViewManagerModel();
+//        this.chooseAvatarViewModel = chooseAvatarViewModel;
+//        this.playGameViewModel = playGameViewModel;
+//        this.decisionLogViewModel = decisionLogViewModel;
+//        this.profileSettingsViewModel = profileSettingsViewModel;
     }
 
     @Override
