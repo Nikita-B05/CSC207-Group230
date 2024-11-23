@@ -1,13 +1,13 @@
 package entity;
 
 public class Stock {
-    private final int stockCode;
+    private final String stockCode;
     private final int quantity;
     private final int buyPrice;
     private int sellPrice;
     private int multiplier;
 
-    public Stock(int stockCode, int quantity, int buyPrice, int sellPrice, int multiplier) {
+    public Stock(String stockCode, int quantity, int buyPrice, int sellPrice, int multiplier) {
         this.stockCode = stockCode;
         this.quantity = quantity;
         this.buyPrice = buyPrice;
@@ -15,7 +15,7 @@ public class Stock {
         this.multiplier = multiplier;
     }
 
-    public int getStockCode() {
+    public String getStockCode() {
         return stockCode;
     }
 
