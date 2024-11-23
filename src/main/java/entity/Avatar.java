@@ -35,3 +35,4 @@ public class Avatar {
         return id.hashCode();
     }
 }
+
