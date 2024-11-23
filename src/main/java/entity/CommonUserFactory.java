@@ -15,6 +15,7 @@ public class CommonUserFactory implements UserFactory {
     @Override
     public User create(String username,
                        String password,
+                       boolean isDarkMode,
                        String characterName,
                        Avatar avatar,
                        int happiness,
@@ -26,6 +27,7 @@ public class CommonUserFactory implements UserFactory {
         return new CommonUser(
                 username,
                 password,
+                isDarkMode,
                 characterName,
                 avatar,
                 happiness,

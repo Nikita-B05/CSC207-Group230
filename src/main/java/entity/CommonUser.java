@@ -9,6 +9,7 @@ public class CommonUser implements User {
 
     private final String username;
     private final String password;
+    private final boolean isDarkMode;
 
     private final String characterName;
     private final Avatar avatar;
@@ -21,6 +22,7 @@ public class CommonUser implements User {
     public CommonUser(String username, String password) {
         this.username = username;
         this.password = password;
+        this.isDarkMode = false;
         this.characterName = null;
         this.avatar = null;
         this.happiness = 100;
@@ -33,6 +35,7 @@ public class CommonUser implements User {
     public CommonUser(
             String username,
             String password,
+            boolean isDarkMode,
             String characterName,
             Avatar avatar,
             int happiness,
@@ -43,6 +46,7 @@ public class CommonUser implements User {
     ) {
         this.username = username;
         this.password = password;
+        this.isDarkMode = isDarkMode;
         this.characterName = characterName;
         this.avatar = avatar;
         this.happiness = happiness;
@@ -63,6 +67,11 @@ public class CommonUser implements User {
     }
 
     @Override
+    public boolean isDarkMode() {
+        return isDarkMode;
+    }
+
+    @Override
     public String getCharacterName() {
         return characterName;
     }
@@ -75,6 +84,11 @@ public class CommonUser implements User {
     @Override
     public int getHappiness() {
         return happiness;
+    }
+
+    @Override
+    public int getSalary() {
+        return salary;
     }
 
     @Override

@@ -20,6 +20,12 @@ public interface User {
     String getPassword();
 
     /**
+     * Returns whether the user is on dark mode.
+     * @return the dark mode flag of the user.
+     */
+    boolean isDarkMode();
+
+    /**
      * Returns the characterName of the user.
      * @return the characterName of the user.
      */
@@ -36,6 +42,12 @@ public interface User {
      * @return the happiness of the user.
      */
     int getHappiness();
+
+    /**
+     * Returns the salary of the user.
+     * @return the salary of the user.
+     */
+    public int getSalary();
 
     /**
      * Returns the assets of the user.
