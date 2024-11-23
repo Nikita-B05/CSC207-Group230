@@ -2,8 +2,6 @@ package interface_adapter.homepage;
 
 import use_case.homepage.HomepageInputBoundary;
 import use_case.homepage.HomepageInputData;
-import use_case.signup.SignupInputBoundary;
-import use_case.signup.SignupInputData;
 
 /**
  * Controller for the Homepage Use Case.
