@@ -31,7 +31,14 @@ public interface EntityConverterInterface {
     static final String HAPPINESS_CHANGE = "happinessChange";
 
     public Avatar toAvatar(JSONObject object);
+    public JSONObject toJSONObject(Avatar avatar);
+
     public Assets toAssets(JSONObject object);
+    public JSONObject toJSONObject(Assets assets);
+
     public Liabilities toLiabilities(JSONObject object);
+    public JSONObject toJSONObject(Liabilities liabilities);
+
     public ArrayList<Decision> toArrayListOfDecision(JSONArray array);
+    public JSONArray toJSONArray(ArrayList<Decision> decisions);
 }
