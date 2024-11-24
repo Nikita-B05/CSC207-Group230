@@ -5,21 +5,15 @@ package entity;
  */
 public class Avatar {
     private final String id;
-    private final String characterName;
     private final String imagePath;
 
-    public Avatar(String id, String characterName, String imagePath) {
+    public Avatar(String id, String imagePath) {
         this.id = id;
-        this.characterName = characterName;
         this.imagePath = imagePath;
     }
 
     public String getId() {
         return id;
-    }
-
-    public String getCharacterName() {
-        return characterName;
     }
 
     public String getImagePath() {

@@ -1,12 +1,14 @@
 package data_access;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
+import converters.EntityConverterInterface;
+import converters.EntityConverter;
+import entity.*;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import entity.User;
-import entity.UserFactory;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -33,12 +35,22 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private static final String STATUS_CODE_LABEL = "status_code";
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
-    private static final String DARKMODE = "darkmode";
+    private static final String DARK_MODE = "darkMode";
+    private static final String CHARACTER_NAME = "characterName";
+    private static final String AVATAR = "avatar";
+    private static final String HAPPINESS = "happiness";
+    private static final String SALARY = "salary";
+    private static final String ASSETS = "assets";
+    private static final String LIABILITIES = "liabilities";
+    private static final String DECISIONS = "decisions";
+
     private static final String MESSAGE = "message";
     private final UserFactory userFactory;
+    private final EntityConverterInterface converter;
 
     public DBUserDataAccessObject(UserFactory userFactory) {
         this.userFactory = userFactory;
+        this.converter = new EntityConverter();
         // No need to do anything to reinitialize a user list! The data is the cloud that may be miles away.
     }
 
@@ -57,10 +69,34 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
             if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
                 final JSONObject userJSONObject = responseBody.getJSONObject("user");
-                final String name = userJSONObject.getString(USERNAME);
-                final String password = userJSONObject.getString(PASSWORD);
+                String dbUsername = userJSONObject.has(USERNAME) ? userJSONObject.getString(USERNAME) : username;
+                final String password = userJSONObject.has(PASSWORD) ? userJSONObject.getString(PASSWORD) : null;
+                final boolean isDarkMode = userJSONObject.has(DARK_MODE) ? userJSONObject.getBoolean(DARK_MODE) : false;
+                final String characterName = userJSONObject.has(CHARACTER_NAME) ?
+                        userJSONObject.getString(CHARACTER_NAME) : null;
+                final Avatar avatar = userJSONObject.has(AVATAR) ?
+                        converter.toAvatar(userJSONObject.getJSONObject(AVATAR)) : null;
+                final int happiness = userJSONObject.has(HAPPINESS) ? userJSONObject.getInt(HAPPINESS) : 0;
+                final int salary = userJSONObject.has(SALARY) ? userJSONObject.getInt(SALARY) : 0;
+                final Assets assets = userJSONObject.has(ASSETS) ?
+                        converter.toAssets(userJSONObject.getJSONObject(ASSETS)) : null;
+                final Liabilities liabilities = userJSONObject.has(LIABILITIES) ?
+                        converter.toLiabilities(userJSONObject.getJSONObject(LIABILITIES)) : null;
+                final ArrayList<Decision> decisions = userJSONObject.has(DECISIONS) ?
+                        converter.toArrayListOfDecision(userJSONObject.getJSONArray(DECISIONS)) : null;
 
-                return userFactory.create(name, password);
+                return userFactory.create(
+                        dbUsername,
+                        password,
+                        isDarkMode,
+                        characterName,
+                        avatar,
+                        happiness,
+                        salary,
+                        assets,
+                        liabilities,
+                        decisions
+                );
             }
             else {
                 throw new RuntimeException(responseBody.getString(MESSAGE));
