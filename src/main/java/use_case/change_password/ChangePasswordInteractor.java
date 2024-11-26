@@ -21,7 +21,8 @@ public class ChangePasswordInteractor implements ChangePasswordInputBoundary {
 
     @Override
     public void execute(ChangePasswordInputData changePasswordInputData) {
-         if (changePasswordInputData.getPassword().isEmpty()) {
+//        System.out.println(changePasswordInputData.getPassword());
+        if (changePasswordInputData.getPassword().isEmpty()) {
              userPresenter.prepareFailView("Password cannot be empty.");
         }
         else if (changePasswordInputData.getPassword().length() < 8) {

@@ -22,8 +22,9 @@ public class SettingsPresenter implements SettingsOutputBoundary {
     }
 
     @Override
-    public void prepareChangePasswordView() {
+    public void prepareChangePasswordView(SettingsOutputData settingsOutputData) {
         viewManagerModel.setState(changePasswordViewModel.getViewName());
+        changePasswordViewModel.getState().setUsername(settingsOutputData.getUsername());
         viewManagerModel.firePropertyChanged();
     }
 

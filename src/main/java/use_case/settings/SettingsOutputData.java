@@ -5,18 +5,12 @@ package use_case.settings;
  */
 public class SettingsOutputData {
     private final String username;
-    private final boolean logoutSuccessful;
 
-    public SettingsOutputData(String username, boolean logoutSuccessful) {
+    public SettingsOutputData(String username) {
         this.username = username;
-        this.logoutSuccessful = logoutSuccessful;
     }
 
     public String getUsername() {
         return username;
-    }
-
-    public boolean isLogoutSuccessful() {
-        return logoutSuccessful;
     }
 }

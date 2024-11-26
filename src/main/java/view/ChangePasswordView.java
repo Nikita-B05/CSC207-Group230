@@ -57,6 +57,7 @@ public class ChangePasswordView extends JPanel implements ActionListener, Proper
         if (evt.getSource().equals(changePasswordButton)) {
             String newPassword = new String(newPasswordField.getPassword());
             changePasswordViewModel.getState().setPassword(newPassword);
+            System.out.println(changePasswordViewModel.getState().getUsername());
             changePasswordController.execute(newPassword, changePasswordViewModel.getState().getUsername());
         } else if (evt.getSource().equals(cancelButton)) {
             changePasswordViewModel.firePropertyChanged("navigateBack");
