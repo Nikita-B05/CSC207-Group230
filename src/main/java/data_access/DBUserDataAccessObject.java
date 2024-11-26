@@ -156,8 +156,18 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         // POST METHOD
         final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);
         final JSONObject requestBody = new JSONObject();
+
         requestBody.put(USERNAME, user.getUsername());
         requestBody.put(PASSWORD, user.getPassword());
+        requestBody.put(DARK_MODE, user.isDarkMode());
+        requestBody.put(CHARACTER_NAME, user.getCharacterName());
+        requestBody.put(AVATAR, converter.toJSONObject(user.getAvatar()));
+        requestBody.put(HAPPINESS, user.getHappiness());
+        requestBody.put(SALARY, user.getSalary());
+        requestBody.put(ASSETS, converter.toJSONObject(user.getAssets()));
+        requestBody.put(LIABILITIES, converter.toJSONObject(user.getLiabilities()));
+        requestBody.put(DECISIONS, converter.toJSONArray(user.getDecisions()));
+
         final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
         final Request request = new Request.Builder()
                 .url("http://vm003.teach.cs.toronto.edu:20112/user")
