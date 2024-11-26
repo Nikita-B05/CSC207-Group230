@@ -33,6 +33,10 @@ public class LoginPresenter implements LoginOutputBoundary {
 
         final HomepageState homepageState = homepageViewModel.getState();
         homepageState.setUsername(response.getUsername());
+        homepageState.setAvatar(response.getAvatar());
+        homepageState.setName(response.getName());
+        homepageState.setDarkMode(response.isDarkMode());
+        homepageState.setDecisions(response.getDecisions());
         this.homepageViewModel.setState(homepageState);
         this.homepageViewModel.firePropertyChanged();
 
