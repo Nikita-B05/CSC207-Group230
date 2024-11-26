@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class HomepageState {
 
     private String username = null;
-    private Avatar avatar = new Avatar("default", "/images/rickroll.png");
+    private Avatar avatar = new Avatar();
     private String name = null;
     private boolean isDarkMode = false;;
     private ArrayList<Decision> decisions = new ArrayList<>();
