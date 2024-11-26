@@ -15,7 +15,7 @@ public class EntityConverter implements EntityConverterInterface {
     @Override
     public Avatar toAvatar(JSONObject object) {
         if (object == null) {
-            return null;
+            return new Avatar();
         }
         final String id = object.getString(AVATAR_ID);
         final String imagePath = object.getString(IMAGE_PATH);
@@ -26,7 +26,7 @@ public class EntityConverter implements EntityConverterInterface {
     @Override
     public JSONObject toJSONObject(Avatar avatar) {
         if (avatar == null) {
-            return null;
+            avatar = new Avatar();
         }
         final JSONObject object = new JSONObject();
         object.put(AVATAR_ID, avatar.getId());
@@ -179,7 +179,7 @@ public class EntityConverter implements EntityConverterInterface {
     @Override
     public JSONArray toJSONArray(ArrayList<Decision> decisions) {
         if (decisions == null) {
-            return null;
+            decisions = new ArrayList<>();
         }
         final JSONArray array = new JSONArray();
         for (Decision decision : decisions) {
