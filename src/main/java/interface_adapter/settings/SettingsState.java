@@ -7,6 +7,7 @@ public class SettingsState {
     private String username;
     private boolean darkModeEnabled;
 
+
     public String getUsername() {
         return username;
     }

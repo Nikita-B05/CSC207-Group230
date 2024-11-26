@@ -29,7 +29,6 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
     private final SettingsViewModel settingsViewModel;
     private final DarkModeController darkModeController;
     private LogoutController logoutController;
-    private final SettingsPresenter settingsPresenter;
     private ChangePasswordController changePasswordController;
     private SettingsController settingsController;
 
@@ -40,12 +39,10 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
 
     public SettingsView(SettingsViewModel settingsViewModel,
                         DarkModeController darkModeController,
-                        LogoutController logoutController,
-                        SettingsPresenter settingsPresenter) {
+                        LogoutController logoutController) {
         this.settingsViewModel = settingsViewModel;
         this.darkModeController = darkModeController;
         this.logoutController = logoutController;
-        this.settingsPresenter = settingsPresenter;
 
         this.settingsViewModel.addPropertyChangeListener(this);
 
@@ -90,14 +87,9 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
             boolean darkModeEnabled = darkModeCheckBox.isSelected();
             darkModeController.toggleDarkMode(darkModeEnabled);
         } else if (evt.getSource().equals(changePasswordButton)) {
-            if (changePasswordController != null) {
+            if (settingsController != null) {
                 String username = settingsViewModel.getState().getUsername();
-                String newPassword = JOptionPane.showInputDialog(this, "Enter new password:");  // Collect new password from user
-                if (newPassword != null && !newPassword.isEmpty()) {
-                    changePasswordController.execute(newPassword, username);  // Pass both new password and username
-                } else {
-                    JOptionPane.showMessageDialog(this, "Password cannot be empty.");
-                }
+                settingsController.changePassword(username);
             }
         } else if (evt.getSource().equals(logOutButton)) {
             String username = settingsViewModel.getState().getUsername();

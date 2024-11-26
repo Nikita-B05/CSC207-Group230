@@ -1,15 +1,21 @@
 package interface_adapter.change_password;
 
 public class ChangePasswordState {
-    private String username;
-    private String password;
+    private String username = "";
+    private String password = "";
     private String passwordError;
 
 
-    public ChangePasswordState(String username) {
-        this.username = username;
-        this.password = "";
+    public ChangePasswordState(ChangePasswordState copy) {
+        username = copy.username;
+        password = copy.password;
+        passwordError = copy.passwordError;
     }
+
+    public ChangePasswordState() {
+
+    }
+
 
     public String getUsername() {
         return username;

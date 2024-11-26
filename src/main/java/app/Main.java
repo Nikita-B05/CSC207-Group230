@@ -14,14 +14,17 @@ public class Main {
     public static void main(String[] args) {
         final AppBuilder appBuilder = new AppBuilder();
         final JFrame application = appBuilder
-                                            .addLoginView()
-                                            .addSignupView()
-                                            .addLoggedInView()
-                                            .addSignupUseCase()
-                                            .addLoginUseCase()
-                                            .addLogoutUseCase()
-                                            .addChangePasswordUseCase()
-                                            .build();
+                .addLoginView()
+                .addSignupView()
+                .addSettingsView()
+                .addChangePasswordView()
+                .addSignupUseCase()
+                .addLoginUseCase()
+                .addLogoutUseCase()
+                .addChangePasswordUseCase()
+                .addSettingsUseCase()
+                .addChangePasswordUseCase()
+                .build();
 
         application.pack();
         application.setVisible(true);

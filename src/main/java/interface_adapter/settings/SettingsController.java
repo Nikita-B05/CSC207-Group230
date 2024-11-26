@@ -18,7 +18,7 @@ public class SettingsController {
         settingsInteractor.toggleDarkMode(inputData);
     }
 
-    public void navigateToChangePassword(String username) {
+    public void changePassword(String username) {
         SettingsInputData inputData = new SettingsInputData(username);
         settingsInteractor.navigateToChangePassword(inputData);
     }
@@ -27,4 +27,5 @@ public class SettingsController {
         SettingsInputData inputData = new SettingsInputData(username);
         settingsInteractor.logout(inputData);
     }
+
 }
