@@ -4,6 +4,11 @@ public class Liabilities {
     private final int loan;
     private final int creditCard;
 
+    public Liabilities() {
+        this.loan = 0;
+        this.creditCard = 0;
+    }
+
     public Liabilities(int loan, int creditCard) {
         this.loan = loan;
         this.creditCard = creditCard;
