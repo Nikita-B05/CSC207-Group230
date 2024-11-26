@@ -60,7 +60,7 @@ public class ChangePasswordView extends JPanel implements ActionListener, Proper
             System.out.println(changePasswordViewModel.getState().getUsername());
             changePasswordController.execute(newPassword, changePasswordViewModel.getState().getUsername());
         } else if (evt.getSource().equals(cancelButton)) {
-            changePasswordViewModel.firePropertyChanged("navigateBack");
+            changePasswordViewModel.firePropertyChanged();
         }
     }
 
@@ -68,7 +68,7 @@ public class ChangePasswordView extends JPanel implements ActionListener, Proper
     public void propertyChange(PropertyChangeEvent evt) {
         if ("passwordChanged".equals(evt.getPropertyName())) {
             JOptionPane.showMessageDialog(this, "Password changed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            changePasswordViewModel.firePropertyChanged("navigateBack");
+            changePasswordViewModel.firePropertyChanged();
         }
     }
 
