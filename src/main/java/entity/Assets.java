@@ -10,7 +10,7 @@ public class Assets {
 
     public Assets() {
         home = 0;
-        stocks = new ArrayList<Stock>();
+        stocks = new ArrayList<>();
         cash = 0;
         car = 0;
     }

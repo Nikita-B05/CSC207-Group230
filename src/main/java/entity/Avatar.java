@@ -7,6 +7,11 @@ public class Avatar {
     private final String id;
     private final String imagePath;
 
+    public Avatar() {
+        this.id = "default";
+        this.imagePath = "./images/rickroll.png";
+    }
+
     public Avatar(String id, String imagePath) {
         this.id = id;
         this.imagePath = imagePath;

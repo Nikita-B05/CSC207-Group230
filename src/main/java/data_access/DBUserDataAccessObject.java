@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import converters.EntityConverterInterface;
 import converters.EntityConverter;
 import entity.*;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -67,21 +68,38 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
             if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
                 final JSONObject userJSONObject = responseBody.getJSONObject("user");
+
                 String dbUsername = userJSONObject.has(USERNAME) ? userJSONObject.getString(USERNAME) : username;
+
                 final String password = userJSONObject.has(PASSWORD) ? userJSONObject.getString(PASSWORD) : null;
+
                 final boolean isDarkMode = userJSONObject.has(DARK_MODE) ? userJSONObject.getBoolean(DARK_MODE) : false;
+
                 final String characterName = userJSONObject.has(CHARACTER_NAME) ?
                         userJSONObject.getString(CHARACTER_NAME) : null;
-                final Avatar avatar = userJSONObject.has(AVATAR) ?
-                        converter.toAvatar(userJSONObject.getJSONObject(AVATAR)) : null;
+
+                Avatar avatar = new Avatar();
+                if (userJSONObject.has(AVATAR)) {
+                    converter.toAvatar(userJSONObject.getJSONObject(AVATAR));
+                }
+
                 final int happiness = userJSONObject.has(HAPPINESS) ? userJSONObject.getInt(HAPPINESS) : 0;
                 final int salary = userJSONObject.has(SALARY) ? userJSONObject.getInt(SALARY) : 0;
-                final Assets assets = userJSONObject.has(ASSETS) ?
-                        converter.toAssets(userJSONObject.getJSONObject(ASSETS)) : null;
-                final Liabilities liabilities = userJSONObject.has(LIABILITIES) ?
-                        converter.toLiabilities(userJSONObject.getJSONObject(LIABILITIES)) : null;
-                final ArrayList<Decision> decisions = userJSONObject.has(DECISIONS) ?
-                        converter.toArrayListOfDecision(userJSONObject.getJSONArray(DECISIONS)) : null;
+
+                Assets assets = new Assets();
+                if (userJSONObject.has(ASSETS)) {
+                    converter.toAssets(userJSONObject.getJSONObject(ASSETS));
+                }
+
+                Liabilities liabilities = new Liabilities();
+                if (userJSONObject.has(LIABILITIES)) {
+                    converter.toLiabilities(userJSONObject.getJSONObject(LIABILITIES));
+                }
+
+                ArrayList<Decision> decisions = new ArrayList<>();
+                if (userJSONObject.has(DECISIONS)) {
+                    decisions = converter.toArrayListOfDecision(userJSONObject.getJSONArray(DECISIONS));
+                }
 
                 return userFactory.create(
                         dbUsername,
