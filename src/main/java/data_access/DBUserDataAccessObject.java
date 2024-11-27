@@ -239,6 +239,10 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         final OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
 
+        if (!existsByName(user.getUsername())) {
+            throw new RuntimeException(String.format("User %s does not exist", user.getUsername()));
+        }
+
         // POST METHOD
         final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);
         final JSONObject requestBody = new JSONObject();
@@ -290,25 +294,22 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     public static void main(String[] args) {
         UserFactory userFactory = new CommonUserFactory();
         DBUserDataAccessObject dao = new DBUserDataAccessObject(userFactory);
-        User user = dao.get("Paul");
-        user = userFactory.create(
-                user.getUsername(),
-                user.getPassword(),
+        User user = userFactory.create(
+                "Paul",
+                "abc",
                 true,
                 "Joe Roggens",
                 new Avatar(),
                 0,
-                10000,
+                100000,
                 null,
                 null,
                 new ArrayList<>()
         );
         dao.updateUser(user);
-        boolean isDarkMode = dao.get(user.getUsername()).isDarkMode();
-        int salary = dao.get(user.getUsername()).getSalary();
-        String password = dao.get(user.getUsername()).getPassword();
-        System.out.println(isDarkMode);
-        System.out.println(salary);
-        System.out.println(password);
+        user = dao.get("Paul");
+        System.out.println(user.getUsername());
+        System.out.println(user.getPassword());
+        System.out.println(user.getSalary());
     }
 }
