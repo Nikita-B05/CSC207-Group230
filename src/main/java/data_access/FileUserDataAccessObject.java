@@ -31,14 +31,16 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
     private String currentUsername;
 
     public FileUserDataAccessObject(String csvPath, UserFactory userFactory) throws IOException {
+
         csvFile = new File(csvPath);
         headers.put("username", 0);
         headers.put("password", 1);
-        headers.put("darkMode", 2);  // Add darkMode
 
         if (csvFile.length() == 0) {
             save();
-        } else {
+        }
+        else {
+
             try (BufferedReader reader = new BufferedReader(new FileReader(csvFile))) {
                 final String header = reader.readLine();
 
@@ -49,9 +51,8 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
                 String row;
                 while ((row = reader.readLine()) != null) {
                     final String[] col = row.split(",");
-                    final String username = col[headers.get("username")];
-                    final String password = col[headers.get("password")];
-
+                    final String username = String.valueOf(col[headers.get("username")]);
+                    final String password = String.valueOf(col[headers.get("password")]);
                     final User user = userFactory.create(username, password);
                     accounts.put(username, user);
                 }
@@ -67,13 +68,14 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
             writer.newLine();
 
             for (User user : accounts.values()) {
-                final String line = String.format("%s,%s,%s",  // Include darkMode
-                        user.getName(), user.getPassword(), user.getDarkMode());
+                final String line = String.format("%s,%s",
+                        user.getUsername(), user.getPassword());
                 writer.write(line);
                 writer.newLine();
             }
 
             writer.close();
+
         }
         catch (IOException ex) {
             throw new RuntimeException(ex);
@@ -82,7 +84,7 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
 
     @Override
     public void save(User user) {
-        accounts.put(user.getName(), user);
+        accounts.put(user.getUsername(), user);
         this.save();
     }
 
@@ -109,7 +111,7 @@ public class FileUserDataAccessObject implements SignupUserDataAccessInterface,
     @Override
     public void changePassword(User user) {
         // Replace the User object in the map
-        accounts.put(user.getName(), user);
+        accounts.put(user.getUsername(), user);
         save();
     }
 }

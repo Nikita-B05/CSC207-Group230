@@ -1,22 +1,23 @@
 package data_access;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
+import converters.EntityConverterInterface;
+import converters.EntityConverter;
+import entity.*;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import entity.User;
-import entity.UserFactory;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
-import use_case.dark_mode.DarkModeUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
-import use_case.settings.SettingsUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 /**
@@ -25,91 +26,147 @@ import use_case.signup.SignupUserDataAccessInterface;
 public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
         ChangePasswordUserDataAccessInterface,
-        LogoutUserDataAccessInterface,
-        DarkModeUserDataAccessInterface,
-        SettingsUserDataAccessInterface {
-
+        LogoutUserDataAccessInterface
+{
     private static final int SUCCESS_CODE = 200;
     private static final String CONTENT_TYPE_LABEL = "Content-Type";
     private static final String CONTENT_TYPE_JSON = "application/json";
     private static final String STATUS_CODE_LABEL = "status_code";
-    private static final String USERNAME_KEY = "username";
-    private static final String PASSWORD_KEY = "password";
-    private static final String DARK_MODE_KEY = "darkMode";
-    private static final String MESSAGE_KEY = "message";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String DARK_MODE = "darkMode";
+    private static final String CHARACTER_NAME = "characterName";
+    private static final String AVATAR = "avatar";
+    private static final String HAPPINESS = "happiness";
+    private static final String SALARY = "salary";
+    private static final String ASSETS = "assets";
+    private static final String LIABILITIES = "liabilities";
+    private static final String DECISIONS = "decisions";
 
+    private static final String MESSAGE = "failed to get user from database";
     private final UserFactory userFactory;
-    private String currentUsername = null;
+    private final EntityConverterInterface converter;
 
     public DBUserDataAccessObject(UserFactory userFactory) {
         this.userFactory = userFactory;
+        this.converter = new EntityConverter();
+        // No need to do anything to reinitialize a user list! The data is the cloud that may be miles away.
     }
 
     @Override
     public User get(String username) {
-        if (username == null || username.isEmpty()) {
-            throw new IllegalArgumentException("Username cannot be null or empty");
-        }
-
+        // Make an API call to get the user object.
         final OkHttpClient client = new OkHttpClient().newBuilder().build();
         final Request request = new Request.Builder()
                 .url(String.format("http://vm003.teach.cs.toronto.edu:20112/user?username=%s", username))
-                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
+                .addHeader("Content-Type", CONTENT_TYPE_JSON)
                 .build();
+        try {
+            final Response response = client.newCall(request).execute();
 
-        try (Response response = client.newCall(request).execute()) {
-            if (response.body() == null) {
-                throw new RuntimeException("Response body is null");
-            }
             final JSONObject responseBody = new JSONObject(response.body().string());
-            System.out.println(responseBody);
+
             if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
                 final JSONObject userJSONObject = responseBody.getJSONObject("user");
-                final String name = userJSONObject.getString(USERNAME_KEY);
-                final String password = userJSONObject.getString(PASSWORD_KEY);
-                final boolean darkModeEnabled = userJSONObject.getBoolean(DARK_MODE_KEY);
-                return userFactory.create(name, password);
-            } else {
-                throw new RuntimeException(responseBody.optString(MESSAGE_KEY, "Unknown error"));
+
+                String dbUsername = userJSONObject.has(USERNAME) ? userJSONObject.getString(USERNAME) : username;
+
+                final String password = userJSONObject.has(PASSWORD) ? userJSONObject.getString(PASSWORD) : null;
+
+                final boolean isDarkMode = userJSONObject.has(DARK_MODE) ? userJSONObject.getBoolean(DARK_MODE) : false;
+
+                final String characterName = userJSONObject.has(CHARACTER_NAME) ?
+                        userJSONObject.getString(CHARACTER_NAME) : null;
+
+                Avatar avatar = new Avatar();
+                if (userJSONObject.has(AVATAR)) {
+                    converter.toAvatar(userJSONObject.getJSONObject(AVATAR));
+                }
+
+                final int happiness = userJSONObject.has(HAPPINESS) ? userJSONObject.getInt(HAPPINESS) : 0;
+                final int salary = userJSONObject.has(SALARY) ? userJSONObject.getInt(SALARY) : 0;
+
+                Assets assets = new Assets();
+                if (userJSONObject.has(ASSETS)) {
+                    converter.toAssets(userJSONObject.getJSONObject(ASSETS));
+                }
+
+                Liabilities liabilities = new Liabilities();
+                if (userJSONObject.has(LIABILITIES)) {
+                    converter.toLiabilities(userJSONObject.getJSONObject(LIABILITIES));
+                }
+
+                ArrayList<Decision> decisions = new ArrayList<>();
+                if (userJSONObject.has(DECISIONS)) {
+                    decisions = converter.toArrayListOfDecision(userJSONObject.getJSONArray(DECISIONS));
+                }
+
+                return userFactory.create(
+                        dbUsername,
+                        password,
+                        isDarkMode,
+                        characterName,
+                        avatar,
+                        happiness,
+                        salary,
+                        assets,
+                        liabilities,
+                        decisions
+                );
             }
-        } catch (IOException | JSONException ex) {
-            throw new RuntimeException("Error fetching user data: " + ex.getMessage(), ex);
+            else {
+                throw new RuntimeException(responseBody.getString(MESSAGE));
+            }
+        }
+        catch (IOException | JSONException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
     @Override
     public void setCurrentUsername(String name) {
-        if (name != null && name.isEmpty()) {
-            throw new IllegalArgumentException("Current username cannot be an empty string");
-        }
-        this.currentUsername = name;
+        // this isn't implemented for the lab
     }
 
     @Override
-    public String getCurrentUsername() {
-        if (currentUsername == null) {
-            throw new IllegalStateException("No current user is set");
-        }
-        return currentUsername;
-    }
+    public boolean existsByName(String username) {
+        final OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+        final Request request = new Request.Builder()
+                .url(String.format("http://vm003.teach.cs.toronto.edu:20112/checkIfUserExists?username=%s", username))
+                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
+                .build();
+        try {
+            final Response response = client.newCall(request).execute();
 
-    @Override
-    public User getCurrentUser() {
-        if (currentUsername == null) {
-            throw new IllegalStateException("No current user is logged in");
+            final JSONObject responseBody = new JSONObject(response.body().string());
+
+            return responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE;
         }
-        return get(currentUsername);
+        catch (IOException | JSONException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     @Override
     public void save(User user) {
-        final OkHttpClient client = new OkHttpClient().newBuilder().build();
-        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);
+        final OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
 
+        // POST METHOD
+        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);
         final JSONObject requestBody = new JSONObject();
-        requestBody.put(USERNAME_KEY, user.getName());
-        requestBody.put(PASSWORD_KEY, user.getPassword());
-        requestBody.put(DARK_MODE_KEY, user.getDarkMode());
+
+        requestBody.put(USERNAME, user.getUsername());
+        requestBody.put(PASSWORD, user.getPassword());
+        requestBody.put(DARK_MODE, user.isDarkMode());
+        requestBody.put(CHARACTER_NAME, user.getCharacterName());
+        requestBody.put(AVATAR, converter.toJSONObject(user.getAvatar()));
+        requestBody.put(HAPPINESS, user.getHappiness());
+        requestBody.put(SALARY, user.getSalary());
+        requestBody.put(ASSETS, converter.toJSONObject(user.getAssets()));
+        requestBody.put(LIABILITIES, converter.toJSONObject(user.getLiabilities()));
+        requestBody.put(DECISIONS, converter.toJSONArray(user.getDecisions()));
 
         final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
         final Request request = new Request.Builder()
@@ -117,77 +174,58 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                 .method("POST", body)
                 .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
                 .build();
+        try {
+            final Response response = client.newCall(request).execute();
 
-        try (Response response = client.newCall(request).execute()) {
-            if (response.body() == null) {
-                throw new RuntimeException("Response body is null");
-            }
             final JSONObject responseBody = new JSONObject(response.body().string());
 
-            if (responseBody.getInt(STATUS_CODE_LABEL) != SUCCESS_CODE) {
-                throw new RuntimeException(responseBody.optString(MESSAGE_KEY, "Unknown error"));
+            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
+                // success!
             }
-        } catch (IOException | JSONException ex) {
-            throw new RuntimeException("Error saving user data: " + ex.getMessage(), ex);
+            else {
+                throw new RuntimeException(responseBody.getString(MESSAGE));
+            }
+        }
+        catch (IOException | JSONException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
     @Override
     public void changePassword(User user) {
-        updateUser(user, "PUT");
-    }
+        final OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
 
-    @Override
-    public void updateUserDarkMode(User user) {
-        updateUser(user, "PUT");
-    }
-
-    private void updateUser(User user, String method) {
-        final OkHttpClient client = new OkHttpClient().newBuilder().build();
+        // POST METHOD
         final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);
-
         final JSONObject requestBody = new JSONObject();
-        requestBody.put(USERNAME_KEY, user.getName());
-        requestBody.put(PASSWORD_KEY, user.getPassword());
-        requestBody.put(DARK_MODE_KEY, user.getDarkMode());
+        requestBody.put(USERNAME, user.getUsername());
+        requestBody.put(PASSWORD, user.getPassword());
         final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
         final Request request = new Request.Builder()
                 .url("http://vm003.teach.cs.toronto.edu:20112/user")
-                .method(method, body)
+                .method("PUT", body)
                 .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
                 .build();
+        try {
+            final Response response = client.newCall(request).execute();
 
-        try (Response response = client.newCall(request).execute()) {
-            if (response.body() == null) {
-                throw new RuntimeException("Response body is null");
-            }
             final JSONObject responseBody = new JSONObject(response.body().string());
 
-            if (responseBody.getInt(STATUS_CODE_LABEL) != SUCCESS_CODE) {
-                throw new RuntimeException(responseBody.optString(MESSAGE_KEY, "Unknown error"));
+            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
+                // success!
             }
-        } catch (IOException | JSONException ex) {
-            throw new RuntimeException("Error updating user data: " + ex.getMessage(), ex);
+            else {
+                throw new RuntimeException(responseBody.getString(MESSAGE));
+            }
+        }
+        catch (IOException | JSONException ex) {
+            throw new RuntimeException(ex);
         }
     }
 
     @Override
-    public boolean existsByName(String username) {
-        final OkHttpClient client = new OkHttpClient().newBuilder().build();
-        final Request request = new Request.Builder()
-                .url(String.format("http://vm003.teach.cs.toronto.edu:20112/checkIfUserExists?username=%s", username))
-                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            if (response.body() == null) {
-                throw new RuntimeException("Response body is null");
-            }
-            final JSONObject responseBody = new JSONObject(response.body().string());
-
-            return responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE;
-        } catch (IOException | JSONException ex) {
-            throw new RuntimeException("Error checking user existence: " + ex.getMessage(), ex);
-        }
+    public String getCurrentUsername() {
+        return null;
     }
 }

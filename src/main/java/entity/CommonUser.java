@@ -1,29 +1,64 @@
 package entity;
 
+import java.util.ArrayList;
+
 /**
  * A simple implementation of the User interface.
  */
 public class CommonUser implements User {
 
-    private final String name;
+    private final String username;
     private final String password;
-    private Boolean darkMode;
+    private final boolean isDarkMode;
 
-    public CommonUser(String name, String password) {
-        this.name = name;
+    private final String characterName;
+    private final Avatar avatar;
+    private final int happiness;
+    private final int salary;
+    private final Assets assets;
+    private final Liabilities liabilities;
+    private final ArrayList<Decision> decisions;
+
+    public CommonUser(String username, String password) {
+        this.username = username;
         this.password = password;
-        this.darkMode = false;
+        this.isDarkMode = false;
+        this.characterName = null;
+        this.avatar = null;
+        this.happiness = 100;
+        this.salary = 0;
+        this.assets = null;
+        this.liabilities = null;
+        this.decisions = new ArrayList<>();
     }
 
-    public CommonUser(String name, String password, boolean darkMode) {
-        this.name = name;
+    public CommonUser(
+            String username,
+            String password,
+            boolean isDarkMode,
+            String characterName,
+            Avatar avatar,
+            int happiness,
+            int salary,
+            Assets assets,
+            Liabilities liabilities,
+            ArrayList<Decision> decisions
+    ) {
+        this.username = username;
         this.password = password;
-        this.darkMode = darkMode;
+        this.isDarkMode = isDarkMode;
+        this.characterName = characterName;
+        this.avatar = avatar;
+        this.happiness = happiness;
+        this.salary = salary;
+        this.assets = assets;
+        this.liabilities = liabilities;
+        this.decisions = decisions;
     }
 
     @Override
-    public String getName() {
-        return name;
+    public String getUsername() {
+        return username;
     }
 
     @Override
@@ -31,11 +66,51 @@ public class CommonUser implements User {
         return password;
     }
 
-    public Boolean getDarkMode() {
-        return darkMode;
+    @Override
+    public boolean isDarkMode() {
+        return isDarkMode;
     }
 
-    public void setDarkMode(Boolean darkMode) {
-        this.darkMode = darkMode;
+    @Override
+    public String getCharacterName() {
+        return characterName;
+    }
+
+    @Override
+    public Avatar getAvatar() {
+        return avatar;
+    }
+
+    @Override
+    public int getHappiness() {
+        return happiness;
+    }
+
+    @Override
+    public int getSalary() {
+        return salary;
+    }
+
+    @Override
+    public Assets getAssets() {
+        return assets;
+    }
+
+    @Override
+    public Liabilities getLiabilities() {
+        return liabilities;
+    }
+
+    @Override
+    public ArrayList<Decision> getDecisions() {
+        return decisions;
+    }
+
+    @Override
+    public int getNetWork() {
+        if (assets == null || liabilities == null) {
+            return 0;
+        }
+        return assets.getTotal() - liabilities.getTotal();
     }
 }
