@@ -1,6 +1,7 @@
 package data_access.config;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.mongodb.client.MongoCollection;
@@ -12,6 +13,7 @@ import data_access.MongoDBConnection;
 import entity.*;
 import org.bson.Document;
 
+import org.bson.codecs.DecoderContext;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
@@ -141,10 +143,52 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
     private void updateUser(User user, String key, Object value) {
         MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
 
-        usersCollection.updateOne(
-                Filters.eq(USERNAME, user.getUsername()),
-                Updates.set(key, value)
-        );
+        if (Objects.equals(key, AVATAR)) {
+            if (!(value instanceof Avatar)) {
+                throw new IllegalArgumentException("Class of <value> must be equal to <key>.");
+            }
+            usersCollection.updateOne(
+                    Filters.eq(USERNAME, user.getUsername()),
+                    Updates.set(key, converter.serialize((Avatar) value))
+            );
+        }
+        else if (Objects.equals(key, ASSETS)) {
+            if (!(value instanceof Assets)) {
+                throw new IllegalArgumentException("Class of <value> must be equal to <key>.");
+            }
+            usersCollection.updateOne(
+                    Filters.eq(USERNAME, user.getUsername()),
+                    Updates.set(key, converter.serialize((Assets) value))
+            );
+        }
+        else if (Objects.equals(key, LIABILITIES)) {
+            if (!(value instanceof Liabilities)) {
+                throw new IllegalArgumentException("Class of <value> must be equal to <key>.");
+            }
+            usersCollection.updateOne(
+                    Filters.eq(USERNAME, user.getUsername()),
+                    Updates.set(key, converter.serialize((Liabilities) value))
+            );
+        }
+        else if (Objects.equals(key, DECISIONS)) {
+            if (!(value instanceof ArrayList)) {
+                throw new IllegalArgumentException("Class of <value> must be equal to <key>.");
+            }
+            for (Object o : (ArrayList) value) {
+                if (!(o instanceof Decision)) {
+                    throw new IllegalArgumentException("Value is not an ArrayList of Decision.");
+                }
+            }
+            usersCollection.updateOne(
+                    Filters.eq(USERNAME, user.getUsername()),
+                    Updates.set(key, converter.serialize((ArrayList<Decision>) value))
+            );
+        } else {
+            usersCollection.updateOne(
+                    Filters.eq(USERNAME, user.getUsername()),
+                    Updates.set(key, value)
+            );
+        }
     }
 
     @Override
