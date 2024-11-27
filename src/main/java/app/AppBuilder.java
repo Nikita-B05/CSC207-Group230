@@ -13,6 +13,9 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.LoggedInViewModel;
+import interface_adapter.homepage.HomepageController;
+import interface_adapter.homepage.HomepagePresenter;
+import interface_adapter.homepage.HomepageViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -24,6 +27,9 @@ import interface_adapter.signup.SignupViewModel;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.homepage.HomepageInputBoundary;
+import use_case.homepage.HomepageInteractor;
+import use_case.homepage.HomepageOutputBoundary;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
@@ -33,10 +39,7 @@ import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
-import view.LoggedInView;
-import view.LoginView;
-import view.SignupView;
-import view.ViewManager;
+import view.*;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -63,8 +66,10 @@ public class AppBuilder {
     private SignupView signupView;
     private SignupViewModel signupViewModel;
     private LoginViewModel loginViewModel;
+    private HomepageViewModel homepageViewModel;
     private LoggedInViewModel loggedInViewModel;
     private LoggedInView loggedInView;
+    private HomepageView homepageView;
     private LoginView loginView;
 
     public AppBuilder() {
@@ -90,6 +95,17 @@ public class AppBuilder {
         loginViewModel = new LoginViewModel();
         loginView = new LoginView(loginViewModel);
         cardPanel.add(loginView, loginView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Homepage View to the application.
+     * @return this builder
+     */
+    public AppBuilder addHomepageView() {
+        homepageViewModel = new HomepageViewModel();
+        homepageView = new HomepageView(homepageViewModel);
+        cardPanel.add(homepageView, homepageView.getViewName());
         return this;
     }
 
@@ -125,12 +141,27 @@ public class AppBuilder {
      */
     public AppBuilder addLoginUseCase() {
         final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel,
-                loggedInViewModel, loginViewModel, signupViewModel);
+                homepageViewModel, loginViewModel, signupViewModel);
         final LoginInputBoundary loginInteractor = new LoginInteractor(
                 userDataAccessObject, loginOutputBoundary);
 
         final LoginController loginController = new LoginController(loginInteractor);
         loginView.setLoginController(loginController);
+        return this;
+    }
+
+    /**
+     * Adds the Homepage Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addHomepageUseCase() {
+        final HomepageOutputBoundary homepageOutputBoundary = new HomepagePresenter(viewManagerModel,
+                homepageViewModel);
+        final HomepageInputBoundary homepageInteractor = new HomepageInteractor(
+                userDataAccessObject, homepageOutputBoundary);
+
+        final HomepageController homepageController = new HomepageController(homepageInteractor);
+        homepageView.setHomepageController(homepageController);
         return this;
     }
 

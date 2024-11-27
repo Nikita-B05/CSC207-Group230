@@ -1,17 +1,12 @@
 package view;
 
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -49,6 +44,16 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                 new JLabel("Username"), usernameInputField);
         final LabelTextPanel passwordInfo = new LabelTextPanel(
                 new JLabel("Password"), passwordInputField);
+
+        final JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
+        inputPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        inputPanel.setMaximumSize(new Dimension(1000, 120));
+
+//        inputPanel.add(title);
+        inputPanel.add(usernameInfo);
+        inputPanel.add(usernameErrorField);
+        inputPanel.add(passwordInfo);
 
         final JPanel buttons = new JPanel();
         logIn = new JButton("log in");
@@ -128,11 +133,10 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
             }
         });
 
-        this.add(title);
-        this.add(usernameInfo);
-        this.add(usernameErrorField);
-        this.add(passwordInfo);
+        this.add(Box.createVerticalGlue());
+        this.add(inputPanel);
         this.add(buttons);
+        this.add(Box.createVerticalGlue());
     }
 
     /**
