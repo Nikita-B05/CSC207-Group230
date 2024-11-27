@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import converters.EntityConverterInterface;
 import converters.EntityConverter;
 import entity.*;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,6 +33,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private static final String STATUS_CODE_LABEL = "status_code";
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
+    private static final String INFO = "info";
     private static final String DARK_MODE = "darkMode";
     private static final String CHARACTER_NAME = "characterName";
     private static final String AVATAR = "avatar";
@@ -43,7 +43,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private static final String LIABILITIES = "liabilities";
     private static final String DECISIONS = "decisions";
 
-    private static final String MESSAGE = "failed to get user from database";
+    private static final String MESSAGE = "message";
     private final UserFactory userFactory;
     private final EntityConverterInterface converter;
 
@@ -73,32 +73,37 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
                 final String password = userJSONObject.has(PASSWORD) ? userJSONObject.getString(PASSWORD) : null;
 
-                final boolean isDarkMode = userJSONObject.has(DARK_MODE) ? userJSONObject.getBoolean(DARK_MODE) : false;
+                if (!userJSONObject.has(INFO) || userJSONObject.isNull(INFO)) {
+                    return userFactory.create(dbUsername, password);
+                }
+                JSONObject infoJSON = userJSONObject.getJSONObject(INFO);
 
-                final String characterName = userJSONObject.has(CHARACTER_NAME) ?
-                        userJSONObject.getString(CHARACTER_NAME) : null;
+                final boolean isDarkMode = infoJSON.has(DARK_MODE) ? infoJSON.getBoolean(DARK_MODE) : false;
+
+                final String characterName = infoJSON.has(CHARACTER_NAME) ?
+                        infoJSON.getString(CHARACTER_NAME) : null;
 
                 Avatar avatar = new Avatar();
-                if (userJSONObject.has(AVATAR)) {
-                    converter.toAvatar(userJSONObject.getJSONObject(AVATAR));
+                if (infoJSON.has(AVATAR)) {
+                    converter.toAvatar(infoJSON.getJSONObject(AVATAR));
                 }
 
-                final int happiness = userJSONObject.has(HAPPINESS) ? userJSONObject.getInt(HAPPINESS) : 0;
-                final int salary = userJSONObject.has(SALARY) ? userJSONObject.getInt(SALARY) : 0;
+                final int happiness = infoJSON.has(HAPPINESS) ? infoJSON.getInt(HAPPINESS) : 0;
+                final int salary = infoJSON.has(SALARY) ? infoJSON.getInt(SALARY) : 0;
 
                 Assets assets = new Assets();
-                if (userJSONObject.has(ASSETS)) {
-                    converter.toAssets(userJSONObject.getJSONObject(ASSETS));
+                if (infoJSON.has(ASSETS)) {
+                    converter.toAssets(infoJSON.getJSONObject(ASSETS));
                 }
 
                 Liabilities liabilities = new Liabilities();
-                if (userJSONObject.has(LIABILITIES)) {
-                    converter.toLiabilities(userJSONObject.getJSONObject(LIABILITIES));
+                if (infoJSON.has(LIABILITIES)) {
+                    converter.toLiabilities(infoJSON.getJSONObject(LIABILITIES));
                 }
 
                 ArrayList<Decision> decisions = new ArrayList<>();
-                if (userJSONObject.has(DECISIONS)) {
-                    decisions = converter.toArrayListOfDecision(userJSONObject.getJSONArray(DECISIONS));
+                if (infoJSON.has(DECISIONS)) {
+                    decisions = converter.toArrayListOfDecision(infoJSON.getJSONArray(DECISIONS));
                 }
 
                 return userFactory.create(
@@ -159,14 +164,19 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
         requestBody.put(USERNAME, user.getUsername());
         requestBody.put(PASSWORD, user.getPassword());
-        requestBody.put(DARK_MODE, user.isDarkMode());
-        requestBody.put(CHARACTER_NAME, user.getCharacterName());
-        requestBody.put(AVATAR, converter.toJSONObject(user.getAvatar()));
-        requestBody.put(HAPPINESS, user.getHappiness());
-        requestBody.put(SALARY, user.getSalary());
-        requestBody.put(ASSETS, converter.toJSONObject(user.getAssets()));
-        requestBody.put(LIABILITIES, converter.toJSONObject(user.getLiabilities()));
-        requestBody.put(DECISIONS, converter.toJSONArray(user.getDecisions()));
+
+        final JSONObject infoBody = new JSONObject();
+
+        infoBody.put(DARK_MODE, user.isDarkMode());
+        infoBody.put(CHARACTER_NAME, user.getCharacterName());
+        infoBody.put(AVATAR, converter.toJSONObject(user.getAvatar()));
+        infoBody.put(HAPPINESS, user.getHappiness());
+        infoBody.put(SALARY, user.getSalary());
+        infoBody.put(ASSETS, converter.toJSONObject(user.getAssets()));
+        infoBody.put(LIABILITIES, converter.toJSONObject(user.getLiabilities()));
+        infoBody.put(DECISIONS, converter.toJSONArray(user.getDecisions()));
+
+        requestBody.put(INFO, infoBody);
 
         final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
         final Request request = new Request.Builder()
@@ -224,8 +234,81 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         }
     }
 
+//    @Override
+    public void updateUser(User user) {
+        final OkHttpClient client = new OkHttpClient().newBuilder()
+                .build();
+
+        // POST METHOD
+        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);
+        final JSONObject requestBody = new JSONObject();
+
+        requestBody.put(USERNAME, user.getUsername());
+        requestBody.put(PASSWORD, user.getPassword());
+
+        final JSONObject infoBody = new JSONObject();
+
+        infoBody.put(DARK_MODE, user.isDarkMode());
+        infoBody.put(CHARACTER_NAME, user.getCharacterName());
+        infoBody.put(AVATAR, converter.toJSONObject(user.getAvatar()));
+        infoBody.put(HAPPINESS, user.getHappiness());
+        infoBody.put(SALARY, user.getSalary());
+        infoBody.put(ASSETS, converter.toJSONObject(user.getAssets()));
+        infoBody.put(LIABILITIES, converter.toJSONObject(user.getLiabilities()));
+        infoBody.put(DECISIONS, converter.toJSONArray(user.getDecisions()));
+
+        requestBody.put(INFO, infoBody);
+
+        final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
+        final Request request = new Request.Builder()
+                .url("http://vm003.teach.cs.toronto.edu:20112/modifyUserInfo")
+                .method("PUT", body)
+                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
+                .build();
+        try {
+            final Response response = client.newCall(request).execute();
+
+            final JSONObject responseBody = new JSONObject(response.body().string());
+
+            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
+                // success!
+            }
+            else {
+                throw new RuntimeException(responseBody.getString(MESSAGE));
+            }
+        }
+        catch (IOException | JSONException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
     @Override
     public String getCurrentUsername() {
         return null;
+    }
+
+    public static void main(String[] args) {
+        UserFactory userFactory = new CommonUserFactory();
+        DBUserDataAccessObject dao = new DBUserDataAccessObject(userFactory);
+        User user = dao.get("Paul");
+        user = userFactory.create(
+                user.getUsername(),
+                user.getPassword(),
+                true,
+                "Joe Roggens",
+                new Avatar(),
+                0,
+                10000,
+                null,
+                null,
+                new ArrayList<>()
+        );
+        dao.updateUser(user);
+        boolean isDarkMode = dao.get(user.getUsername()).isDarkMode();
+        int salary = dao.get(user.getUsername()).getSalary();
+        String password = dao.get(user.getUsername()).getPassword();
+        System.out.println(isDarkMode);
+        System.out.println(salary);
+        System.out.println(password);
     }
 }
