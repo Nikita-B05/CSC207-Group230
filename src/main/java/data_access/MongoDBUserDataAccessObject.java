@@ -1,4 +1,4 @@
-package data_access.config;
+package data_access;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -9,11 +9,9 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import converters.EntityConverter;
 import converters.EntityConverterInterface;
-import data_access.MongoDBConnection;
 import entity.*;
 import org.bson.Document;
 
-import org.bson.codecs.DecoderContext;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
