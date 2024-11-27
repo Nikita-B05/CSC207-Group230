@@ -19,7 +19,7 @@ import use_case.signup.SignupUserDataAccessInterface;
 /**
  * The DAO for user data, now using MongoDB.
  */
-public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
+public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
         ChangePasswordUserDataAccessInterface,
         LogoutUserDataAccessInterface,
@@ -34,7 +34,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     private final MongoDBConnection mongoDBConnection;
     private String currentUsername = null;
 
-    public DBUserDataAccessObject(UserFactory userFactory) {
+    public MongoDBUserDataAccessObject(UserFactory userFactory) {
         this.userFactory = userFactory;
         this.mongoDBConnection = new MongoDBConnection();
     }

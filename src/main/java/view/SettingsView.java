@@ -1,6 +1,6 @@
 package view;
 
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -13,7 +13,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.settings.SettingsController;
 import interface_adapter.settings.SettingsViewModel;
 import interface_adapter.dark_mode.DarkModeController;
@@ -101,8 +100,31 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
         if ("darkMode".equals(evt.getPropertyName())) {
             boolean darkModeEnabled = settingsViewModel.getState().isDarkModeEnabled();
             darkModeCheckBox.setSelected(darkModeEnabled);
+
+            if (darkModeEnabled) {
+                setBackground(Color.DARK_GRAY);
+                darkModeCheckBox.setBackground(Color.DARK_GRAY);
+                darkModeCheckBox.setForeground(Color.WHITE);
+                changePasswordButton.setBackground(Color.GRAY);
+                changePasswordButton.setForeground(Color.WHITE);
+                logOutButton.setBackground(Color.GRAY);
+                logOutButton.setForeground(Color.WHITE);
+                cancelButton.setBackground(Color.GRAY);
+                cancelButton.setForeground(Color.WHITE);
+            } else {
+                setBackground(Color.LIGHT_GRAY);
+                darkModeCheckBox.setBackground(Color.LIGHT_GRAY);
+                darkModeCheckBox.setForeground(Color.BLACK);
+                changePasswordButton.setBackground(Color.WHITE);
+                changePasswordButton.setForeground(Color.BLACK);
+                logOutButton.setBackground(Color.WHITE);
+                logOutButton.setForeground(Color.BLACK);
+                cancelButton.setBackground(Color.WHITE);
+                cancelButton.setForeground(Color.BLACK);
+            }
         }
     }
+
 
     public String getViewName() {
         return viewName;

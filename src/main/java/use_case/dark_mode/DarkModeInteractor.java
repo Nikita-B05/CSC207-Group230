@@ -1,6 +1,6 @@
 package use_case.dark_mode;
 
-import data_access.DBUserDataAccessObject;
+import data_access.MongoDBUserDataAccessObject;
 import entity.User;
 
 /**
@@ -8,9 +8,9 @@ import entity.User;
  */
 public class DarkModeInteractor implements DarkModeInputBoundary {
     private final DarkModeOutputBoundary outputBoundary;
-    private final DBUserDataAccessObject userDataAccess;
+    private final MongoDBUserDataAccessObject userDataAccess;
 
-    public DarkModeInteractor(DarkModeOutputBoundary outputBoundary, DBUserDataAccessObject userDataAccess) {
+    public DarkModeInteractor(DarkModeOutputBoundary outputBoundary, MongoDBUserDataAccessObject userDataAccess) {
         this.outputBoundary = outputBoundary;
         this.userDataAccess = userDataAccess;
     }

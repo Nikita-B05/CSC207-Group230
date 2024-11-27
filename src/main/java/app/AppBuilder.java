@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import data_access.DBUserDataAccessObject;
+import data_access.MongoDBUserDataAccessObject;
 import entity.CommonUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
@@ -58,7 +58,7 @@ public class AppBuilder {
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
-    private final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
+    private final MongoDBUserDataAccessObject userDataAccessObject = new MongoDBUserDataAccessObject(new CommonUserFactory());
 
     private SignupView signupView;
     private SignupViewModel signupViewModel;
@@ -101,7 +101,7 @@ public class AppBuilder {
      */
     public AppBuilder addChangePasswordView() {
         changePasswordViewModel = new ChangePasswordViewModel();
-        changePasswordView = new ChangePasswordView(changePasswordViewModel);
+        changePasswordView = new ChangePasswordView(changePasswordViewModel, settingsViewModel);
         cardPanel.add(changePasswordView, changePasswordViewModel.getViewName());
         return this;
     }
