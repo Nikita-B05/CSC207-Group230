@@ -13,6 +13,9 @@ import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.ChangePasswordViewModel;
 import interface_adapter.dark_mode.DarkModeController;
+import interface_adapter.homepage.HomepageController;
+import interface_adapter.homepage.HomepagePresenter;
+import interface_adapter.homepage.HomepageViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -27,6 +30,9 @@ import interface_adapter.settings.SettingsViewModel;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.homepage.HomepageInputBoundary;
+import use_case.homepage.HomepageInteractor;
+import use_case.homepage.HomepageOutputBoundary;
 import use_case.dark_mode.DarkModeInputBoundary;
 import use_case.dark_mode.DarkModeInteractor;
 import use_case.dark_mode.DarkModeOutputBoundary;
@@ -51,9 +57,15 @@ import view.*;
  * <p/>
  * This is done by adding each View and then adding related Use Cases.
  */
+// Checkstyle note: you can ignore the "Class Data Abstraction Coupling"
+//                  and the "Class Fan-Out Complexity" issues for this lab; we encourage
+//                  your team to think about ways to refactor the code to resolve these
+//                  if your team decides to work with this as your starter code
+//                  for your final project this term.
 public class AppBuilder {
     private final JPanel cardPanel = new JPanel();
     private final CardLayout cardLayout = new CardLayout();
+    // thought question: is the hard dependency below a problem?
     private final UserFactory userFactory = new CommonUserFactory();
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
@@ -64,6 +76,8 @@ public class AppBuilder {
     private SignupViewModel signupViewModel;
     private LoginViewModel loginViewModel;
     private LoginView loginView;
+    private HomepageViewModel homepageViewModel;
+    private HomepageView homepageView;
     private ChangePasswordViewModel changePasswordViewModel;
     private ChangePasswordView changePasswordView;
     private SettingsView settingsView;
@@ -92,6 +106,17 @@ public class AppBuilder {
         loginViewModel = new LoginViewModel();
         loginView = new LoginView(loginViewModel);
         cardPanel.add(loginView, loginView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Homepage View to the application.
+     * @return this builder
+     */
+    public AppBuilder addHomepageView() {
+        homepageViewModel = new HomepageViewModel();
+        homepageView = new HomepageView(homepageViewModel);
+        cardPanel.add(homepageView, homepageView.getViewName());
         return this;
     }
 
@@ -144,10 +169,28 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addLoginUseCase() {
-        final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel, settingsViewModel, loginViewModel, signupViewModel);
-        final LoginInputBoundary loginInteractor = new LoginInteractor(userDataAccessObject, loginOutputBoundary);
+        final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel,
+                homepageViewModel, loginViewModel, signupViewModel);
+        final LoginInputBoundary loginInteractor = new LoginInteractor(
+                userDataAccessObject, loginOutputBoundary);
+
         final LoginController loginController = new LoginController(loginInteractor);
         loginView.setLoginController(loginController);
+        return this;
+    }
+
+    /**
+     * Adds the Homepage Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addHomepageUseCase() {
+        final HomepageOutputBoundary homepageOutputBoundary = new HomepagePresenter(viewManagerModel,
+                homepageViewModel);
+        final HomepageInputBoundary homepageInteractor = new HomepageInteractor(
+                userDataAccessObject, homepageOutputBoundary);
+
+        final HomepageController homepageController = new HomepageController(homepageInteractor);
+        homepageView.setHomepageController(homepageController);
         return this;
     }
 

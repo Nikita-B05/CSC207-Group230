@@ -19,6 +19,15 @@ public interface UserFactory {
      * @param username the name of the new user
      * @param password the password of the new user
      * @param isDarkMode the dark mode flag for the new user
+     * @return the new user
+     */
+    User create(String username, String password, boolean isDarkMode);
+
+    /**
+     * Creates a new User.
+     * @param username the name of the new user
+     * @param password the password of the new user
+     * @param isDarkMode the dark mode flag for the new user
      * @param characterName the character name of the new user
      * @param avatar the avatar of the new user
      * @param happiness the happiness of the new user

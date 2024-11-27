@@ -1,18 +1,12 @@
 package view;
 
-import java.awt.Component;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -48,6 +42,16 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
                 new JLabel(SignupViewModel.PASSWORD_LABEL), passwordInputField);
         final LabelTextPanel repeatPasswordInfo = new LabelTextPanel(
                 new JLabel(SignupViewModel.REPEAT_PASSWORD_LABEL), repeatPasswordInputField);
+
+        final JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
+        inputPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        inputPanel.setMaximumSize(new Dimension(1000, 120));
+
+        //        inputPanel.add(title);
+        inputPanel.add(usernameInfo);
+        inputPanel.add(passwordInfo);
+        inputPanel.add(repeatPasswordInfo);
 
         final JPanel buttons = new JPanel();
         toLogin = new JButton(SignupViewModel.TO_LOGIN_BUTTON_LABEL);
@@ -86,11 +90,10 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        this.add(title);
-        this.add(usernameInfo);
-        this.add(passwordInfo);
-        this.add(repeatPasswordInfo);
+        this.add(Box.createVerticalGlue());
+        this.add(inputPanel);
         this.add(buttons);
+        this.add(Box.createVerticalGlue());
     }
 
     private void addUsernameListener() {

@@ -25,6 +25,16 @@ public class Main {
                 .addSettingsUseCase()
                 .addChangePasswordUseCase()
                 .build();
+                                            .addLoginView()
+                                            .addSignupView()
+                                            .addHomepageView()
+                                            .addLoggedInView()
+                                            .addSignupUseCase()
+                                            .addLoginUseCase()
+                                            .addLogoutUseCase()
+                                            .addChangePasswordUseCase()
+                                            .addHomepageUseCase()
+                                            .build();
 
         application.pack();
         application.setVisible(true);

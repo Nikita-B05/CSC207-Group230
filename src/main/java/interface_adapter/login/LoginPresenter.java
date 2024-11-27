@@ -1,9 +1,11 @@
 package interface_adapter.login;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.signup.SignupViewModel;
 import interface_adapter.settings.SettingsViewModel;
 import interface_adapter.settings.SettingsState;
-import interface_adapter.signup.SignupViewModel;
+import interface_adapter.homepage.HomepageState;
+import interface_adapter.homepage.HomepageViewModel;
 import use_case.login.LoginOutputBoundary;
 import use_case.login.LoginOutputData;
 
@@ -13,17 +15,20 @@ import use_case.login.LoginOutputData;
 public class LoginPresenter implements LoginOutputBoundary {
 
     private final LoginViewModel loginViewModel;
-    private final SettingsViewModel settingsViewModel;
     private final ViewManagerModel viewManagerModel;
+    private final HomepageViewModel homepageViewModel;
+    private final SettingsViewModel settingsViewModel;
     private final SignupViewModel signupViewModel;
 
     public LoginPresenter(ViewManagerModel viewManagerModel,
-                          SettingsViewModel settingsViewModel,
                           LoginViewModel loginViewModel,
+                          SettingsViewModel settingsViewModel,
+                          HomepageViewModel homepageViewModel,
                           SignupViewModel signupViewModel) {
         this.viewManagerModel = viewManagerModel;
-        this.settingsViewModel = settingsViewModel;
         this.loginViewModel = loginViewModel;
+        this.settingsViewModel = settingsViewModel;
+        this.homepageViewModel = homepageViewModel;
         this.signupViewModel = signupViewModel;
     }
 
@@ -33,10 +38,19 @@ public class LoginPresenter implements LoginOutputBoundary {
         newState.setUsername(response.getUsername());
         newState.setDarkModeEnabled(false);
 
+        this.viewManagerModel.firePropertyChanged();
         settingsViewModel.setState(newState);
-
+        final HomepageState homepageState = homepageViewModel.getState();
+        homepageState.setUsername(response.getUsername());
+        homepageState.setAvatar(response.getAvatar());
+        homepageState.setName(response.getName());
+        homepageState.setDarkMode(response.isDarkMode());
+        homepageState.setDecisions(response.getDecisions());
+        this.homepageViewModel.setState(homepageState);
+        this.homepageViewModel.firePropertyChanged();
         viewManagerModel.setState(settingsViewModel.getViewName());
-        viewManagerModel.firePropertyChanged();
+        this.viewManagerModel.setState(homepageViewModel.getViewName());
+        this.viewManagerModel.firePropertyChanged();
     }
 
     @Override

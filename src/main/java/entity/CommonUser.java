@@ -7,24 +7,25 @@ import java.util.ArrayList;
  */
 public class CommonUser implements User {
 
-    private final String username;
-    private final String password;
+    private String username;
+    private String password;
     private boolean isDarkMode;
 
-    private final String characterName;
-    private final Avatar avatar;
-    private final int happiness;
-    private final int salary;
-    private final Assets assets;
-    private final Liabilities liabilities;
-    private final ArrayList<Decision> decisions;
+
+    private String characterName;
+    private Avatar avatar;
+    private int happiness;
+    private int salary;
+    private Assets assets;
+    private Liabilities liabilities;
+    private ArrayList<Decision> decisions;
 
     public CommonUser(String username, String password) {
         this.username = username;
         this.password = password;
         this.isDarkMode = false;
         this.characterName = null;
-        this.avatar = null;
+        this.avatar = new Avatar();
         this.happiness = 100;
         this.salary = 0;
         this.assets = null;
@@ -55,20 +56,6 @@ public class CommonUser implements User {
         this.liabilities = liabilities;
         this.decisions = decisions;
     }
-
-    public CommonUser(String name, String password, boolean darkMode) {
-        this.username = name;
-        this.password = password;
-        this.isDarkMode = darkMode;
-        this.characterName = null;
-        this.avatar = new Avatar();
-        this.happiness = 100;
-        this.salary = 0;
-        this.assets = null;
-        this.liabilities = null;
-        this.decisions = new ArrayList<>();
-    }
-
 
     @Override
     public String getUsername() {
@@ -120,16 +107,51 @@ public class CommonUser implements User {
         return decisions;
     }
 
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setDarkMode(boolean darkMode) {
+        isDarkMode = darkMode;
+    }
+
+    public void setCharacterName(String characterName) {
+        this.characterName = characterName;
+    }
+
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
+    }
+
+    public void setHappiness(int happiness) {
+        this.happiness = happiness;
+    }
+
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
+
+    public void setAssets(Assets assets) {
+        this.assets = assets;
+    }
+
+    public void setLiabilities(Liabilities liabilities) {
+        this.liabilities = liabilities;
+    }
+
+    public void setDecisions(ArrayList<Decision> decisions) {
+        this.decisions = decisions;
+    }
+
     @Override
     public int getNetWork() {
         if (assets == null || liabilities == null) {
             return 0;
         }
         return assets.getTotal() - liabilities.getTotal();
-    }
-
-    @Override
-    public void setDarkMode(boolean isDarkMode) {
-        this.isDarkMode = isDarkMode;
     }
 }
