@@ -2,23 +2,21 @@ package data_access;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoClients;
+import app.config.ConfigLoader;
 import org.bson.Document;
 
-/**
- * MongoDBConnection handles the connection to MongoDB and provides access to the users collection.
- */
 public class MongoDBConnection {
 
-    private static final String DATABASE_NAME = "mydatabase";
-    private static final String COLLECTION_NAME = "users";
-
-    private com.mongodb.client.MongoClient mongoClient;
-    private MongoCollection<Document> collection;
+    private final com.mongodb.client.MongoClient mongoClient;
+    private final MongoCollection<Document> collection;
 
     public MongoDBConnection() {
-        String mongoUri = "mongodb+srv://csc207:csc207@userdatabase.k8oh9.mongodb.net/?retryWrites=true&w=majority&appName=UserDatabase";
+        String mongoUri = ConfigLoader.getProperty("mongo.uri");
+        String databaseName = ConfigLoader.getProperty("mongo.database");
+        String collectionName = ConfigLoader.getProperty("mongo.collection");
+
         this.mongoClient = MongoClients.create(mongoUri);
-        this.collection = mongoClient.getDatabase(DATABASE_NAME).getCollection(COLLECTION_NAME);
+        this.collection = mongoClient.getDatabase(databaseName).getCollection(collectionName);
     }
 
     public MongoCollection<Document> getCollection() {

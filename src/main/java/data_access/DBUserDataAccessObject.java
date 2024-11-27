@@ -52,7 +52,8 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         if (userDoc != null) {
             String name = userDoc.getString(USERNAME);
             String password = userDoc.getString(PASSWORD);
-            boolean darkModeEnabled = userDoc.getBoolean(DARK_MODE, false);
+            boolean darkModeEnabled = userDoc.getBoolean(DARK_MODE);
+//            boolean darkModeEnabled = userDoc.getBoolean(DARK_MODE, false);
             return userFactory.create(name, password, darkModeEnabled);
         } else {
             throw new RuntimeException("User not found");
