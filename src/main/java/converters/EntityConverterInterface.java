@@ -30,15 +30,23 @@ public interface EntityConverterInterface {
     static final String NET_WORTH_CHANGE = "netWorthChange";
     static final String HAPPINESS_CHANGE = "happinessChange";
 
+    public Avatar toAvatar(String jsonString);
     public Avatar toAvatar(JSONObject object);
+    public String serialize(Avatar avatar);
     public JSONObject toJSONObject(Avatar avatar);
 
+    public Assets toAssets(String jsonString);
     public Assets toAssets(JSONObject object);
+    public String serialize(Assets assets);
     public JSONObject toJSONObject(Assets assets);
 
+    public Liabilities toLiabilities(String jsonString);
     public Liabilities toLiabilities(JSONObject object);
+    public String serialize(Liabilities liabilities);
     public JSONObject toJSONObject(Liabilities liabilities);
 
+    public ArrayList<Decision> toArrayListOfDecision(String jsonString);
     public ArrayList<Decision> toArrayListOfDecision(JSONArray array);
+    public String serialize(ArrayList<Decision> decisions);
     public JSONArray toJSONArray(ArrayList<Decision> decisions);
 }
