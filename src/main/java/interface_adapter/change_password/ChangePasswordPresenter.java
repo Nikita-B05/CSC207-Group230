@@ -1,5 +1,7 @@
 package interface_adapter.change_password;
 
+import interface_adapter.ViewManagerModel;
+import interface_adapter.settings.SettingsViewModel;
 import use_case.change_password.ChangePasswordOutputBoundary;
 import use_case.change_password.ChangePasswordOutputData;
 
@@ -9,28 +11,39 @@ import use_case.change_password.ChangePasswordOutputData;
 public class ChangePasswordPresenter implements ChangePasswordOutputBoundary {
 
     private final ChangePasswordViewModel changePasswordViewModel;
+    private final ViewManagerModel viewManagerModel;
+    private final SettingsViewModel settingsViewModel;
 
-    public ChangePasswordPresenter(ChangePasswordViewModel changePasswordViewModel) {
+    public ChangePasswordPresenter(ChangePasswordViewModel changePasswordViewModel,
+                                   ViewManagerModel viewManagerModel,
+                                   SettingsViewModel settingsViewModel) {
         this.changePasswordViewModel = changePasswordViewModel;
+        this.viewManagerModel = viewManagerModel;
+        this.settingsViewModel = settingsViewModel;
     }
 
     @Override
     public void prepareSuccessView(ChangePasswordOutputData outputData) {
-        // If the password change was successful, fire a property change indicating that the password has changed.
-        changePasswordViewModel.firePropertyChanged("passwordChanged");
+        ChangePasswordState state = changePasswordViewModel.getState();
+        state.setPasswordChanged(true);
+        state.setPasswordError(null);
+        state.setUsername(outputData.getUsername());
+        changePasswordViewModel.setState(new ChangePasswordState(state));
+        changePasswordViewModel.firePropertyChanged("password");
     }
 
     @Override
-    public void prepareFailView(String error) {
-        // If the password change failed, update the error message in the state.
-        ChangePasswordState state = changePasswordViewModel.getState();
-        state.setPasswordError(error);
-
-        // Notify the view about the error.
-        changePasswordViewModel.firePropertyChanged("passwordError");
-
-        // Clear the error after notifying, for subsequent use.
+    public void prepareFailView(String errorMessage) {
+        final ChangePasswordState state = changePasswordViewModel.getState();
+        state.setPasswordError(errorMessage);
+        changePasswordViewModel.firePropertyChanged();
         state.setPasswordError(null);
-        changePasswordViewModel.firePropertyChanged("passwordError");
+        changePasswordViewModel.firePropertyChanged();
+    }
+
+    @Override
+    public void switchToSettingsView() {
+        viewManagerModel.setState(settingsViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 }

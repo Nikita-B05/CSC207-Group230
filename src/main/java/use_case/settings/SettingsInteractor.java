@@ -25,11 +25,4 @@ public class SettingsInteractor implements SettingsInputBoundary {
         SettingsOutputData outputData = new SettingsOutputData(inputData.getUsername());
         outputBoundary.prepareLogoutView(outputData);
     }
-
-    @Override
-    public void toggleDarkMode(SettingsInputData inputData) {
-        boolean darkModeEnabled = inputData.isDarkMode();
-        userDataAccess.setDarkMode(darkModeEnabled);
-        outputBoundary.updateDarkMode(darkModeEnabled);
-    }
 }

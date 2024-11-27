@@ -29,7 +29,6 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
     private final SettingsViewModel settingsViewModel;
     private final DarkModeController darkModeController;
     private LogoutController logoutController;
-    private ChangePasswordController changePasswordController;
     private SettingsController settingsController;
 
     private final JCheckBox darkModeCheckBox;
@@ -73,9 +72,6 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
         this.settingsController = settingsController;
     }
 
-    public void setChangePasswordController(ChangePasswordController changePasswordController) {
-        this.changePasswordController = changePasswordController;
-    }
 
     public void setLogoutController(LogoutController logoutController) {
         this.logoutController = logoutController;

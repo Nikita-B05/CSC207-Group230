@@ -4,12 +4,15 @@ public class ChangePasswordState {
     private String username = "";
     private String password = "";
     private String passwordError;
+    private boolean passwordChanged = false;
+
 
 
     public ChangePasswordState(ChangePasswordState copy) {
         username = copy.username;
         password = copy.password;
         passwordError = copy.passwordError;
+        passwordChanged = copy.passwordChanged;
     }
 
     public ChangePasswordState() {
@@ -39,5 +42,13 @@ public class ChangePasswordState {
 
     public void setPasswordError(String passwordError) {
         this.passwordError = passwordError;
+    }
+
+    public boolean isPasswordChanged() {
+        return passwordChanged;
+    }
+
+    public void setPasswordChanged(boolean passwordChanged) {
+        this.passwordChanged = passwordChanged;
     }
 }

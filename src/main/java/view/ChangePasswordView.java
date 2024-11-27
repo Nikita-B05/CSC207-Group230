@@ -1,25 +1,17 @@
 package view;
 
 import java.awt.Component;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-
+import javax.swing.*;
 import interface_adapter.change_password.ChangePasswordController;
+import interface_adapter.change_password.ChangePasswordState;
 import interface_adapter.change_password.ChangePasswordViewModel;
 
 /**
  * The View for the Change Password screen.
  */
-public class ChangePasswordView extends JPanel implements ActionListener, PropertyChangeListener {
+public class ChangePasswordView extends JPanel implements PropertyChangeListener {
 
     private final String viewName = "changePassword";
     private final ChangePasswordViewModel changePasswordViewModel;
@@ -31,7 +23,6 @@ public class ChangePasswordView extends JPanel implements ActionListener, Proper
 
     public ChangePasswordView(ChangePasswordViewModel changePasswordViewModel) {
         this.changePasswordViewModel = changePasswordViewModel;
-
         this.changePasswordViewModel.addPropertyChangeListener(this);
 
         final JLabel title = new JLabel("Change Password");
@@ -40,10 +31,13 @@ public class ChangePasswordView extends JPanel implements ActionListener, Proper
         newPasswordField = new JPasswordField(15);
 
         changePasswordButton = new JButton("Change Password");
-        changePasswordButton.addActionListener(this);
+        changePasswordButton.addActionListener(e -> {
+            String newPassword = new String(newPasswordField.getPassword());
+            changePasswordController.execute(newPassword, changePasswordViewModel.getState().getUsername());
+        });
 
         cancelButton = new JButton("Cancel");
-        cancelButton.addActionListener(this);
+        cancelButton.addActionListener(e -> changePasswordController.switchToSettingsView());
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.add(title);
@@ -53,31 +47,26 @@ public class ChangePasswordView extends JPanel implements ActionListener, Proper
     }
 
     @Override
-    public void actionPerformed(ActionEvent evt) {
-        if (evt.getSource().equals(changePasswordButton)) {
-            String newPassword = new String(newPasswordField.getPassword());
-            changePasswordViewModel.getState().setPassword(newPassword);
-            System.out.println(changePasswordViewModel.getState().getUsername());
-            changePasswordController.execute(newPassword, changePasswordViewModel.getState().getUsername());
-        } else if (evt.getSource().equals(cancelButton)) {
-            changePasswordViewModel.firePropertyChanged();
-        }
-    }
-
-    @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if ("passwordChanged".equals(evt.getPropertyName())) {
-            JOptionPane.showMessageDialog(this, "Password changed successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
-            changePasswordViewModel.firePropertyChanged();
+        if (evt.getPropertyName().equals("state")) {
+            final ChangePasswordState state = (ChangePasswordState) evt.getNewValue();
+            if (state.getPasswordError() != null) {
+                JOptionPane.showMessageDialog(this, state.getPasswordError());
+            }
         }
-    }
+        else if (evt.getPropertyName().equals("password")) {
+            final ChangePasswordState state = (ChangePasswordState) evt.getNewValue();
+            JOptionPane.showMessageDialog(null, "password updated for " + state.getUsername());
+        }
 
-    public void setChangePasswordController(ChangePasswordController changePasswordController) {
-        this.changePasswordController = changePasswordController;
     }
 
 
     public String getViewName() {
         return viewName;
+    }
+
+    public void setChangePasswordController(ChangePasswordController changePasswordController) {
+        this.changePasswordController = changePasswordController;
     }
 }

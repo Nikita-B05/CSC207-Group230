@@ -1,17 +1,14 @@
 package data_access;
 
-import java.io.IOException;
+import java.util.Optional;
 
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import org.bson.Document;
 
 import entity.User;
 import entity.UserFactory;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.dark_mode.DarkModeUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
@@ -20,7 +17,7 @@ import use_case.settings.SettingsUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 /**
- * The DAO for user data.
+ * The DAO for user data, now using MongoDB.
  */
 public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
@@ -29,20 +26,17 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         DarkModeUserDataAccessInterface,
         SettingsUserDataAccessInterface {
 
-    private static final int SUCCESS_CODE = 200;
-    private static final String CONTENT_TYPE_LABEL = "Content-Type";
-    private static final String CONTENT_TYPE_JSON = "application/json";
-    private static final String STATUS_CODE_LABEL = "status_code";
-    private static final String USERNAME_KEY = "username";
-    private static final String PASSWORD_KEY = "password";
-    private static final String DARK_MODE_KEY = "darkMode";
-    private static final String MESSAGE_KEY = "message";
+    private static final String USERNAME = "username";
+    private static final String PASSWORD = "password";
+    private static final String DARK_MODE = "darkMode";
 
     private final UserFactory userFactory;
-    private String currentUsername = null; // Replaces static variable for thread safety
+    private final MongoDBConnection mongoDBConnection;
+    private String currentUsername = null;
 
     public DBUserDataAccessObject(UserFactory userFactory) {
         this.userFactory = userFactory;
+        this.mongoDBConnection = new MongoDBConnection();
     }
 
     @Override
@@ -51,30 +45,17 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
             throw new IllegalArgumentException("Username cannot be null or empty");
         }
 
-        final OkHttpClient client = new OkHttpClient().newBuilder().build();
-        final Request request = new Request.Builder()
-                .url(String.format("http://vm003.teach.cs.toronto.edu:20112/user?username=%s", username))
-                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
-                .build();
+        MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
 
-        try (Response response = client.newCall(request).execute()) {
-            if (response.body() == null) {
-                throw new RuntimeException("Response body is null");
-            }
-            final JSONObject responseBody = new JSONObject(response.body().string());
+        Document userDoc = usersCollection.find(Filters.eq(USERNAME, username)).first();
 
-            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
-                final JSONObject userJSONObject = responseBody.getJSONObject("user");
-                final String name = userJSONObject.getString(USERNAME_KEY);
-                final String password = userJSONObject.getString(PASSWORD_KEY);
-                final boolean darkModeEnabled = userJSONObject.optBoolean(DARK_MODE_KEY, false);
-
-                return userFactory.create(name, password, darkModeEnabled);
-            } else {
-                throw new RuntimeException(responseBody.optString(MESSAGE_KEY, "Unknown error"));
-            }
-        } catch (IOException | JSONException ex) {
-            throw new RuntimeException("Error fetching user data: " + ex.getMessage(), ex);
+        if (userDoc != null) {
+            String name = userDoc.getString(USERNAME);
+            String password = userDoc.getString(PASSWORD);
+            boolean darkModeEnabled = userDoc.getBoolean(DARK_MODE, false);
+            return userFactory.create(name, password, darkModeEnabled);
+        } else {
+            throw new RuntimeException("User not found");
         }
     }
 
@@ -104,103 +85,41 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
 
     @Override
     public void save(User user) {
-        final OkHttpClient client = new OkHttpClient().newBuilder().build();
-        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);
+        MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
 
-        final JSONObject requestBody = new JSONObject();
-        requestBody.put(USERNAME_KEY, user.getName());
-        requestBody.put(PASSWORD_KEY, user.getPassword());
-        requestBody.put(DARK_MODE_KEY, user.getDarkMode());
+        Document userDoc = new Document()
+                .append(USERNAME, user.getName())
+                .append(PASSWORD, user.getPassword())
+                .append(DARK_MODE, user.getDarkMode());
 
-        final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
-        final Request request = new Request.Builder()
-                .url("http://vm003.teach.cs.toronto.edu:20112/user")
-                .method("POST", body)
-                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            if (response.body() == null) {
-                throw new RuntimeException("Response body is null");
-            }
-            final JSONObject responseBody = new JSONObject(response.body().string());
-
-            if (responseBody.getInt(STATUS_CODE_LABEL) != SUCCESS_CODE) {
-                throw new RuntimeException(responseBody.optString(MESSAGE_KEY, "Unknown error"));
-            }
-        } catch (IOException | JSONException ex) {
-            throw new RuntimeException("Error saving user data: " + ex.getMessage(), ex);
-        }
+        usersCollection.insertOne(userDoc);
     }
 
     @Override
     public void changePassword(User user) {
-        updateUser(user, "PUT");
+        updateUser(user, PASSWORD, user.getPassword());
     }
 
     @Override
-    public void updateUserDarkMode(User user, boolean isDarkMode) {
-        user.setDarkMode(isDarkMode);
-        updateUser(user, "PUT");
+    public void updateUserDarkMode(User user) {
+        updateUser(user, DARK_MODE, user.getDarkMode());
     }
 
-    private void updateUser(User user, String method) {
-        final OkHttpClient client = new OkHttpClient().newBuilder().build();
-        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);
+    private void updateUser(User user, String key, Object value) {
+        MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
 
-        final JSONObject requestBody = new JSONObject();
-        requestBody.put(USERNAME_KEY, user.getName());
-        requestBody.put(PASSWORD_KEY, user.getPassword());
-        requestBody.put(DARK_MODE_KEY, user.getDarkMode());
-
-        final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);
-        final Request request = new Request.Builder()
-                .url("http://vm003.teach.cs.toronto.edu:20112/user")
-                .method(method, body)
-                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            if (response.body() == null) {
-                throw new RuntimeException("Response body is null");
-            }
-            final JSONObject responseBody = new JSONObject(response.body().string());
-
-            if (responseBody.getInt(STATUS_CODE_LABEL) != SUCCESS_CODE) {
-                throw new RuntimeException(responseBody.optString(MESSAGE_KEY, "Unknown error"));
-            }
-        } catch (IOException | JSONException ex) {
-            throw new RuntimeException("Error updating user data: " + ex.getMessage(), ex);
-        }
-    }
-
-    @Override
-    public void setDarkMode(boolean darkModeEnabled) {
-        updateUserDarkMode(getCurrentUser(), darkModeEnabled);
-    }
-
-    @Override
-    public boolean isDarkModeEnabled() {
-        return getCurrentUser().getDarkMode();
+        usersCollection.updateOne(
+                Filters.eq(USERNAME, user.getName()),
+                Updates.set(key, value)
+        );
     }
 
     @Override
     public boolean existsByName(String username) {
-        final OkHttpClient client = new OkHttpClient().newBuilder().build();
-        final Request request = new Request.Builder()
-                .url(String.format("http://vm003.teach.cs.toronto.edu:20112/checkIfUserExists?username=%s", username))
-                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)
-                .build();
+        MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
 
-        try (Response response = client.newCall(request).execute()) {
-            if (response.body() == null) {
-                throw new RuntimeException("Response body is null");
-            }
-            final JSONObject responseBody = new JSONObject(response.body().string());
+        Optional<Document> userDoc = Optional.ofNullable(usersCollection.find(Filters.eq(USERNAME, username)).first());
 
-            return responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE;
-        } catch (IOException | JSONException ex) {
-            throw new RuntimeException("Error checking user existence: " + ex.getMessage(), ex);
-        }
+        return userDoc.isPresent();
     }
 }

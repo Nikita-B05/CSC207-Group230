@@ -4,5 +4,5 @@ import entity.User;
 
 public interface DarkModeUserDataAccessInterface {
     User getCurrentUser();
-    void updateUserDarkMode(User user, boolean isDarkMode);
+    void updateUserDarkMode(User user);
 }
