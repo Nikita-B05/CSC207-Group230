@@ -1,17 +1,12 @@
 package view;
 
-import java.awt.*;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import interface_adapter.settings.SettingsController;
 import interface_adapter.settings.SettingsViewModel;
@@ -65,6 +60,8 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
         this.add(changePasswordButton);
         this.add(logOutButton);
         this.add(cancelButton);
+
+        updateTheme(settingsViewModel.getState().isDarkModeEnabled());
     }
 
     public void setSettingsController(SettingsController settingsController) {
@@ -76,6 +73,19 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
         this.logoutController = logoutController;
     }
 
+    private void updateTheme(boolean isDarkMode) {
+        darkModeCheckBox.setSelected(isDarkMode);
+
+        if (isDarkMode) {
+            ColorTheme.applyDarkMode(this);
+        } else {
+            ColorTheme.applyLightMode(this);
+        }
+
+        SwingUtilities.updateComponentTreeUI(this);
+    }
+
+
     @Override
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource().equals(darkModeCheckBox)) {
@@ -84,7 +94,7 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
         } else if (evt.getSource().equals(changePasswordButton)) {
             if (settingsController != null) {
                 String username = settingsViewModel.getState().getUsername();
-                settingsController.changePassword(username);
+                settingsController.changePassword(username, darkModeCheckBox.isSelected());
             }
         } else if (evt.getSource().equals(logOutButton)) {
             String username = settingsViewModel.getState().getUsername();
@@ -100,31 +110,9 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
         if ("darkMode".equals(evt.getPropertyName())) {
             boolean darkModeEnabled = settingsViewModel.getState().isDarkModeEnabled();
             darkModeCheckBox.setSelected(darkModeEnabled);
-
-            if (darkModeEnabled) {
-                setBackground(Color.DARK_GRAY);
-                darkModeCheckBox.setBackground(Color.DARK_GRAY);
-                darkModeCheckBox.setForeground(Color.WHITE);
-                changePasswordButton.setBackground(Color.GRAY);
-                changePasswordButton.setForeground(Color.WHITE);
-                logOutButton.setBackground(Color.GRAY);
-                logOutButton.setForeground(Color.WHITE);
-                cancelButton.setBackground(Color.GRAY);
-                cancelButton.setForeground(Color.WHITE);
-            } else {
-                setBackground(Color.LIGHT_GRAY);
-                darkModeCheckBox.setBackground(Color.LIGHT_GRAY);
-                darkModeCheckBox.setForeground(Color.BLACK);
-                changePasswordButton.setBackground(Color.WHITE);
-                changePasswordButton.setForeground(Color.BLACK);
-                logOutButton.setBackground(Color.WHITE);
-                logOutButton.setForeground(Color.BLACK);
-                cancelButton.setBackground(Color.WHITE);
-                cancelButton.setForeground(Color.BLACK);
-            }
+            updateTheme(darkModeEnabled);
         }
     }
-
 
     public String getViewName() {
         return viewName;

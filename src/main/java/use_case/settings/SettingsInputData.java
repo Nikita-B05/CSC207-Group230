@@ -7,13 +7,8 @@ public class SettingsInputData {
     private final String username;
     private final boolean darkMode;
 
-    public SettingsInputData(String username) {
+    public SettingsInputData(String username, boolean darkMode) {
         this.username = username;
-        this.darkMode = false;
-    }
-
-    public SettingsInputData(boolean darkMode) {
-        this.username = null;
         this.darkMode = darkMode;
     }
 

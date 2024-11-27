@@ -89,9 +89,9 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
         MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
 
         Document userDoc = new Document()
-                .append(USERNAME, user.getName())
+                .append(USERNAME, user.getUsername())
                 .append(PASSWORD, user.getPassword())
-                .append(DARK_MODE, user.getDarkMode());
+                .append(DARK_MODE, user.isDarkMode());
 
         usersCollection.insertOne(userDoc);
     }
@@ -103,14 +103,14 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
 
     @Override
     public void updateUserDarkMode(User user) {
-        updateUser(user, DARK_MODE, user.getDarkMode());
+        updateUser(user, DARK_MODE, user.isDarkMode());
     }
 
     private void updateUser(User user, String key, Object value) {
         MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
 
         usersCollection.updateOne(
-                Filters.eq(USERNAME, user.getName()),
+                Filters.eq(USERNAME, user.getUsername()),
                 Updates.set(key, value)
         );
     }

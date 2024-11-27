@@ -15,14 +15,14 @@ public class SettingsInteractor implements SettingsInputBoundary {
 
     @Override
     public void navigateToChangePassword(SettingsInputData inputData) {
-        SettingsOutputData settingsOutputData = new SettingsOutputData(inputData.getUsername());
+        SettingsOutputData settingsOutputData = new SettingsOutputData(inputData.getUsername(), inputData.isDarkMode());
         outputBoundary.prepareChangePasswordView(settingsOutputData);
     }
 
     @Override
     public void logout(SettingsInputData inputData) {
         userDataAccess.setCurrentUsername(null);
-        SettingsOutputData outputData = new SettingsOutputData(inputData.getUsername());
+        SettingsOutputData outputData = new SettingsOutputData(inputData.getUsername(), inputData.isDarkMode());
         outputBoundary.prepareLogoutView(outputData);
     }
 }

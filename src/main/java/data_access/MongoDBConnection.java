@@ -2,7 +2,7 @@ package data_access;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoClients;
-import app.config.ConfigLoader;
+import data_access.config.ConfigLoader;
 import org.bson.Document;
 
 public class MongoDBConnection {

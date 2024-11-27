@@ -4,7 +4,7 @@ public class ChangePasswordState {
     private String username = "";
     private String password = "";
     private String passwordError;
-    private boolean passwordChanged = false;
+    private boolean darkModeEnabled;
 
 
 
@@ -12,13 +12,12 @@ public class ChangePasswordState {
         username = copy.username;
         password = copy.password;
         passwordError = copy.passwordError;
-        passwordChanged = copy.passwordChanged;
+        darkModeEnabled = copy.darkModeEnabled;
     }
 
     public ChangePasswordState() {
 
     }
-
 
     public String getUsername() {
         return username;
@@ -44,11 +43,12 @@ public class ChangePasswordState {
         this.passwordError = passwordError;
     }
 
-    public boolean isPasswordChanged() {
-        return passwordChanged;
+    public boolean isDarkModeEnabled() {
+        return darkModeEnabled;
     }
 
-    public void setPasswordChanged(boolean passwordChanged) {
-        this.passwordChanged = passwordChanged;
+    public void setDarkModeEnabled(boolean darkModeEnabled) {
+        this.darkModeEnabled = darkModeEnabled;
     }
+
 }

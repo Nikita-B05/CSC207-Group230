@@ -13,13 +13,13 @@ public class SettingsController {
         this.settingsInteractor = settingsInteractor;
     }
 
-    public void changePassword(String username) {
-        SettingsInputData inputData = new SettingsInputData(username);
+    public void changePassword(String username, boolean darkMode) {
+        SettingsInputData inputData = new SettingsInputData(username, darkMode);
         settingsInteractor.navigateToChangePassword(inputData);
     }
 
-    public void logout(String username) {
-        SettingsInputData inputData = new SettingsInputData(username);
+    public void logout(String username, boolean darkMode) {
+        SettingsInputData inputData = new SettingsInputData(username, darkMode);
         settingsInteractor.logout(inputData);
     }
 

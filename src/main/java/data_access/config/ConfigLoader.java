@@ -1,4 +1,4 @@
-package app.config;
+package data_access.config;
 
 import java.io.IOException;
 import java.io.InputStream;

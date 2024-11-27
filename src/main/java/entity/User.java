@@ -72,4 +72,9 @@ public interface User {
      * @return the net worth of the user.
      */
     int getNetWork();
+
+    /**
+     * Returns the dark mode UI config of the user.
+     */
+    void setDarkMode(boolean isDarkMode);
 }

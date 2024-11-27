@@ -25,6 +25,8 @@ public class SettingsPresenter implements SettingsOutputBoundary {
     public void prepareChangePasswordView(SettingsOutputData settingsOutputData) {
         viewManagerModel.setState(changePasswordViewModel.getViewName());
         changePasswordViewModel.getState().setUsername(settingsOutputData.getUsername());
+        changePasswordViewModel.getState().setDarkModeEnabled(settingsOutputData.getDarkMode());
+        changePasswordViewModel.firePropertyChanged();
         viewManagerModel.firePropertyChanged();
     }
 

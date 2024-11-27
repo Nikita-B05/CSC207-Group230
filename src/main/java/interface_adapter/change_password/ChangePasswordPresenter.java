@@ -22,10 +22,11 @@ public class ChangePasswordPresenter implements ChangePasswordOutputBoundary {
         this.settingsViewModel = settingsViewModel;
     }
 
+
+
     @Override
     public void prepareSuccessView(ChangePasswordOutputData outputData) {
         ChangePasswordState state = changePasswordViewModel.getState();
-        state.setPasswordChanged(true);
         state.setPasswordError(null);
         state.setUsername(outputData.getUsername());
         changePasswordViewModel.setState(new ChangePasswordState(state));
