@@ -62,7 +62,15 @@ public class PolygonApiClient {
         }
     }
 
-    public double[] fetchPrices(String ticker) throws IOException {
+    public double getBuyPrice(String ticker) throws IOException {
+        return fetchPrices(ticker)[0];
+    }
+
+    public double getSellPrice(String ticker) throws IOException {
+        return fetchPrices(ticker)[1];
+    }
+
+    private double[] fetchPrices(String ticker) throws IOException {
         String url = BASE_URL + "/v2/aggs/ticker/" + ticker + "/prev?adjusted=true&apiKey=" + apiKey;
 
         Request request = new Request.Builder()

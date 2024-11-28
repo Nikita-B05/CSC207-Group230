@@ -48,7 +48,6 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         inputPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         inputPanel.setMaximumSize(new Dimension(1000, 120));
 
-        //        inputPanel.add(title);
         inputPanel.add(usernameInfo);
         inputPanel.add(passwordInfo);
         inputPanel.add(repeatPasswordInfo);
@@ -91,6 +90,7 @@ public class SignupView extends JPanel implements ActionListener, PropertyChange
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         this.add(Box.createVerticalGlue());
+        this.add(title);
         this.add(inputPanel);
         this.add(buttons);
         this.add(Box.createVerticalGlue());

@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A simple implementation of the User interface.
@@ -148,10 +149,15 @@ public class CommonUser implements User {
     }
 
     @Override
-    public int getNetWork() {
-        if (assets == null || liabilities == null) {
+    public double getNetWorth(HashMap<String, Double> stockPrices) {
+        if (assets == null && liabilities == null) {
             return 0;
+        } else if (assets != null && liabilities == null) {
+            return assets.getTotal(stockPrices);
+        } else if (assets == null && liabilities != null) {
+            return -1 * liabilities.getTotal();
+        } else {
+            return assets.getTotal(stockPrices) - liabilities.getTotal();
         }
-        return assets.getTotal() - liabilities.getTotal();
     }
 }

@@ -17,7 +17,6 @@ import java.beans.PropertyChangeListener;
  */
 public class HomepageView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "homepage";
-    private boolean isDarkMode = false;
 
     private final HomepageViewModel homepageViewModel;
     private HomepageController homepageController;
@@ -147,7 +146,7 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
 
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-            updateTheme(isDarkMode);
+            updateTheme(homepageState.isDarkMode());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -177,7 +176,6 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
 
     private void setFields(HomepageState state) {
         greetingLabel.setText(state.getUsername());
-        isDarkMode = state.isDarkMode();
 
         // Add the image above the buttons
         String imagePath = System.getProperty("user.dir") + state.getAvatar().getImagePath();

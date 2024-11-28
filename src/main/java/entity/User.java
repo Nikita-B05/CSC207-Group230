@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The representation of a user in our program.
@@ -69,9 +70,10 @@ public interface User {
 
     /**
      * Returns the net worth (assets - liabilities) of the user.
+     * @param stockPrices is the current market prices of stocks.
      * @return the net worth of the user.
      */
-    int getNetWork();
+    double getNetWorth(HashMap<String, Double> stockPrices);
 
     /**
      * Returns the dark mode UI config of the user.
