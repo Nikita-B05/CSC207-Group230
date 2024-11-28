@@ -16,6 +16,7 @@ public class Main {
         final JFrame application = appBuilder
                 .addLoginView()
                 .addSignupView()
+                .addHomepageView()
                 .addSettingsView()
                 .addChangePasswordView()
                 .addSignupUseCase()
@@ -24,17 +25,8 @@ public class Main {
                 .addChangePasswordUseCase()
                 .addSettingsUseCase()
                 .addChangePasswordUseCase()
+                .addHomepageUseCase()
                 .build();
-                                            .addLoginView()
-                                            .addSignupView()
-                                            .addHomepageView()
-                                            .addLoggedInView()
-                                            .addSignupUseCase()
-                                            .addLoginUseCase()
-                                            .addLogoutUseCase()
-                                            .addChangePasswordUseCase()
-                                            .addHomepageUseCase()
-                                            .build();
 
         application.pack();
         application.setVisible(true);

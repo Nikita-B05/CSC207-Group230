@@ -100,7 +100,9 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
             String username = settingsViewModel.getState().getUsername();
             logoutController.execute(username);
         } else if (evt.getSource().equals(cancelButton)) {
-            JOptionPane.showMessageDialog(this, "Cancel button pressed (no action assigned yet).");
+            String username = settingsViewModel.getState().getUsername();
+            settingsController.changeToHomePage(username, darkModeCheckBox.isSelected());
+//            JOptionPane.showMessageDialog(this, "Cancel button pressed (no action assigned yet).");
         }
     }
 

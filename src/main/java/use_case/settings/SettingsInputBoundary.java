@@ -6,4 +6,5 @@ package use_case.settings;
 public interface SettingsInputBoundary {
     void navigateToChangePassword(SettingsInputData inputData);
     void logout(SettingsInputData inputData);
+    void navigateToHomePage(SettingsInputData inputData);
 }

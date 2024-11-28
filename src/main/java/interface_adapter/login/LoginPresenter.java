@@ -17,17 +17,14 @@ public class LoginPresenter implements LoginOutputBoundary {
     private final LoginViewModel loginViewModel;
     private final ViewManagerModel viewManagerModel;
     private final HomepageViewModel homepageViewModel;
-    private final SettingsViewModel settingsViewModel;
     private final SignupViewModel signupViewModel;
 
     public LoginPresenter(ViewManagerModel viewManagerModel,
                           LoginViewModel loginViewModel,
-                          SettingsViewModel settingsViewModel,
                           HomepageViewModel homepageViewModel,
                           SignupViewModel signupViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.loginViewModel = loginViewModel;
-        this.settingsViewModel = settingsViewModel;
         this.homepageViewModel = homepageViewModel;
         this.signupViewModel = signupViewModel;
     }
@@ -39,16 +36,13 @@ public class LoginPresenter implements LoginOutputBoundary {
         newState.setDarkModeEnabled(false);
 
         this.viewManagerModel.firePropertyChanged();
-        settingsViewModel.setState(newState);
         final HomepageState homepageState = homepageViewModel.getState();
         homepageState.setUsername(response.getUsername());
         homepageState.setAvatar(response.getAvatar());
         homepageState.setName(response.getName());
         homepageState.setDarkMode(response.isDarkMode());
-        homepageState.setDecisions(response.getDecisions());
         this.homepageViewModel.setState(homepageState);
         this.homepageViewModel.firePropertyChanged();
-        viewManagerModel.setState(settingsViewModel.getViewName());
         this.viewManagerModel.setState(homepageViewModel.getViewName());
         this.viewManagerModel.firePropertyChanged();
     }

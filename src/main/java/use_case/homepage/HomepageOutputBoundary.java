@@ -1,7 +1,5 @@
 package use_case.homepage;
 
-import use_case.login.LoginOutputData;
-
 /**
  * The output boundary for the Homepage Use Case.
  */
@@ -24,5 +22,5 @@ public interface HomepageOutputBoundary {
     /**
      * Switches to the Profile View.
      */
-    void switchToProfileSettingsView(HomepageOutputData homepageOutputData);
+    void switchToSettingsView(HomepageOutputData homepageOutputData);
 }

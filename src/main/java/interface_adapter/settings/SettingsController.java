@@ -23,4 +23,8 @@ public class SettingsController {
         settingsInteractor.logout(inputData);
     }
 
+    public void changeToHomePage(String username, boolean darkMode) {
+        SettingsInputData inputData = new SettingsInputData(username, darkMode);
+        settingsInteractor.navigateToHomePage(inputData);
+    }
 }

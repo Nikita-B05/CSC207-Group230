@@ -1,10 +1,10 @@
 package interface_adapter.settings;
 
-import entity.CommonUser;
 import interface_adapter.ViewManagerModel;
 import use_case.settings.SettingsOutputBoundary;
 import use_case.settings.SettingsOutputData;
 import interface_adapter.change_password.ChangePasswordViewModel;
+import interface_adapter.homepage.HomepageViewModel;
 
 
 /**
@@ -14,18 +14,20 @@ public class SettingsPresenter implements SettingsOutputBoundary {
     private final SettingsViewModel viewModel;
     private final ViewManagerModel viewManagerModel;
     private final ChangePasswordViewModel changePasswordViewModel;
+    private final HomepageViewModel homepageViewModel;
 
-    public SettingsPresenter(SettingsViewModel viewModel, ViewManagerModel viewManagerModel, ChangePasswordViewModel changePasswordViewModel) {
+    public SettingsPresenter(SettingsViewModel viewModel, ViewManagerModel viewManagerModel, ChangePasswordViewModel changePasswordViewModel, HomepageViewModel homepageViewModel) {
         this.viewModel = viewModel;
         this.viewManagerModel = viewManagerModel;
         this.changePasswordViewModel = changePasswordViewModel;
+        this.homepageViewModel = new HomepageViewModel();
     }
 
     @Override
     public void prepareChangePasswordView(SettingsOutputData settingsOutputData) {
         viewManagerModel.setState(changePasswordViewModel.getViewName());
         changePasswordViewModel.getState().setUsername(settingsOutputData.getUsername());
-        changePasswordViewModel.getState().setDarkModeEnabled(settingsOutputData.getDarkMode());
+        changePasswordViewModel.getState().setDarkModeEnabled(settingsOutputData.isDarkMode());
         changePasswordViewModel.firePropertyChanged();
         viewManagerModel.firePropertyChanged();
     }
@@ -39,6 +41,18 @@ public class SettingsPresenter implements SettingsOutputBoundary {
         viewManagerModel.firePropertyChanged();
 
     }
+
+    @Override
+    public void prepareHomepageView(SettingsOutputData outputData) {
+        viewManagerModel.setState(homepageViewModel.getViewName());
+        homepageViewModel.getState().setUsername(outputData.getUsername());
+        homepageViewModel.getState().setDarkMode(outputData.isDarkMode());
+        homepageViewModel.getState().setAvatar(outputData.getAvatar());
+        homepageViewModel.getState().setName(outputData.getName());
+        homepageViewModel.firePropertyChanged();
+        viewManagerModel.firePropertyChanged();
+    }
+
 
     @Override
     public void updateDarkMode(boolean darkModeEnabled) {

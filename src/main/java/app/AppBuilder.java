@@ -170,7 +170,7 @@ public class AppBuilder {
      */
     public AppBuilder addLoginUseCase() {
         final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel,
-                homepageViewModel, loginViewModel, signupViewModel);
+                loginViewModel, homepageViewModel, signupViewModel);
         final LoginInputBoundary loginInteractor = new LoginInteractor(
                 userDataAccessObject, loginOutputBoundary);
 
@@ -185,7 +185,7 @@ public class AppBuilder {
      */
     public AppBuilder addHomepageUseCase() {
         final HomepageOutputBoundary homepageOutputBoundary = new HomepagePresenter(viewManagerModel,
-                homepageViewModel);
+                homepageViewModel, settingsViewModel);
         final HomepageInputBoundary homepageInteractor = new HomepageInteractor(
                 userDataAccessObject, homepageOutputBoundary);
 
@@ -227,7 +227,7 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addSettingsUseCase() {
-        final SettingsOutputBoundary settingsOutputBoundary = new SettingsPresenter(settingsViewModel, viewManagerModel, changePasswordViewModel);
+        final SettingsOutputBoundary settingsOutputBoundary = new SettingsPresenter(settingsViewModel, viewManagerModel, changePasswordViewModel, homepageViewModel);
         final SettingsInputBoundary settingsInteractor = new SettingsInteractor(userDataAccessObject, settingsOutputBoundary);
         final SettingsController settingsController = new SettingsController(settingsInteractor);
         settingsView.setSettingsController(settingsController);

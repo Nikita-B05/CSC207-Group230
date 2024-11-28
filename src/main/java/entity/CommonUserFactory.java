@@ -45,9 +45,4 @@ public class CommonUserFactory implements UserFactory {
                 decisions
         );
     }
-
-    @Override
-    public User create(String name, String password, boolean darkMode) {
-        return new CommonUser(name, password, darkMode);
-    }
 }

@@ -13,8 +13,10 @@ import entity.*;
 import org.bson.Document;
 
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
+import use_case.homepage.HomepageUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
+import use_case.settings.SettingsUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 /**
@@ -23,7 +25,9 @@ import use_case.signup.SignupUserDataAccessInterface;
 public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
         ChangePasswordUserDataAccessInterface,
-        LogoutUserDataAccessInterface {
+        LogoutUserDataAccessInterface,
+        HomepageUserDataAccessInterface,
+        SettingsUserDataAccessInterface {
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
@@ -94,6 +98,12 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
     }
 
     @Override
+    public void updateUserDarkMode(boolean isDarkMode) {
+        User user = getCurrentUser();
+        updateUser(user, DARK_MODE, isDarkMode);
+    }
+
+    @Override
     public String getCurrentUsername() {
         if (currentUsername == null) {
             throw new IllegalStateException("No current user is set");
@@ -101,7 +111,7 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
         return currentUsername;
     }
 
-//    @Override
+    @Override
     public User getCurrentUser() {
         if (currentUsername == null) {
             throw new IllegalStateException("No current user is logged in");
