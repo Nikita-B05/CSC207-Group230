@@ -18,7 +18,6 @@ public interface EntityConverterInterface {
     static final String STOCK_CODE = "stockCode";
     static final String QUANTITY = "quantity";
     static final String BUY_PRICE = "buyPrice";
-    static final String SELL_PRICE = "sellPrice";
     static final String MULTIPLIER = "multiplier";
     static final String CASH = "cash";
     static final String CAR = "car";
