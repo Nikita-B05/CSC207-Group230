@@ -21,7 +21,7 @@ public class ChangePasswordInteractor implements ChangePasswordInputBoundary {
 
     @Override
     public void execute(ChangePasswordInputData changePasswordInputData) {
-         if (changePasswordInputData.getPassword().isEmpty()) {
+        if (changePasswordInputData.getPassword().isEmpty()) {
              userPresenter.prepareFailView("Password cannot be empty.");
         }
         else if (changePasswordInputData.getPassword().length() < 8) {
@@ -35,5 +35,12 @@ public class ChangePasswordInteractor implements ChangePasswordInputBoundary {
                      false);
              userPresenter.prepareSuccessView(changePasswordOutputData);
          }
+    }
+
+    /**
+     * Navigate back to SettingsView.
+     */
+    public void switchToSettingsView() {
+        userPresenter.switchToSettingsView();
     }
 }

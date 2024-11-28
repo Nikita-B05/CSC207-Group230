@@ -1,6 +1,7 @@
 package interface_adapter.change_password;
 
-import interface_adapter.signup.SignupState;
+import interface_adapter.ViewManagerModel;
+import interface_adapter.settings.SettingsViewModel;
 import use_case.change_password.ChangePasswordOutputBoundary;
 import use_case.change_password.ChangePasswordOutputData;
 
@@ -9,27 +10,41 @@ import use_case.change_password.ChangePasswordOutputData;
  */
 public class ChangePasswordPresenter implements ChangePasswordOutputBoundary {
 
-    private final LoggedInViewModel loggedInViewModel;
+    private final ChangePasswordViewModel changePasswordViewModel;
+    private final ViewManagerModel viewManagerModel;
+    private final SettingsViewModel settingsViewModel;
 
-    public ChangePasswordPresenter(LoggedInViewModel loggedInViewModel) {
-        this.loggedInViewModel = loggedInViewModel;
+    public ChangePasswordPresenter(ChangePasswordViewModel changePasswordViewModel,
+                                   ViewManagerModel viewManagerModel,
+                                   SettingsViewModel settingsViewModel) {
+        this.changePasswordViewModel = changePasswordViewModel;
+        this.viewManagerModel = viewManagerModel;
+        this.settingsViewModel = settingsViewModel;
     }
+
+
 
     @Override
     public void prepareSuccessView(ChangePasswordOutputData outputData) {
-        // currently there isn't anything to change based on the output data,
-        // since the output data only contains the username, which remains the same.
-        // We still fire the property changed event, but just to let the view know that
-        // it can alert the user that their password was changed successfully.
-        loggedInViewModel.firePropertyChanged("password");
+        ChangePasswordState state = changePasswordViewModel.getState();
+        state.setPasswordError(null);
+        state.setUsername(outputData.getUsername());
+        changePasswordViewModel.setState(new ChangePasswordState(state));
+        changePasswordViewModel.firePropertyChanged("password");
     }
 
     @Override
-    public void prepareFailView(String error) {
-        final LoggedInState loggedInState = loggedInViewModel.getState();
-        loggedInState.setPasswordError(error);
-        loggedInViewModel.firePropertyChanged();
-        loggedInState.setPasswordError(null);
-        loggedInViewModel.firePropertyChanged();
+    public void prepareFailView(String errorMessage) {
+        final ChangePasswordState state = changePasswordViewModel.getState();
+        state.setPasswordError(errorMessage);
+        changePasswordViewModel.firePropertyChanged();
+        state.setPasswordError(null);
+        changePasswordViewModel.firePropertyChanged();
+    }
+
+    @Override
+    public void switchToSettingsView() {
+        viewManagerModel.setState(settingsViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 }

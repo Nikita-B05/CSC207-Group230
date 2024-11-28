@@ -57,7 +57,7 @@ public class HomepageInteractor implements HomepageInputBoundary  {
     public void switchToProfileSettingsView(HomepageInputData homepageInputData) {
         final String username = homepageInputData.getUsername();
         final User user = userDataAccessObject.get(username);
-        homepagePresenter.switchToProfileSettingsView(new HomepageOutputData(
+        homepagePresenter.switchToSettingsView(new HomepageOutputData(
                 username,
                 user.getAvatar(),
                 user.isDarkMode(),

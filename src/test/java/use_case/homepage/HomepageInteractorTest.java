@@ -38,7 +38,7 @@ public class HomepageInteractorTest {
             }
 
             @Override
-            public void switchToProfileSettingsView(HomepageOutputData homepageOutputData) {
+            public void switchToSettingsView(HomepageOutputData homepageOutputData) {
                 fail("Use case ProfileSettingsView is unexpected.");
             }
         };
@@ -71,7 +71,7 @@ public class HomepageInteractorTest {
             }
 
             @Override
-            public void switchToProfileSettingsView(HomepageOutputData homepageOutputData) {
+            public void switchToSettingsView(HomepageOutputData homepageOutputData) {
                 fail("Use case ProfileSettingsView is unexpected.");
             }
         };
@@ -104,7 +104,7 @@ public class HomepageInteractorTest {
             }
 
             @Override
-            public void switchToProfileSettingsView(HomepageOutputData homepageOutputData) {
+            public void switchToSettingsView(HomepageOutputData homepageOutputData) {
                 fail("Use case ProfileSettingsView is unexpected.");
             }
         };
@@ -135,7 +135,7 @@ public class HomepageInteractorTest {
             }
 
             @Override
-            public void switchToProfileSettingsView(HomepageOutputData homepageOutputData) {
+            public void switchToSettingsView(HomepageOutputData homepageOutputData) {
                 assertEquals("Paul", homepageOutputData.getUsername());
                 assertEquals(new Avatar().getId(), homepageOutputData.getAvatar().getId());
                 assertEquals(new ArrayList<>(), homepageOutputData.getDecisions());

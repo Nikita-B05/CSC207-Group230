@@ -1,22 +1,21 @@
 package interface_adapter.change_password;
 
-/**
- * The State information representing the logged-in user.
- */
-public class LoggedInState {
+public class ChangePasswordState {
     private String username = "";
-
     private String password = "";
     private String passwordError;
+    private boolean darkModeEnabled;
 
-    public LoggedInState(LoggedInState copy) {
+
+
+    public ChangePasswordState(ChangePasswordState copy) {
         username = copy.username;
         password = copy.password;
         passwordError = copy.passwordError;
+        darkModeEnabled = copy.darkModeEnabled;
     }
 
-    // Because of the previous copy constructor, the default constructor must be explicit.
-    public LoggedInState() {
+    public ChangePasswordState() {
 
     }
 
@@ -28,17 +27,28 @@ public class LoggedInState {
         this.username = username;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getPasswordError() {
+        return passwordError;
     }
 
     public void setPasswordError(String passwordError) {
         this.passwordError = passwordError;
     }
 
-    public String getPassword() {
-        return password;
+    public boolean isDarkModeEnabled() {
+        return darkModeEnabled;
     }
 
-    public String getPasswordError() { return passwordError; }
+    public void setDarkModeEnabled(boolean darkModeEnabled) {
+        this.darkModeEnabled = darkModeEnabled;
+    }
+
 }

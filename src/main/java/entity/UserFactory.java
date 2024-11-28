@@ -48,5 +48,4 @@ public interface UserFactory {
                 Liabilities liabilities,
                 ArrayList<Decision> decisions
     );
-
 }
