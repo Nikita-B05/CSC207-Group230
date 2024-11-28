@@ -8,6 +8,18 @@ import java.util.ArrayList;
 public interface User {
 
     /**
+     * Sets the characterName of the user.
+     * @param characterName the new character name of the user.
+     */
+    void setCharacterName(String characterName);
+
+    /**
+     * Sets the avatar of the user.
+     * @param avatar the new avatar of the user.
+     */
+    void setAvatar(Avatar avatar);
+
+    /**
      * Returns the username of the user.
      * @return the username of the user.
      */
