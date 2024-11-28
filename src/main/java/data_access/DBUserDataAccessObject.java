@@ -187,7 +187,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
                 for (int i = 0; i < decisionsArray.length(); i++) {
                     final JSONObject decisionObject = decisionsArray.getJSONObject(i);
                     final String timestampString = decisionObject.getString("timestamp");
-                    LocalDateTime timestamp = LocalDateTime.parse(timestampString, DateTimeFormatter.ISO_DATE_TIME);
+                    LocalDateTime timestamp = LocalDateTime.parse(timestampString, DateTimeFormatter.ofPattern("MM/dd HH:mm"));
                     final String decisionText = decisionObject.getString("decisionText");
                     final String decisionResponse = decisionObject.getString("decisionResponse");
                     final int happinessImpact = decisionObject.getInt("happinessImpact");
