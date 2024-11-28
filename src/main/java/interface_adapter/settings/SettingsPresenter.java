@@ -20,7 +20,7 @@ public class SettingsPresenter implements SettingsOutputBoundary {
         this.viewModel = viewModel;
         this.viewManagerModel = viewManagerModel;
         this.changePasswordViewModel = changePasswordViewModel;
-        this.homepageViewModel = new HomepageViewModel();
+        this.homepageViewModel = homepageViewModel;
     }
 
     @Override
@@ -36,20 +36,20 @@ public class SettingsPresenter implements SettingsOutputBoundary {
     public void prepareLogoutView(SettingsOutputData outputData) {
         viewModel.getState().setUsername(outputData.getUsername());
         viewModel.firePropertyChanged();
-
         viewManagerModel.setState("log in");
         viewManagerModel.firePropertyChanged();
-
     }
 
     @Override
     public void prepareHomepageView(SettingsOutputData outputData) {
-        viewManagerModel.setState(homepageViewModel.getViewName());
+        System.out.println(outputData.isDarkMode());
         homepageViewModel.getState().setUsername(outputData.getUsername());
         homepageViewModel.getState().setDarkMode(outputData.isDarkMode());
         homepageViewModel.getState().setAvatar(outputData.getAvatar());
         homepageViewModel.getState().setName(outputData.getName());
         homepageViewModel.firePropertyChanged();
+
+        viewManagerModel.setState(homepageViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
 

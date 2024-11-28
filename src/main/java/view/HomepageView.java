@@ -17,6 +17,7 @@ import java.beans.PropertyChangeListener;
  */
 public class HomepageView extends JPanel implements ActionListener, PropertyChangeListener {
     private final String viewName = "homepage";
+    private boolean isDarkMode = false;
 
     private final HomepageViewModel homepageViewModel;
     private HomepageController homepageController;
@@ -143,7 +144,19 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
                 homepageController.switchToProfileSettingsView(currentState.getUsername());
             }
         });
+
+        updateTheme(isDarkMode);
     }
+
+    private void updateTheme(boolean isDarkMode) {
+        if (isDarkMode) {
+            ColorTheme.applyDarkMode(this);
+        } else {
+            ColorTheme.applyLightMode(this);
+        }
+        SwingUtilities.updateComponentTreeUI(this);
+    }
+
 
     @Override
     public void actionPerformed(ActionEvent evt) {
@@ -152,12 +165,15 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        System.out.println("PROPERTY CHANGED");
         final HomepageState state = (HomepageState) evt.getNewValue();
         setFields(state);
+        updateTheme(state.isDarkMode());
     }
 
     private void setFields(HomepageState state) {
         greetingLabel.setText(state.getUsername());
+        isDarkMode = state.isDarkMode();
 
         // Add the image above the buttons
         String imagePath = System.getProperty("user.dir") + state.getAvatar().getImagePath();
