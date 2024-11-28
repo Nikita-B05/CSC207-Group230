@@ -149,6 +149,26 @@ public class CommonUser implements User {
     }
 
     @Override
+    public void buyStock(String stockCode, int quantity, double buyPrice) {
+        assets.buyStock(stockCode, quantity, buyPrice);
+    }
+
+    @Override
+    public boolean canBuyStock(String stockCode, int quantity, HashMap<String, Double> stockPrices) {
+        return assets.canBuyStock(stockCode, quantity, stockPrices);
+    }
+
+    @Override
+    public double sellStock(String stockCode, int quantity, double sellPrice) {
+        return assets.sellStock(stockCode, quantity, sellPrice);
+    }
+
+    @Override
+    public boolean isValidSell(String stockCode, int quantity) {
+        return assets.isValidSell(stockCode, quantity);
+    }
+
+    @Override
     public double getNetWorth(HashMap<String, Double> stockPrices) {
         if (assets == null && liabilities == null) {
             return 0;

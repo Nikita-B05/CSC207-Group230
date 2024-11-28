@@ -43,6 +43,10 @@ public class Assets {
         stocks.add(new Stock(stockCode, quantity, buyPrice, 365));
     }
 
+    public boolean canBuyStock(String stockCode, int quantity, HashMap<String, Double> stockPrices) {
+        return cash >= stockPrices.get(stockCode) * quantity;
+    }
+
     public double sellStock(String stockCode, int quantity, double sellPrice) {
         double total = 0;
         for (int i = 0; i < stocks.size(); i++) {
