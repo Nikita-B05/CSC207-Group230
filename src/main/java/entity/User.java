@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The representation of a user in our program.
@@ -69,12 +70,49 @@ public interface User {
 
     /**
      * Returns the net worth (assets - liabilities) of the user.
+     * @param stockPrices is the current market prices of stocks.
      * @return the net worth of the user.
      */
-    int getNetWork();
+    double getNetWorth(HashMap<String, Double> stockPrices);
 
     /**
      * Returns the dark mode UI config of the user.
      */
     void setDarkMode(boolean isDarkMode);
+
+    /**
+     * Buys a stock for the user.
+     * Precondition: User has sufficient cash.
+     * @param stockCode code of the stock to be bought.
+     * @param quantity number of stock to be bought.
+     * @param buyPrice price of stock to be bought.
+     */
+    public void buyStock(String stockCode, int quantity, double buyPrice);
+
+    /**
+     * Returns if the user has the funds to buy stock.
+     * @param stockCode code of the stock to be bought.
+     * @param quantity number of stock to be bought.
+     * @param stockPrices is the current market prices of stocks.
+     * @return if the user has the funds to buy stock.
+     */
+    public boolean canBuyStock(String stockCode, int quantity, HashMap<String, Double> stockPrices);
+
+    /**
+     * Returns the money made on the stock sold.
+     * Precondition: assumes the user owns enough stock to sell.
+     * @param stockCode code of the stock to be sold.
+     * @param quantity number of stock to be sold.
+     * @param sellPrice price of stock to be sold.
+     * @return the money made on the stock sold.
+     */
+    public double sellStock(String stockCode, int quantity, double sellPrice);
+
+    /**
+     * Returns if the user can sell the stock.
+     * @param stockCode code of the stock to be sold.
+     * @param quantity number of stock to be sold.
+     * @return if the user can sell the stock.
+     */
+    public boolean isValidSell(String stockCode, int quantity);
 }
