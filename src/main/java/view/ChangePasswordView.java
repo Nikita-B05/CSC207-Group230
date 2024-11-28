@@ -46,8 +46,12 @@ public class ChangePasswordView extends JPanel implements PropertyChangeListener
         this.add(changePasswordButton);
         this.add(cancelButton);
 
-        updateTheme(changePasswordViewModel.getState().isDarkModeEnabled());
-
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+            updateTheme(changePasswordViewModel.getState().isDarkModeEnabled());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateTheme(boolean isDarkMode) {

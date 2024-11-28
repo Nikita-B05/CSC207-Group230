@@ -42,7 +42,6 @@ public class SettingsPresenter implements SettingsOutputBoundary {
 
     @Override
     public void prepareHomepageView(SettingsOutputData outputData) {
-        System.out.println(outputData.isDarkMode());
         homepageViewModel.getState().setUsername(outputData.getUsername());
         homepageViewModel.getState().setDarkMode(outputData.isDarkMode());
         homepageViewModel.getState().setAvatar(outputData.getAvatar());

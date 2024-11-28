@@ -12,7 +12,6 @@ import interface_adapter.settings.SettingsController;
 import interface_adapter.settings.SettingsViewModel;
 import interface_adapter.dark_mode.DarkModeController;
 import interface_adapter.logout.LogoutController;
-import interface_adapter.settings.SettingsPresenter;
 
 /**
  * The View for the Settings screen.
@@ -61,7 +60,13 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
         this.add(logOutButton);
         this.add(cancelButton);
 
-        updateTheme(settingsViewModel.getState().isDarkModeEnabled());
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+            updateTheme(settingsViewModel.getState().isDarkModeEnabled());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void setSettingsController(SettingsController settingsController) {
@@ -102,18 +107,15 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
         } else if (evt.getSource().equals(cancelButton)) {
             String username = settingsViewModel.getState().getUsername();
             settingsController.changeToHomePage(username, darkModeCheckBox.isSelected());
-//            JOptionPane.showMessageDialog(this, "Cancel button pressed (no action assigned yet).");
         }
     }
 
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if ("darkMode".equals(evt.getPropertyName())) {
-            boolean darkModeEnabled = settingsViewModel.getState().isDarkModeEnabled();
-            darkModeCheckBox.setSelected(darkModeEnabled);
-            updateTheme(darkModeEnabled);
-        }
+        boolean darkModeEnabled = settingsViewModel.getState().isDarkModeEnabled();
+        darkModeCheckBox.setSelected(darkModeEnabled);
+        updateTheme(darkModeEnabled);
     }
 
     public String getViewName() {

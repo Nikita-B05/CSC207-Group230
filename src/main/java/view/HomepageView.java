@@ -145,7 +145,12 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
             }
         });
 
-        updateTheme(isDarkMode);
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+            updateTheme(isDarkMode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void updateTheme(boolean isDarkMode) {
@@ -165,7 +170,6 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("PROPERTY CHANGED");
         final HomepageState state = (HomepageState) evt.getNewValue();
         setFields(state);
         updateTheme(state.isDarkMode());

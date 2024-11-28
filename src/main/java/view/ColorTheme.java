@@ -5,11 +5,8 @@ import javax.swing.*;
 
 public class ColorTheme {
     public static void applyDarkMode(JPanel panel) {
-        // Dark mode background and foreground colors
         panel.setBackground(Color.DARK_GRAY);
         panel.setForeground(Color.WHITE);
-
-        // Recursively apply to child components
         for (Component comp : panel.getComponents()) {
             if (comp instanceof JPanel) {
                 applyDarkMode((JPanel) comp);
@@ -30,11 +27,8 @@ public class ColorTheme {
     }
 
     public static void applyLightMode(JPanel panel) {
-        // Light mode background and foreground colors
         panel.setBackground(Color.WHITE);
         panel.setForeground(Color.BLACK);
-
-        // Recursively apply to child components
         for (Component comp : panel.getComponents()) {
             if (comp instanceof JPanel) {
                 applyLightMode((JPanel) comp);

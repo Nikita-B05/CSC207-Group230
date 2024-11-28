@@ -310,8 +310,5 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         );
         dao.updateUser(user);
         user = dao.get("Paul");
-        System.out.println(user.getUsername());
-        System.out.println(user.getPassword());
-        System.out.println(user.getSalary());
     }
 }
