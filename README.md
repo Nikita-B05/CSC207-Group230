@@ -22,13 +22,12 @@ build financial literacy and understand the long-term effects of money managemen
 
 ### User
   - name: String
-  - character: Image
+  - character: Avatar
   - happiness: int
   - qualityOfLife: int
   - assets: Assets
   - liabilities: Liabilities
-  - newWorth: int
-  - decisions: ArrayList<HashMap<String, Object>>
+  - decisions: ArrayList<Decision>
 
 ### Assets
   - home: int
@@ -48,6 +47,11 @@ build financial literacy and understand the long-term effects of money managemen
   - sellPrice: double
   - netResult: double
   - multiplier: int
+
+### Decision
+  - type: String
+  - question: String
+  - value: String
 
 ---
 
@@ -110,6 +114,7 @@ can reflect on my choices and learn from them.*
 my account secure and control my access.*
 
 - **Use Cases**:
+    - View Settings: Users should be able to view a screen that lets them modify various settings.
     - Change Password: Users update their password.
     - Log Out: Users sign out of their account.
     - Changing UI Mode: Users can select the UI of their program to be in dark mode or light

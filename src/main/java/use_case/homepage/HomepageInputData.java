@@ -1,30 +1,13 @@
 package use_case.homepage;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Objects;
-
 public class HomepageInputData {
-    private final int character;
-    private final String name;
-    private final ArrayList<HashMap<String, Objects>> decisions;
+    private final String username;
 
-    public HomepageInputData(String name, ArrayList<HashMap<String, Objects>> decisions, int character) {
-        this.name = name;
-        this.decisions = decisions;
-        this.character = character;
+    public HomepageInputData(String username) {
+        this.username = username;
     }
 
-
-    public String getName() {
-        return name;
-    }
-
-    public int getCharacter() {
-        return character;
-    }
-
-    public ArrayList<HashMap<String, Objects>> getDecisions() {
-        return decisions;
+    public String getUsername() {
+        return username;
     }
 }

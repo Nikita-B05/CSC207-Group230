@@ -1,26 +1,38 @@
 package use_case.homepage;
 
+import entity.Avatar;
+import entity.Decision;
+
+import java.util.ArrayList;
+
 public class HomepageOutputData {
-    private final Object logo;
-    private final Object character;
-    private final String name;
+    private final String username;
+    private final Avatar avatar;
+    private final boolean isDarkMode;
+    private final ArrayList<Decision> decisions;
+
     // If needed, add stats: network, quality of life, happiness
 
-    public HomepageOutputData(Object logo, Object character, String name) {
-        this.logo = logo;
-        this.character = character;
-        this.name = name;
+    public HomepageOutputData(String username, Avatar avatar, boolean isDarkMode, ArrayList<Decision> decisions) {
+        this.username = username;
+        this.avatar = avatar;
+        this.isDarkMode = isDarkMode;
+        this.decisions = decisions;
     }
 
-    public Object getLogo() {
-        return logo;
+    public String getUsername() {
+        return username;
     }
 
-    public Object getCharacter() {
-        return character;
+    public Avatar getAvatar() {
+        return avatar;
     }
 
-    public String getName() {
-        return name;
+    public boolean isDarkMode() {
+        return isDarkMode;
+    }
+
+    public ArrayList<Decision> getDecisions() {
+        return decisions;
     }
 }

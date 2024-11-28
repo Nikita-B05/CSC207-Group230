@@ -3,26 +3,27 @@ package use_case.homepage;
 /**
  * Input Boundary for actions which are related to the homepage.
  */
+import interface_adapter.homepage.HomepageViewModel;
 import use_case.logout.LogoutInputData;
 
 public interface HomepageInputBoundary {
     /**
      * Executes the switch to Character view use case.
      */
-    void switchToCharacterView();
+    void switchToChooseAvatarView(HomepageInputData homepageInputData);
 
     /**
      * Executes the switch to Game view use case.
      */
-    void switchToGameView();
+    void switchToPlayGameView(HomepageInputData homepageInputData);
 
     /**
      * Executes the switch to Decision view use case.
      */
-    void switchToDecisionView();
+    void switchToDecisionLogView(HomepageInputData homepageInputData);
 
     /**
      * Executes the switch to Profile view use case.
      */
-    void switchToProfileView();
+    void switchToProfileSettingsView(HomepageInputData homepageInputData);
 }

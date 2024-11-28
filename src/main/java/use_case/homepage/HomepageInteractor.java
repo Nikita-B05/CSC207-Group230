@@ -1,28 +1,67 @@
 package use_case.homepage;
 
 import entity.User;
-import use_case.login.*;
 
 /**
  * The Homepage Interactor.
  */
 public class HomepageInteractor implements HomepageInputBoundary  {
 
+    private final HomepageUserDataAccessInterface userDataAccessObject;
     private final HomepageOutputBoundary homepagePresenter;
 
-    public HomepageInteractor(HomepageOutputBoundary homepageOutputBoundary) {
+    public HomepageInteractor(
+            HomepageUserDataAccessInterface homepageUserDataAccessInterface,
+            HomepageOutputBoundary homepageOutputBoundary) {
+        this.userDataAccessObject = homepageUserDataAccessInterface;
         this.homepagePresenter = homepageOutputBoundary;
     }
 
     @Override
-    public void switchToCharacterView() { homepagePresenter.switchToCharacterView(); }
+    public void switchToChooseAvatarView(HomepageInputData homepageInputData) {
+        final String username = homepageInputData.getUsername();
+        final User user = userDataAccessObject.get(username);
+        homepagePresenter.switchToChooseAvatarView(new HomepageOutputData(
+                username,
+                user.getAvatar(),
+                user.isDarkMode(),
+                user.getDecisions()
+        ));
+    }
 
     @Override
-    public void switchToGameView() { homepagePresenter.switchToGameView(); }
+    public void switchToPlayGameView(HomepageInputData homepageInputData) {
+        final String username = homepageInputData.getUsername();
+        final User user = userDataAccessObject.get(username);
+        homepagePresenter.switchToPlayGameView(new HomepageOutputData(
+                username,
+                user.getAvatar(),
+                user.isDarkMode(),
+                user.getDecisions()
+        ));
+    }
 
     @Override
-    public void switchToDecisionView() { homepagePresenter.switchToDecisionView(); }
+    public void switchToDecisionLogView(HomepageInputData homepageInputData) {
+        final String username = homepageInputData.getUsername();
+        final User user = userDataAccessObject.get(username);
+        homepagePresenter.switchToDecisionLogView(new HomepageOutputData(
+                username,
+                user.getAvatar(),
+                user.isDarkMode(),
+                user.getDecisions()
+        ));
+    }
 
     @Override
-    public void switchToProfileView() { homepagePresenter.switchToProfileView(); }
+    public void switchToProfileSettingsView(HomepageInputData homepageInputData) {
+        final String username = homepageInputData.getUsername();
+        final User user = userDataAccessObject.get(username);
+        homepagePresenter.switchToSettingsView(new HomepageOutputData(
+                username,
+                user.getAvatar(),
+                user.isDarkMode(),
+                user.getDecisions()
+        ));
+    }
 }

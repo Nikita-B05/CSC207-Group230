@@ -1,7 +1,5 @@
 package use_case.homepage;
 
-import use_case.login.LoginOutputData;
-
 /**
  * The output boundary for the Homepage Use Case.
  */
@@ -9,20 +7,20 @@ public interface HomepageOutputBoundary {
     /**
      * Switches to the Character View.
      */
-    void switchToCharacterView();
+    void switchToChooseAvatarView(HomepageOutputData homepageOutputData);
 
     /**
      * Switches to the Game View.
      */
-    void switchToGameView();
+    void switchToPlayGameView(HomepageOutputData homepageOutputData);
 
     /**
      * Switches to the Decision View.
      */
-    void switchToDecisionView();
+    void switchToDecisionLogView(HomepageOutputData homepageOutputData);
 
     /**
      * Switches to the Profile View.
      */
-    void switchToProfileView();
+    void switchToSettingsView(HomepageOutputData homepageOutputData);
 }

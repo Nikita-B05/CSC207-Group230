@@ -1,18 +1,21 @@
 package app;
 
 import java.awt.CardLayout;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import data_access.DBUserDataAccessObject;
+import data_access.MongoDBUserDataAccessObject;
 import entity.CommonUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
-import interface_adapter.change_password.LoggedInViewModel;
+import interface_adapter.change_password.ChangePasswordViewModel;
+import interface_adapter.dark_mode.DarkModeController;
+import interface_adapter.homepage.HomepageController;
+import interface_adapter.homepage.HomepagePresenter;
+import interface_adapter.homepage.HomepageViewModel;
 import interface_adapter.login.LoginController;
 import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
@@ -21,9 +24,19 @@ import interface_adapter.logout.LogoutPresenter;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.settings.SettingsController;
+import interface_adapter.settings.SettingsPresenter;
+import interface_adapter.settings.SettingsViewModel;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.homepage.HomepageInputBoundary;
+import use_case.homepage.HomepageInteractor;
+import use_case.homepage.HomepageOutputBoundary;
+import use_case.dark_mode.DarkModeInputBoundary;
+import use_case.dark_mode.DarkModeInteractor;
+import use_case.dark_mode.DarkModeOutputBoundary;
+import use_case.dark_mode.DarkModeOutputData;
 import use_case.login.LoginInputBoundary;
 import use_case.login.LoginInteractor;
 import use_case.login.LoginOutputBoundary;
@@ -33,10 +46,10 @@ import use_case.logout.LogoutOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
-import view.LoggedInView;
-import view.LoginView;
-import view.SignupView;
-import view.ViewManager;
+import use_case.settings.SettingsInputBoundary;
+import use_case.settings.SettingsInteractor;
+import use_case.settings.SettingsOutputBoundary;
+import view.*;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
@@ -57,15 +70,18 @@ public class AppBuilder {
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
-    // thought question: is the hard dependency below a problem?
-    private final DBUserDataAccessObject userDataAccessObject = new DBUserDataAccessObject(new CommonUserFactory());
+    private final MongoDBUserDataAccessObject userDataAccessObject = new MongoDBUserDataAccessObject(new CommonUserFactory());
 
     private SignupView signupView;
     private SignupViewModel signupViewModel;
     private LoginViewModel loginViewModel;
-    private LoggedInViewModel loggedInViewModel;
-    private LoggedInView loggedInView;
     private LoginView loginView;
+    private HomepageViewModel homepageViewModel;
+    private HomepageView homepageView;
+    private ChangePasswordViewModel changePasswordViewModel;
+    private ChangePasswordView changePasswordView;
+    private SettingsView settingsView;
+    private SettingsViewModel settingsViewModel;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -94,13 +110,45 @@ public class AppBuilder {
     }
 
     /**
-     * Adds the LoggedIn View to the application.
+     * Adds the Homepage View to the application.
      * @return this builder
      */
-    public AppBuilder addLoggedInView() {
-        loggedInViewModel = new LoggedInViewModel();
-        loggedInView = new LoggedInView(loggedInViewModel);
-        cardPanel.add(loggedInView, loggedInView.getViewName());
+    public AppBuilder addHomepageView() {
+        homepageViewModel = new HomepageViewModel();
+        homepageView = new HomepageView(homepageViewModel);
+        cardPanel.add(homepageView, homepageView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Change Password View to the application.
+     * @return this builder
+     */
+    public AppBuilder addChangePasswordView() {
+        changePasswordViewModel = new ChangePasswordViewModel();
+        changePasswordView = new ChangePasswordView(changePasswordViewModel);
+        cardPanel.add(changePasswordView, changePasswordViewModel.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Settings View to the application.
+     * @return this builder
+     */
+    public AppBuilder addSettingsView() {
+        settingsViewModel = new SettingsViewModel();
+
+        DarkModeInputBoundary darkModeInteractor = new DarkModeInteractor(new DarkModeOutputBoundary() {
+            @Override
+            public void updateUIMode(DarkModeOutputData outputData) {
+                settingsViewModel.setDarkMode(outputData.isDarkMode());
+            }
+        }, userDataAccessObject);
+        DarkModeController darkModeController = new DarkModeController(darkModeInteractor);
+        LogoutController logoutController = new LogoutController(new LogoutInteractor(userDataAccessObject, new LogoutPresenter(viewManagerModel, settingsViewModel, loginViewModel)));
+        settingsView = new SettingsView(settingsViewModel, darkModeController, logoutController);
+        cardPanel.add(settingsView, settingsView.getViewName());
+
         return this;
     }
 
@@ -109,11 +157,8 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addSignupUseCase() {
-        final SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel,
-                signupViewModel, loginViewModel);
-        final SignupInputBoundary userSignupInteractor = new SignupInteractor(
-                userDataAccessObject, signupOutputBoundary, userFactory);
-
+        final SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel, signupViewModel, loginViewModel);
+        final SignupInputBoundary userSignupInteractor = new SignupInteractor(userDataAccessObject, signupOutputBoundary, userFactory);
         final SignupController controller = new SignupController(userSignupInteractor);
         signupView.setSignupController(controller);
         return this;
@@ -125,7 +170,7 @@ public class AppBuilder {
      */
     public AppBuilder addLoginUseCase() {
         final LoginOutputBoundary loginOutputBoundary = new LoginPresenter(viewManagerModel,
-                loggedInViewModel, loginViewModel, signupViewModel);
+                loginViewModel, homepageViewModel, signupViewModel);
         final LoginInputBoundary loginInteractor = new LoginInteractor(
                 userDataAccessObject, loginOutputBoundary);
 
@@ -135,35 +180,57 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the Homepage Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addHomepageUseCase() {
+        final HomepageOutputBoundary homepageOutputBoundary = new HomepagePresenter(viewManagerModel,
+                homepageViewModel, settingsViewModel);
+        final HomepageInputBoundary homepageInteractor = new HomepageInteractor(
+                userDataAccessObject, homepageOutputBoundary);
+
+        final HomepageController homepageController = new HomepageController(homepageInteractor);
+        homepageView.setHomepageController(homepageController);
+        return this;
+    }
+
+    /**
      * Adds the Change Password Use Case to the application.
      * @return this builder
      */
     public AppBuilder addChangePasswordUseCase() {
         final ChangePasswordOutputBoundary changePasswordOutputBoundary =
-                new ChangePasswordPresenter(loggedInViewModel);
-
+                new ChangePasswordPresenter(changePasswordViewModel, viewManagerModel, settingsViewModel);
         final ChangePasswordInputBoundary changePasswordInteractor =
                 new ChangePasswordInteractor(userDataAccessObject, changePasswordOutputBoundary, userFactory);
-
         final ChangePasswordController changePasswordController =
                 new ChangePasswordController(changePasswordInteractor);
-        loggedInView.setChangePasswordController(changePasswordController);
+        changePasswordView.setChangePasswordController(changePasswordController);
         return this;
     }
+
 
     /**
      * Adds the Logout Use Case to the application.
      * @return this builder
      */
     public AppBuilder addLogoutUseCase() {
-        final LogoutOutputBoundary logoutOutputBoundary = new LogoutPresenter(viewManagerModel,
-                loggedInViewModel, loginViewModel);
-
-        final LogoutInputBoundary logoutInteractor =
-                new LogoutInteractor(userDataAccessObject, logoutOutputBoundary);
-
+        final LogoutOutputBoundary logoutOutputBoundary = new LogoutPresenter(viewManagerModel, settingsViewModel, loginViewModel);
+        final LogoutInputBoundary logoutInteractor = new LogoutInteractor(userDataAccessObject, logoutOutputBoundary);
         final LogoutController logoutController = new LogoutController(logoutInteractor);
-        loggedInView.setLogoutController(logoutController);
+        settingsView.setLogoutController(logoutController);
+        return this;
+    }
+
+    /**
+     * Adds the Settings Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addSettingsUseCase() {
+        final SettingsOutputBoundary settingsOutputBoundary = new SettingsPresenter(settingsViewModel, viewManagerModel, changePasswordViewModel, homepageViewModel);
+        final SettingsInputBoundary settingsInteractor = new SettingsInteractor(userDataAccessObject, settingsOutputBoundary);
+        final SettingsController settingsController = new SettingsController(settingsInteractor);
+        settingsView.setSettingsController(settingsController);
         return this;
     }
 
@@ -172,14 +239,11 @@ public class AppBuilder {
      * @return the application
      */
     public JFrame build() {
-        final JFrame application = new JFrame("Login Example");
+        final JFrame application = new JFrame("Application");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
         application.add(cardPanel);
-
         viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();
-
         return application;
     }
 }
