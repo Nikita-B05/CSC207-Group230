@@ -114,10 +114,9 @@ public class EntityConverter implements EntityConverterInterface {
         }
         final int quantity = object.getInt(QUANTITY);
         final int price = object.getInt(BUY_PRICE);
-        final int sellPrice = object.getInt(SELL_PRICE);
         final int multiplier = object.getInt(MULTIPLIER);
 
-        return new Stock(code, quantity, price, sellPrice, multiplier);
+        return new Stock(code, quantity, price, multiplier);
     }
 
     private JSONArray listOfStockToJSONArray(ArrayList<Stock> stocks) {
@@ -139,7 +138,6 @@ public class EntityConverter implements EntityConverterInterface {
         object.put(STOCK_CODE, stock.getStockCode());
         object.put(QUANTITY, stock.getQuantity());
         object.put(BUY_PRICE, stock.getBuyPrice());
-        object.put(SELL_PRICE, stock.getSellPrice());
         object.put(MULTIPLIER, stock.getMultiplier());
 
         return object;

@@ -1,28 +1,28 @@
 package entity;
 
 public class Liabilities {
-    private final int loan;
-    private final int creditCard;
+    private final double loan;
+    private final double creditCard;
 
     public Liabilities() {
         this.loan = 0;
         this.creditCard = 0;
     }
 
-    public Liabilities(int loan, int creditCard) {
+    public Liabilities(double loan, double creditCard) {
         this.loan = loan;
         this.creditCard = creditCard;
     }
 
-    public int getLoan() {
+    public double getLoan() {
         return loan;
     }
 
-    public int getCreditCard() {
+    public double getCreditCard() {
         return creditCard;
     }
 
-    public int getTotal() {
+    public double getTotal() {
         return loan + creditCard;
     }
 }
