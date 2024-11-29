@@ -1,5 +1,6 @@
 package use_case.choose_avatar;
 
+import entity.Avatar;
 import entity.User;
 
 /**
@@ -13,4 +14,7 @@ public interface ChooseAvatarUserDataAccessInterface {
      * @return the User object.
      */
     User get(String username);
+
+    User getCurrentUser();
+    void updateAvatar(Avatar avatar);
 }

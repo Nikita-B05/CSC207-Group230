@@ -114,6 +114,12 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
     }
 
     @Override
+    public void updateAvatar(Avatar avatar) {
+        User user = getCurrentUser();
+        updateUser(user, AVATAR, avatar);
+    }
+
+    @Override
     public String getCurrentUsername() {
         if (currentUsername == null) {
             throw new IllegalStateException("No current user is set");
