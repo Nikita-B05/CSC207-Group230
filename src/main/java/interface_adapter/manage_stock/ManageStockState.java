@@ -3,7 +3,7 @@ package interface_adapter.manage_stock;
 import entity.Stock;
 
 public class ManageStockState {
-    private String[] stockNames;
+    private String[] stockNames = new String[] {};
     private boolean isDarkMode;
 
     public String[] getStockNames() {

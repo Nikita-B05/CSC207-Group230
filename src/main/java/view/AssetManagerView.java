@@ -57,13 +57,13 @@ public class AssetManagerView extends JPanel implements ActionListener, Property
         // Add action listeners for buttons
         manageHome.addActionListener(evt -> {
             if (evt.getSource().equals(manageHome)) {
-//                assetManagerController.switchToHomeBuyer(currentState.getUsername());
+                assetManagerController.switchToManageHomeView();
             }
         });
 
         manageStock.addActionListener(evt -> {
             if (evt.getSource().equals(manageStock)) {
-//                assetManagerController.switchToStockBuyer(currentState.getUsername());
+                assetManagerController.switchToManageStockView();
             }
         });
 

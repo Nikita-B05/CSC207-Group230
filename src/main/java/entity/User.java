@@ -76,9 +76,64 @@ public interface User {
     double getNetWorth(HashMap<String, Double> stockPrices);
 
     /**
-     * Returns the dark mode UI config of the user.
+     * Sets the user's username
+     * @param username new username
+     */
+    void setUsername(String username);
+
+    /**
+     * Sets the user's password
+     * @param password new password
+     */
+    void setPassword(String password);
+
+    /**
+     * Sets the user's darkMode
+     * @param isDarkMode new darkMode
      */
     void setDarkMode(boolean isDarkMode);
+
+    /**
+     * Sets the user's characterName
+     * @param characterName new characterName
+     */
+    void setCharacterName(String characterName);
+
+    /**
+     * Sets the user's avatar
+     * @param avatar new avatar
+     */
+    void setAvatar(Avatar avatar);
+
+    /**
+     * Sets the user's happiness
+     * @param happiness new happiness
+     */
+    void setHappiness(int happiness);
+
+    /**
+     * Sets the user's salary
+     * @param salary new salary
+     */
+    void setSalary(int salary);
+
+    /**
+     * Sets the user's assets
+     * @param assets new assets
+     */
+    void setAssets(Assets assets);
+
+    /**
+     * Sets the user's liabilities
+     * @param liabilities new liabilities
+     */
+    void setLiabilities(Liabilities liabilities);
+
+    /**
+     * Sets the user's decisions
+     * @param decisions new decisions
+     */
+    void setDecisions(ArrayList<Decision> decisions);
 
     /**
      * Buys a stock for the user.

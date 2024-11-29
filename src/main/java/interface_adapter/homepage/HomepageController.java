@@ -1,11 +1,6 @@
 package interface_adapter.homepage;
 
-import entity.Avatar;
-import entity.Decision;
 import use_case.homepage.HomepageInputBoundary;
-import use_case.homepage.HomepageInputData;
-
-import java.util.ArrayList;
 
 /**
  * Controller for the Homepage Use Case.
@@ -20,32 +15,28 @@ public class HomepageController {
     /**
      * Executes the "switch to ChooseCharacter" Use Case.
      */
-    public void switchToAvatarView(String username) {
-        final HomepageInputData homepageInputData = new HomepageInputData(username);
-        userHomepageUseCaseInteractor.switchToChooseAvatarView(homepageInputData);
+    public void switchToAvatarView() {
+        userHomepageUseCaseInteractor.switchToChooseAvatarView();
     }
 
     /**
      * Executes the "switch to PlayGame" Use Case.
      */
-    public void switchToPlayGameView(String username) {
-        final HomepageInputData homepageInputData = new HomepageInputData(username);
-        userHomepageUseCaseInteractor.switchToPlayGameView(homepageInputData);
+    public void switchToPlayGameView() {
+        userHomepageUseCaseInteractor.switchToPlayGameView();
     }
 
     /**
      * Executes the "switch to DecisionLog" Use Case.
      */
-    public void switchToDecisionLogView(String username) {
-        final HomepageInputData homepageInputData = new HomepageInputData(username);
-        userHomepageUseCaseInteractor.switchToDecisionLogView(homepageInputData);
+    public void switchToDecisionLogView() {
+        userHomepageUseCaseInteractor.switchToDecisionLogView();
     }
 
     /**
      * Executes the "switch to ProfileSettings" Use Case.
      */
-    public void switchToProfileSettingsView(String username) {
-        final HomepageInputData homepageInputData = new HomepageInputData(username);
-        userHomepageUseCaseInteractor.switchToProfileSettingsView(homepageInputData);
+    public void switchToProfileSettingsView() {
+        userHomepageUseCaseInteractor.switchToProfileSettingsView();
     }
 }

@@ -18,11 +18,10 @@ public class HomepageInteractor implements HomepageInputBoundary  {
     }
 
     @Override
-    public void switchToChooseAvatarView(HomepageInputData homepageInputData) {
-        final String username = homepageInputData.getUsername();
-        final User user = userDataAccessObject.get(username);
+    public void switchToChooseAvatarView() {
+        final User user = userDataAccessObject.getCurrentUser();
         homepagePresenter.switchToChooseAvatarView(new HomepageOutputData(
-                username,
+                user.getUsername(),
                 user.getAvatar(),
                 user.isDarkMode(),
                 user.getDecisions()
@@ -30,11 +29,10 @@ public class HomepageInteractor implements HomepageInputBoundary  {
     }
 
     @Override
-    public void switchToPlayGameView(HomepageInputData homepageInputData) {
-        final String username = homepageInputData.getUsername();
-        final User user = userDataAccessObject.get(username);
+    public void switchToPlayGameView() {
+        final User user = userDataAccessObject.getCurrentUser();
         homepagePresenter.switchToPlayGameView(new HomepageOutputData(
-                username,
+                user.getUsername(),
                 user.getAvatar(),
                 user.isDarkMode(),
                 user.getDecisions()
@@ -42,11 +40,10 @@ public class HomepageInteractor implements HomepageInputBoundary  {
     }
 
     @Override
-    public void switchToDecisionLogView(HomepageInputData homepageInputData) {
-        final String username = homepageInputData.getUsername();
-        final User user = userDataAccessObject.get(username);
+    public void switchToDecisionLogView() {
+        final User user = userDataAccessObject.getCurrentUser();
         homepagePresenter.switchToDecisionLogView(new HomepageOutputData(
-                username,
+                user.getUsername(),
                 user.getAvatar(),
                 user.isDarkMode(),
                 user.getDecisions()
@@ -54,11 +51,10 @@ public class HomepageInteractor implements HomepageInputBoundary  {
     }
 
     @Override
-    public void switchToProfileSettingsView(HomepageInputData homepageInputData) {
-        final String username = homepageInputData.getUsername();
-        final User user = userDataAccessObject.get(username);
+    public void switchToProfileSettingsView() {
+        final User user = userDataAccessObject.getCurrentUser();
         homepagePresenter.switchToSettingsView(new HomepageOutputData(
-                username,
+                user.getUsername(),
                 user.getAvatar(),
                 user.isDarkMode(),
                 user.getDecisions()

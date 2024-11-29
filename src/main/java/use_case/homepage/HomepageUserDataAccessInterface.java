@@ -7,9 +7,8 @@ import entity.User;
  */
 public interface HomepageUserDataAccessInterface {
     /**
-     * Returns the user with the given username.
-     * @param username the username to look up
-     * @return the user with the given username
+     * Returns the current user.
+     * @return the current user.
      */
-    User get(String username);
+    User getCurrentUser();
 }

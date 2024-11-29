@@ -1,10 +1,8 @@
 package use_case.homepage;
 
 import data_access.DBUserDataAccessObject;
-import entity.Avatar;
-import entity.CommonUserFactory;
-import entity.User;
-import entity.UserFactory;
+import data_access.MongoDBUserDataAccessObject;
+import entity.*;
 import org.junit.jupiter.api.Test;
 import use_case.login.*;
 
@@ -16,8 +14,10 @@ public class HomepageInteractorTest {
 
     @Test
     void switchToChooseAvatarViewTest() {
-        HomepageInputData inputData = new HomepageInputData("Paul");
-        HomepageUserDataAccessInterface userRepository = new DBUserDataAccessObject(new CommonUserFactory());
+        User user = new CommonUser("Paul", "password");
+        MongoDBUserDataAccessObject userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
+        userRepository.setCurrentUsername("Paul");
+        userRepository.save(user);
 
         HomepageOutputBoundary avatarPresenter = new HomepageOutputBoundary() {
             @Override
@@ -44,13 +44,15 @@ public class HomepageInteractorTest {
         };
 
         HomepageInputBoundary interactor = new HomepageInteractor(userRepository, avatarPresenter);
-        interactor.switchToChooseAvatarView(inputData);
+        interactor.switchToChooseAvatarView();
     }
 
     @Test
     void switchToPlayGameViewTest() {
-        HomepageInputData inputData = new HomepageInputData("Paul");
-        HomepageUserDataAccessInterface userRepository = new DBUserDataAccessObject(new CommonUserFactory());
+        User user = new CommonUser("Paul", "password");
+        MongoDBUserDataAccessObject userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
+        userRepository.setCurrentUsername("Paul");
+        userRepository.save(user);
 
         HomepageOutputBoundary playGamePresenter = new HomepageOutputBoundary() {
             @Override
@@ -77,13 +79,15 @@ public class HomepageInteractorTest {
         };
 
         HomepageInputBoundary interactor = new HomepageInteractor(userRepository, playGamePresenter);
-        interactor.switchToPlayGameView(inputData);
+        interactor.switchToPlayGameView();
     }
 
     @Test
     void switchToDecisionLogViewTest() {
-        HomepageInputData inputData = new HomepageInputData("Paul");
-        HomepageUserDataAccessInterface userRepository = new DBUserDataAccessObject(new CommonUserFactory());
+        User user = new CommonUser("Paul", "password");
+        MongoDBUserDataAccessObject userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
+        userRepository.setCurrentUsername("Paul");
+        userRepository.save(user);
 
         HomepageOutputBoundary decisionLogPresenter = new HomepageOutputBoundary() {
             @Override
@@ -110,13 +114,15 @@ public class HomepageInteractorTest {
         };
 
         HomepageInputBoundary interactor = new HomepageInteractor(userRepository, decisionLogPresenter);
-        interactor.switchToDecisionLogView(inputData);
+        interactor.switchToDecisionLogView();
     }
 
     @Test
     void switchToProfileSettingsViewTest() {
-        HomepageInputData inputData = new HomepageInputData("Paul");
-        HomepageUserDataAccessInterface userRepository = new DBUserDataAccessObject(new CommonUserFactory());
+        User user = new CommonUser("Paul", "password");
+        MongoDBUserDataAccessObject userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
+        userRepository.setCurrentUsername("Paul");
+        userRepository.save(user);
 
         HomepageOutputBoundary settingsPresenter = new HomepageOutputBoundary() {
             @Override
@@ -143,6 +149,6 @@ public class HomepageInteractorTest {
         };
 
         HomepageInputBoundary interactor = new HomepageInteractor(userRepository, settingsPresenter);
-        interactor.switchToProfileSettingsView(inputData);
+        interactor.switchToProfileSettingsView();
     }
 }

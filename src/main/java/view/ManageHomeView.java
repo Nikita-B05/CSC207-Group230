@@ -1,11 +1,14 @@
 package view;
 
+import data_access.MongoDBUserDataAccessObject;
+import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.asset_manager.AssetManagerState;
 import interface_adapter.homepage.HomepageState;
 import interface_adapter.manage_home.ManageHomeController;
+import interface_adapter.manage_home.ManageHomePresenter;
 import interface_adapter.manage_home.ManageHomeState;
 import interface_adapter.manage_home.ManageHomeViewModel;
+import use_case.manage_home.ManageHomeInteractor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,6 +33,7 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
     private final ArrayList<JToggleButton> houseButtons = new ArrayList<>();
     private final JPanel housePanel = new JPanel();
 
+    private final JPanel buttonPanel;
     private final JButton backButton;
     private final JButton buyButton;
     private final JButton sellButton;
@@ -53,7 +57,10 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
 
         // Description
         if (state.hasHome()) {
-            decriptionLabel = new JLabel(ManageHomeViewModel.SELL_DESCRIPTION, SwingConstants.CENTER);
+            decriptionLabel = new JLabel(
+                    ManageHomeViewModel.SELL_DESCRIPTION + " of value $" + state.getHome() + "?",
+                    SwingConstants.CENTER
+            );
         }
         else {
             decriptionLabel = new JLabel(ManageHomeViewModel.BUY_DESCRIPTION, SwingConstants.CENTER);
@@ -86,7 +93,7 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
         buyButton = new JButton(ManageHomeViewModel.BUY_LABEL);
         sellButton = new JButton(ManageHomeViewModel.SELL_LABEL);
 
-        final JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
         buttonPanel.add(backButton);
         if (state.hasHome()) {
             buttonPanel.add(sellButton);
@@ -106,21 +113,30 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
 
         backButton.addActionListener(evt -> {
             if (evt.getSource().equals(backButton)) {
-                // controller.goBack();
+                controller.switchToAssetManagerView();
             }
         });
 
         buyButton.addActionListener(evt -> {
             if (evt.getSource().equals(buyButton)) {
-                // controller.buy();
+                controller.execute(getNewHomeValue(), true);
             }
         });
 
         sellButton.addActionListener(evt -> {
             if (evt.getSource().equals(sellButton)) {
-                // controller.sell();
+                controller.execute(0, false);
             }
         });
+    }
+
+    private double getNewHomeValue() {
+        for (int i = 0; i < houseButtons.size(); i++) {
+            if (houseButtons.get(i).isSelected()) {
+                return ManageHomeViewModel.HOME_PRICES[i];
+            }
+        }
+        return 0.0;
     }
 
     private void updateTheme(boolean isDarkMode) {
@@ -134,26 +150,70 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("state")) {
+            handleStateChange(evt);
+        } else if (evt.getPropertyName().equals("manageHomeError")) {
+            handleErrorInput(evt);
+        } else if (evt.getPropertyName().equals("manageHomeBuySuccess")) {
+            handleSuccessInput(evt);
+        } else if (evt.getPropertyName().equals("manageHomeSellSuccess")) {
+            handleSuccessInput(evt);
+        }
+    }
+
+    private void handleErrorInput(PropertyChangeEvent evt) {
         final ManageHomeState state = (ManageHomeState) evt.getNewValue();
-        updateTheme(state.isDarkMode());
+        if (state.getErrorMessage() == null) {
+            throw new RuntimeException("Error message cannot be null.");
+        }
+        else {
+            JOptionPane.showMessageDialog(this, state.getErrorMessage());
+        }
+    }
+
+    private void handleSuccessInput(PropertyChangeEvent evt) {
+        final ManageHomeState state = (ManageHomeState) evt.getNewValue();
+        if (state.getSuccessMessage() == null) {
+            throw new RuntimeException("Success message cannot be null.");
+        }
+        else {
+            JOptionPane.showMessageDialog(this, state.getSuccessMessage());
+        }
+    }
+
+    private void handleStateChange(PropertyChangeEvent evt) {
+        final ManageHomeState state = (ManageHomeState) evt.getNewValue();
         if (state.hasHome()) {
-            decriptionLabel.setText(ManageHomeViewModel.SELL_DESCRIPTION);
+            decriptionLabel.setText(ManageHomeViewModel.SELL_DESCRIPTION + " of value $" + state.getHome() + "?");
             if (housePanel.getParent() == this) {
                 this.remove(housePanel);
                 this.revalidate();
                 this.repaint();
                 constraints.gridy--;
             }
+            if (buyButton.getParent() == buttonPanel) {
+                buttonPanel.remove(buyButton);
+            }
+            if (sellButton.getParent() != buttonPanel) {
+                buttonPanel.add(sellButton);
+            }
         }
         else {
             decriptionLabel.setText(ManageHomeViewModel.BUY_DESCRIPTION);
             if (housePanel.getParent() != this) {
-                constraints.gridy++;
-                this.add(housePanel, 2);
+                constraints.gridy = 2;
+                this.add(housePanel, constraints);
                 this.revalidate();
                 this.repaint();
             }
+            if (sellButton.getParent() == buttonPanel) {
+                buttonPanel.remove(sellButton);
+            }
+            if (buyButton.getParent() != buttonPanel) {
+                buttonPanel.add(buyButton);
+            }
         }
+        updateTheme(state.isDarkMode());
     }
 
     public String getViewName() {
@@ -177,7 +237,7 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
         final ManageHomeViewModel viewModel = new ManageHomeViewModel();
         final ManageHomeState state = viewModel.getState();
         state.setDarkMode(true);
-        state.setHasHome(false);
+        state.setHome(0);
         final ManageHomeView view = new ManageHomeView(viewModel);
         cardPanel.add(view, view.getViewName());
 
@@ -188,6 +248,12 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
 
         frame.pack();
         frame.setVisible(true);
+
+        state.setHome(1000);
+        viewModel.firePropertyChanged();
+
+        state.setHome(0);
+        viewModel.firePropertyChanged();
     }
 
     @Override

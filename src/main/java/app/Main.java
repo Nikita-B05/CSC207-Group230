@@ -19,12 +19,17 @@ public class Main {
                 .addHomepageView()
                 .addSettingsView()
                 .addChangePasswordView()
+                .addAssetManagerView()
+                .addManageHomeView()
+                .addManageStockView()
                 .addSignupUseCase()
                 .addLoginUseCase()
                 .addLogoutUseCase()
                 .addSettingsUseCase()
                 .addChangePasswordUseCase()
                 .addHomepageUseCase()
+                .addChooseAssetUseCase()
+                .addManageHomeUseCase()
                 .build();
 
         application.pack();

@@ -10,20 +10,20 @@ public interface HomepageInputBoundary {
     /**
      * Executes the switch to Character view use case.
      */
-    void switchToChooseAvatarView(HomepageInputData homepageInputData);
+    void switchToChooseAvatarView();
 
     /**
      * Executes the switch to Game view use case.
      */
-    void switchToPlayGameView(HomepageInputData homepageInputData);
+    void switchToPlayGameView();
 
     /**
      * Executes the switch to Decision view use case.
      */
-    void switchToDecisionLogView(HomepageInputData homepageInputData);
+    void switchToDecisionLogView();
 
     /**
      * Executes the switch to Profile view use case.
      */
-    void switchToProfileSettingsView(HomepageInputData homepageInputData);
+    void switchToProfileSettingsView();
 }

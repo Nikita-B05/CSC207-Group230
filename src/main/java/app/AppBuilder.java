@@ -9,6 +9,9 @@ import data_access.MongoDBUserDataAccessObject;
 import entity.CommonUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.asset_manager.AssetManagerController;
+import interface_adapter.asset_manager.AssetManagerPresenter;
+import interface_adapter.asset_manager.AssetManagerViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.ChangePasswordViewModel;
@@ -21,15 +24,23 @@ import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logout.LogoutController;
 import interface_adapter.logout.LogoutPresenter;
+import interface_adapter.manage_home.ManageHomeController;
+import interface_adapter.manage_home.ManageHomePresenter;
+import interface_adapter.manage_home.ManageHomeViewModel;
+import interface_adapter.manage_stock.ManageStockViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
 import interface_adapter.settings.SettingsController;
 import interface_adapter.settings.SettingsPresenter;
 import interface_adapter.settings.SettingsViewModel;
+import stock_api.PolygonApiClient;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
+import use_case.choose_asset.ChooseAssetInputBoundary;
+import use_case.choose_asset.ChooseAssetInteractor;
+import use_case.choose_asset.ChooseAssetOutputBoundary;
 import use_case.homepage.HomepageInputBoundary;
 import use_case.homepage.HomepageInteractor;
 import use_case.homepage.HomepageOutputBoundary;
@@ -43,6 +54,9 @@ import use_case.login.LoginOutputBoundary;
 import use_case.logout.LogoutInputBoundary;
 import use_case.logout.LogoutInteractor;
 import use_case.logout.LogoutOutputBoundary;
+import use_case.manage_home.ManageHomeInputBoundary;
+import use_case.manage_home.ManageHomeInteractor;
+import use_case.manage_home.ManageHomeOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
@@ -71,6 +85,7 @@ public class AppBuilder {
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
     private final MongoDBUserDataAccessObject userDataAccessObject = new MongoDBUserDataAccessObject(new CommonUserFactory());
+    private final PolygonApiClient polygonApiClient = new PolygonApiClient();
 
     private SignupView signupView;
     private SignupViewModel signupViewModel;
@@ -82,6 +97,12 @@ public class AppBuilder {
     private ChangePasswordView changePasswordView;
     private SettingsView settingsView;
     private SettingsViewModel settingsViewModel;
+    private AssetManagerViewModel assetManagerViewModel;
+    private AssetManagerView assetManagerView;
+    private ManageHomeViewModel manageHomeViewModel;
+    private ManageHomeView manageHomeView;
+    private ManageStockViewModel manageStockViewModel;
+    private ManageStockView manageStockView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -149,6 +170,39 @@ public class AppBuilder {
         settingsView = new SettingsView(settingsViewModel, darkModeController, logoutController);
         cardPanel.add(settingsView, settingsView.getViewName());
 
+        return this;
+    }
+
+    /**
+     * Adds the Asset Manager View to the application.
+     * @return this builder
+     */
+    public AppBuilder addAssetManagerView() {
+        assetManagerViewModel = new AssetManagerViewModel();
+        assetManagerView = new AssetManagerView(assetManagerViewModel);
+        cardPanel.add(assetManagerView, assetManagerView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Manager Home View to the application.
+     * @return this builder
+     */
+    public AppBuilder addManageHomeView() {
+        manageHomeViewModel = new ManageHomeViewModel();
+        manageHomeView = new ManageHomeView(manageHomeViewModel);
+        cardPanel.add(manageHomeView, manageHomeView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Manage Stock View to the application.
+     * @return this builder
+     */
+    public AppBuilder addManageStockView() {
+        manageStockViewModel = new ManageStockViewModel();
+        manageStockView = new ManageStockView(manageStockViewModel);
+        cardPanel.add(manageStockView, manageStockView.getViewName());
         return this;
     }
 
@@ -235,14 +289,45 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the Choose Asset Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addChooseAssetUseCase() {
+        final ChooseAssetOutputBoundary chooseAssetOutputBoundary = new AssetManagerPresenter(
+                assetManagerViewModel, viewManagerModel, manageHomeViewModel, manageStockViewModel);
+        final ChooseAssetInputBoundary chooseAssetInteractor = new ChooseAssetInteractor(
+                userDataAccessObject, chooseAssetOutputBoundary, polygonApiClient);
+        final AssetManagerController assetManagerController = new AssetManagerController(chooseAssetInteractor);
+        assetManagerView.setAssetManagerController(assetManagerController);
+        return this;
+    }
+
+    public AppBuilder addManageHomeUseCase() {
+        final ManageHomeOutputBoundary manageHomeOutputBoundary = new ManageHomePresenter(
+                viewManagerModel, manageHomeViewModel, assetManagerViewModel);
+        final ManageHomeInputBoundary manageHomeInteractor = new ManageHomeInteractor(
+                userDataAccessObject, manageHomeOutputBoundary);
+        final ManageHomeController manageHomeController = new ManageHomeController(manageHomeInteractor);
+        manageHomeView.setManageStockController(manageHomeController);
+        return this;
+    }
+
+    /**
      * Creates the JFrame for the application and initially sets the SignupView to be displayed.
      * @return the application
      */
     public JFrame build() {
+//        final JFrame application = new JFrame("Application");
+//        application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//        application.add(cardPanel);
+//        viewManagerModel.setState(signupView.getViewName());
+//        viewManagerModel.firePropertyChanged();
         final JFrame application = new JFrame("Application");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         application.add(cardPanel);
-        viewManagerModel.setState(signupView.getViewName());
+        viewManagerModel.setState(assetManagerView.getViewName());
+        userDataAccessObject.setCurrentUsername("Paul");
+        userDataAccessObject.updateUserCash(100_000_000);
         viewManagerModel.firePropertyChanged();
         return application;
     }

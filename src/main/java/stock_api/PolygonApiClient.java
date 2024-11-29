@@ -4,12 +4,13 @@ import com.google.gson.JsonArray;
 import okhttp3.*;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import use_case.login.ChooseAssetStockDataAccessInterface;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class PolygonApiClient {
+public class PolygonApiClient implements ChooseAssetStockDataAccessInterface {
 
     private static final String[] stockCodes = {"AAPL", "NVDA", "MSFT", "AMZN", "GOOGL", "META", "TSLA"};
     private static final String[] companyNames = {"Apple", "Nvidia", "Microsoft", "Amazon", "Google", "Meta", "Tesla"};

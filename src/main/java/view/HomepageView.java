@@ -119,28 +119,28 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
         chooseAvatar.addActionListener(evt -> {
             if (evt.getSource().equals(chooseAvatar)) {
                 final HomepageState currentState = homepageViewModel.getState();
-                homepageController.switchToAvatarView(currentState.getUsername());
+                homepageController.switchToAvatarView();
             }
         });
 
         playGame.addActionListener(evt -> {
             if (evt.getSource().equals(playGame)) {
                 final HomepageState currentState = homepageViewModel.getState();
-                homepageController.switchToPlayGameView(currentState.getUsername());
+                homepageController.switchToPlayGameView();
             }
         });
 
         decisionLog.addActionListener(evt -> {
             if (evt.getSource().equals(decisionLog)) {
                 final HomepageState currentState = homepageViewModel.getState();
-                homepageController.switchToDecisionLogView(currentState.getUsername());
+                homepageController.switchToDecisionLogView();
             }
         });
 
         profileSettings.addActionListener(evt -> {
             if (evt.getSource().equals(profileSettings)) {
                 final HomepageState currentState = homepageViewModel.getState();
-                homepageController.switchToProfileSettingsView(currentState.getUsername());
+                homepageController.switchToProfileSettingsView();
             }
         });
 

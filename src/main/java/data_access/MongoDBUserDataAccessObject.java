@@ -13,21 +13,27 @@ import entity.*;
 import org.bson.Document;
 
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
+import use_case.choose_asset.ChooseAssetDataAccessInterface;
 import use_case.homepage.HomepageUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
+import use_case.manage_home.ManageHomeDataAccessInterface;
 import use_case.settings.SettingsUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
 /**
  * The DAO for user data, now using MongoDB.
  */
-public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterface,
+public class MongoDBUserDataAccessObject implements
+        SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
         ChangePasswordUserDataAccessInterface,
         LogoutUserDataAccessInterface,
         HomepageUserDataAccessInterface,
-        SettingsUserDataAccessInterface {
+        SettingsUserDataAccessInterface,
+        ChooseAssetDataAccessInterface,
+        ManageHomeDataAccessInterface
+{
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
@@ -101,6 +107,32 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
     public void updateUserDarkMode(boolean isDarkMode) {
         User user = getCurrentUser();
         updateUser(user, DARK_MODE, isDarkMode);
+    }
+
+    @Override
+    public void updateUserCash(double newCash) {
+        User user = getCurrentUser();
+        Assets assets = user.getAssets() == null ? new Assets() : user.getAssets();
+        Assets newAssets = new Assets(
+                assets.getHome(),
+                assets.getStocks(),
+                newCash,
+                assets.getCar()
+        );
+        updateUser(user, ASSETS, newAssets);
+    }
+
+    @Override
+    public void updateUserHome(double newHome) {
+        User user = getCurrentUser();
+        Assets assets = user.getAssets() == null ? new Assets() : user.getAssets();
+        Assets newAssets = new Assets(
+                newHome,
+                assets.getStocks(),
+                assets.getCash(),
+                assets.getCar()
+        );
+        updateUser(user, ASSETS, newAssets);
     }
 
     @Override
