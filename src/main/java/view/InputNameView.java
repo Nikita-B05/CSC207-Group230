@@ -1,8 +1,12 @@
 package view;
 
+import data_access.config.ConfigLoader; // Import ConfigLoader to load API key
 import interface_adapter.input_name.InputNameController;
 import interface_adapter.input_name.InputNameState;
 import interface_adapter.input_name.InputNameViewModel;
+import name_api.NameApiClient; // Ensure you import the NameApiClient
+
+import com.google.gson.JsonObject;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,9 +28,21 @@ public class InputNameView extends JPanel implements ActionListener, PropertyCha
     private final JTextField nameInputField;
     private final JButton submitButton;
 
+    // Add the NameApiClient
+    private final NameApiClient nameApiClient;
+
     public InputNameView(InputNameViewModel viewModel) {
         this.viewModel = viewModel;
         this.viewModel.addPropertyChangeListener(this);
+
+        // Load API key from config.properties using ConfigLoader
+        String apiKey = ConfigLoader.getProperty("nameapi.key");
+        if (apiKey == null || apiKey.isEmpty()) {
+            throw new RuntimeException("API key for NameAPI is not configured. Please check config.properties.");
+        }
+
+        // Initialize the NameApiClient with the loaded API key
+        this.nameApiClient = new NameApiClient(apiKey);
 
         // Set layout
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -93,8 +109,32 @@ public class InputNameView extends JPanel implements ActionListener, PropertyCha
         if (e.getSource().equals(submitButton)) {
             String characterName = nameInputField.getText();
 
-            InputNameState state = viewModel.getState();
-            controller.inputCharacterName(state.getUsername(), characterName);
+            // Call the Name API to validate the character name
+            try {
+                JsonObject response = nameApiClient.validateName(characterName);
+                double riskScore = response.get("score").getAsDouble(); // Access the top-level "score"
+
+                if (riskScore > 0) {
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "That's an invalid name. Please try again.",
+                            "Invalid Name",
+                            JOptionPane.WARNING_MESSAGE
+                    );
+                } else {
+                    // Proceed if the name is valid
+                    InputNameState state = viewModel.getState();
+                    controller.inputCharacterName(state.getUsername(), characterName);
+                }
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "An error occurred while validating the name. Please try again.",
+                        "Error",
+                        JOptionPane.ERROR_MESSAGE
+                );
+                ex.printStackTrace();
+            }
         }
     }
 
