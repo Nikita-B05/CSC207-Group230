@@ -1,5 +1,6 @@
 package use_case.input_name;
 
+import entity.Avatar;
 import entity.User;
 
 /**
@@ -16,4 +17,6 @@ public interface InputNameUserDataAccessInterface {
 
     User getCurrentUser();
     void updateCharacterName(String characterName);
+
+    void updateAvatar(Avatar avatar);
 }

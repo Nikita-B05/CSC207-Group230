@@ -11,7 +11,7 @@ public class Avatar {
 
     public Avatar() {
         this.id = "default";
-        this.imagePath = "/src/main/resources/images/rickroll.png";
+        this.imagePath = "/images/rickroll.png";
     }
 
     public Avatar(String id, String imagePath) {

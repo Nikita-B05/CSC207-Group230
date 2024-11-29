@@ -24,8 +24,9 @@ public class InputNameInteractor implements InputNameInputBoundary {
         User user = userDataAccessObject.get(username);
         user.setCharacterName(characterName);
         userDataAccessObject.updateCharacterName(characterName);
+        userDataAccessObject.updateAvatar(user.getAvatar());
 
-        InputNameOutputData outputData = new InputNameOutputData(username, characterName);
+        InputNameOutputData outputData = new InputNameOutputData(username, characterName, user.getAvatar());
         outputBoundary.presentCharacterNameInput(outputData);
     }
 }

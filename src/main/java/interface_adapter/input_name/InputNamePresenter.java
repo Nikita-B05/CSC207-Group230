@@ -25,8 +25,8 @@ public class InputNamePresenter implements InputNameOutputBoundary {
     public void presentCharacterNameInput(InputNameOutputData outputData) {
         homepageViewModel.getState().setUsername(outputData.getUsername());
         homepageViewModel.getState().setName(outputData.getCharacterName());
+        homepageViewModel.getState().setAvatar(outputData.getAvatar());
         homepageViewModel.firePropertyChanged();
-//        homepageViewModel.getState().setAvatar(outputData.);
 
         // Navigate back to Homepage
         viewManagerModel.setState(homepageViewModel.getViewName());

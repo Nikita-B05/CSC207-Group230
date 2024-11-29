@@ -71,8 +71,6 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
         this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Add greeting at the top
-
-        // If user has set a name, use that. Otherwise, use their username
         if (homepageState.getName() != null) {
             greetingLabel = new JLabel("Hi, " + homepageState.getName());
         } else {
@@ -80,25 +78,13 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
         }
         greetingLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the greeting
         this.add(greetingLabel); // Add greeting at the top
-        this.add(Box.createVerticalStrut(20)); // Add space below the image
+        this.add(Box.createVerticalStrut(20)); // Add space below the greeting
 
-        // Add the image above the buttons
-        String imagePath = System.getProperty("user.dir") + homepageState.getAvatar().getImagePath();
-        ImageIcon imageIcon = null;
-        try {
-            imageIcon = new ImageIcon(imagePath);
-        } catch (Exception e) {
-            System.err.println("Could not load image: " + imagePath);
-        }
-        if (imageIcon != null) {
-            Image scaledImage = imageIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-            ImageIcon resizedIcon = new ImageIcon(scaledImage);
-
-            JLabel imageLabel = new JLabel(resizedIcon);
-            imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the image
-            this.add(imageLabel); // Add image at the top
-            this.add(Box.createVerticalStrut(20)); // Add space below the image
-        }
+        // Load and display the image
+        updateAvatarDisplay(homepageState.getAvatar());
+        imageLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the image
+        this.add(imageLabel);
+        this.add(Box.createVerticalStrut(20)); // Add precise space below the image
 
         // Center the buttons horizontally using alignment
         chooseAvatar.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -161,7 +147,6 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
         SwingUtilities.updateComponentTreeUI(this);
     }
 
-
     @Override
     public void actionPerformed(ActionEvent evt) {
         System.out.println("Homepage click: " + evt.getActionCommand());
@@ -181,17 +166,19 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
             greetingLabel.setText("Hi, " + state.getUsername());
         }
 
-        // Add the image above the buttons
-        String imagePath = System.getProperty("user.dir") + state.getAvatar().getImagePath();
+        // Update the displayed avatar
+        updateAvatarDisplay(state.getAvatar());
+    }
 
-        // if possible update avatar
+    private void updateAvatarDisplay(entity.Avatar avatar) {
         try {
+            String imagePath = System.getProperty("user.dir") + "/src/main/resources" + avatar.getImagePath();
             ImageIcon imageIcon = new ImageIcon(imagePath);
             Image scaledImage = imageIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-            ImageIcon resizedIcon = new ImageIcon(scaledImage);
-            imageLabel.setIcon(resizedIcon);
+            imageLabel.setIcon(new ImageIcon(scaledImage));
         } catch (Exception e) {
-            System.err.println("Could not load image: " + imagePath);
+            System.err.println("Error loading image: " + avatar.getImagePath());
+            imageLabel.setIcon(null);
         }
     }
 
