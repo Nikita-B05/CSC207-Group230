@@ -23,15 +23,14 @@ private ChooseAvatarViewModel chooseAvatarViewModel = new ChooseAvatarViewModel(
         ViewManagerModel viewManagerModel,
         HomepageViewModel homepageViewModel,
         SettingsViewModel settingsViewModel,
-//        ChooseAvatarViewModel chooseAvatarViewModel,
+        ChooseAvatarViewModel chooseAvatarViewModel
 //        PlayGameViewModel playGameViewModel,
-//        DecisionLogViewModel decisionLogViewModel,
-        ChooseAvatarViewModel chooseAvatarViewModel) {
+//        DecisionLogViewModel decisionLogViewModel
+        ) {
         this.viewManagerModel = viewManagerModel;
         this.homepageViewModel = homepageViewModel;
         this.settingsViewModel = settingsViewModel;
-        this.chooseAvatarViewModel = this.chooseAvatarViewModel;
-//        this.chooseAvatarViewModel = chooseAvatarViewModel;
+        this.chooseAvatarViewModel = chooseAvatarViewModel;
 //        this.playGameViewModel = playGameViewModel;
 //        this.decisionLogViewModel = decisionLogViewModel;
     }
@@ -40,8 +39,8 @@ private ChooseAvatarViewModel chooseAvatarViewModel = new ChooseAvatarViewModel(
     public void switchToChooseAvatarView(HomepageOutputData homepageOutputData) {
         chooseAvatarViewModel.getState().setUsername(homepageOutputData.getUsername());
         chooseAvatarViewModel.getState().setDarkMode(homepageOutputData.isDarkMode());
+        chooseAvatarViewModel.getState().setAvatar(homepageOutputData.getAvatar());
         chooseAvatarViewModel.firePropertyChanged();
-        // maybe add getName if issue is with this method
         viewManagerModel.setState(chooseAvatarViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }

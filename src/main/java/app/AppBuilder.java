@@ -5,7 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import data_access.InMemoryUserDataAccessObject;
+//import data_access.InMemoryUserDataAccessObject;
+import data_access.MongoDBUserDataAccessObject;
 import entity.CommonUser;
 import entity.CommonUserFactory;
 import entity.UserFactory;
@@ -79,7 +80,7 @@ public class AppBuilder {
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
-    private final InMemoryUserDataAccessObject userDataAccessObject = new InMemoryUserDataAccessObject(new CommonUserFactory());
+    private final MongoDBUserDataAccessObject userDataAccessObject = new MongoDBUserDataAccessObject(new CommonUserFactory());
 
     // Existing Views and ViewModels
     private SignupView signupView;
@@ -239,7 +240,7 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addChooseAvatarUseCase() {
-        final ChooseAvatarOutputBoundary chooseAvatarOutputBoundary = new ChooseAvatarPresenter(chooseAvatarViewModel, viewManagerModel);
+        final ChooseAvatarOutputBoundary chooseAvatarOutputBoundary = new ChooseAvatarPresenter(chooseAvatarViewModel, viewManagerModel, inputNameViewModel);
         final ChooseAvatarInputBoundary chooseAvatarInteractor = new ChooseAvatarInteractor(userDataAccessObject, chooseAvatarOutputBoundary);
         final ChooseAvatarController chooseAvatarController = new ChooseAvatarController(chooseAvatarInteractor);
         chooseAvatarView.setController(chooseAvatarController);

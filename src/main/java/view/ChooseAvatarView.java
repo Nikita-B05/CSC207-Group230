@@ -32,6 +32,7 @@ public class ChooseAvatarView extends JPanel implements ActionListener, Property
 
     public ChooseAvatarView(ChooseAvatarViewModel viewModel) {
         this.viewModel = viewModel;
+        this.viewModel.addPropertyChangeListener(this);
 
         // Title Label
         titleLabel = new JLabel("Choose Your Avatar");

@@ -26,7 +26,7 @@ public class ChooseAvatarInteractor implements ChooseAvatarInputBoundary {
         user.setAvatar(avatar);
         userDataAccessObject.save(user);
 
-        ChooseAvatarOutputData outputData = new ChooseAvatarOutputData(username, avatar);
+        ChooseAvatarOutputData outputData = new ChooseAvatarOutputData(username, avatar, user.getCharacterName(), user.isDarkMode());
         outputBoundary.presentAvatarSelection(outputData);
     }
 }

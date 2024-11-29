@@ -8,10 +8,10 @@ import use_case.choose_avatar.ChooseAvatarInputData;
  * Controller for the Choose Avatar Use Case.
  */
 public class ChooseAvatarController {
-    private final ChooseAvatarInputBoundary inputBoundary;
+    private final ChooseAvatarInputBoundary chooseAvatarUseCaseInteractor;
 
-    public ChooseAvatarController(ChooseAvatarInputBoundary inputBoundary) {
-        this.inputBoundary = inputBoundary;
+    public ChooseAvatarController(ChooseAvatarInputBoundary chooseAvatarUseCaseInteractor) {
+        this.chooseAvatarUseCaseInteractor = chooseAvatarUseCaseInteractor;
     }
 
     /**
@@ -22,6 +22,6 @@ public class ChooseAvatarController {
      */
     public void selectAvatar(String username, Avatar avatar) {
         ChooseAvatarInputData inputData = new ChooseAvatarInputData(username, avatar);
-        inputBoundary.selectAvatar(inputData);
+        chooseAvatarUseCaseInteractor.selectAvatar(inputData);
     }
 }

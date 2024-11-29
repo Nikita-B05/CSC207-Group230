@@ -18,6 +18,8 @@ import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.settings.SettingsUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
+import use_case.choose_avatar.ChooseAvatarUserDataAccessInterface;
+import use_case.input_name.InputNameUserDataAccessInterface;
 
 /**
  * The DAO for user data, now using MongoDB.
@@ -25,6 +27,8 @@ import use_case.signup.SignupUserDataAccessInterface;
 public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
         ChangePasswordUserDataAccessInterface,
+        ChooseAvatarUserDataAccessInterface,
+        InputNameUserDataAccessInterface,
         LogoutUserDataAccessInterface,
         HomepageUserDataAccessInterface,
         SettingsUserDataAccessInterface {

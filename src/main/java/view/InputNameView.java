@@ -8,11 +8,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 
 /**
  * The View for the Input Name Use Case.
  */
-public class InputNameView extends JPanel implements ActionListener {
+public class InputNameView extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final String viewName = "inputName";
     private final InputNameViewModel viewModel;
@@ -23,28 +26,40 @@ public class InputNameView extends JPanel implements ActionListener {
 
     public InputNameView(InputNameViewModel viewModel) {
         this.viewModel = viewModel;
+        this.viewModel.addPropertyChangeListener(this);
 
+        // Set layout
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
+
+        // Title Label
         JLabel titleLabel = new JLabel(InputNameViewModel.TITLE_LABEL);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Name input
         JLabel nameLabel = new JLabel("Character Name:");
-        nameInputField = new JTextField(15);
+        nameLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        nameInputField = new JTextField(20);
+        nameInputField.setMaximumSize(new Dimension(200, 25));
+        nameInputField.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Submit button
         submitButton = new JButton(InputNameViewModel.SUBMIT_BUTTON_LABEL);
+        submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         submitButton.addActionListener(this);
 
-        // Layout setup
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
-
+        // Add components to the panel
+        this.add(Box.createVerticalGlue());
         this.add(titleLabel);
-        this.add(Box.createVerticalStrut(20));
+        this.add(Box.createVerticalStrut(20)); // Space between components
         this.add(nameLabel);
+        this.add(Box.createVerticalStrut(10)); // Space between label and input
         this.add(nameInputField);
-        this.add(Box.createVerticalStrut(20));
+        this.add(Box.createVerticalStrut(20)); // Space between input and button
         this.add(submitButton);
+        this.add(Box.createVerticalGlue());
 
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
@@ -65,6 +80,12 @@ public class InputNameView extends JPanel implements ActionListener {
 
     public void setController(InputNameController controller) {
         this.controller = controller;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        final InputNameState state = (InputNameState) evt.getNewValue();
+        updateTheme(state.isDarkMode());
     }
 
     @Override
