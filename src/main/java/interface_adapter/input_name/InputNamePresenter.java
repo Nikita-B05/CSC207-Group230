@@ -1,6 +1,7 @@
 package interface_adapter.input_name;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.homepage.HomepageViewModel;
 import use_case.input_name.InputNameOutputBoundary;
 import use_case.input_name.InputNameOutputData;
 
@@ -11,20 +12,24 @@ public class InputNamePresenter implements InputNameOutputBoundary {
 
     private final InputNameViewModel viewModel;
     private final ViewManagerModel viewManagerModel;
+    private final HomepageViewModel homepageViewModel;
 
-    public InputNamePresenter(InputNameViewModel viewModel, ViewManagerModel viewManagerModel) {
+    public InputNamePresenter(
+            InputNameViewModel viewModel, ViewManagerModel viewManagerModel, HomepageViewModel homepageViewModel) {
         this.viewModel = viewModel;
         this.viewManagerModel = viewManagerModel;
+        this.homepageViewModel = homepageViewModel;
     }
 
     @Override
     public void presentCharacterNameInput(InputNameOutputData outputData) {
-        viewModel.getState().setUsername(outputData.getUsername());
-        viewModel.getState().setCharacterName(outputData.getCharacterName());
-        viewModel.firePropertyChanged();
+        homepageViewModel.getState().setUsername(outputData.getUsername());
+        homepageViewModel.getState().setName(outputData.getCharacterName());
+        homepageViewModel.firePropertyChanged();
+//        homepageViewModel.getState().setAvatar(outputData.);
 
         // Navigate back to Homepage
-        viewManagerModel.setState("homepage");
+        viewManagerModel.setState(homepageViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
 }

@@ -175,7 +175,11 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
     }
 
     private void setFields(HomepageState state) {
-        greetingLabel.setText(state.getUsername());
+        if (state.getName() != null) {
+            greetingLabel.setText("Hi, " + state.getName());
+        } else {
+            greetingLabel.setText("Hi, " + state.getUsername());
+        }
 
         // Add the image above the buttons
         String imagePath = System.getProperty("user.dir") + state.getAvatar().getImagePath();

@@ -252,7 +252,7 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addInputNameUseCase() {
-        final InputNameOutputBoundary inputNameOutputBoundary = new InputNamePresenter(inputNameViewModel, viewManagerModel);
+        final InputNameOutputBoundary inputNameOutputBoundary = new InputNamePresenter(inputNameViewModel, viewManagerModel, homepageViewModel);
         final InputNameInputBoundary inputNameInteractor = new InputNameInteractor(userDataAccessObject, inputNameOutputBoundary);
         final InputNameController inputNameController = new InputNameController(inputNameInteractor);
         inputNameView.setController(inputNameController);
