@@ -1,9 +1,10 @@
 package interface_adapter.asset_manager;
 
 import interface_adapter.ViewModel;
-import interface_adapter.homepage.HomepageState;
-import view.AssetManagerView;
 
+/**
+ * The View Model for the Asset Manager View.
+ */
 public class AssetManagerViewModel extends ViewModel<AssetManagerState> {
     public static final String TITLE = "Asset Manager";
     public static final String MANAGE_STOCK_LABEL = "Buy/Sell Stock";

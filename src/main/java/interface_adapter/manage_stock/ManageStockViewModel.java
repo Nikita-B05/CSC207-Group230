@@ -2,6 +2,9 @@ package interface_adapter.manage_stock;
 
 import interface_adapter.ViewModel;
 
+/**
+ * The View Model for the Manage Stock View.
+ */
 public class ManageStockViewModel extends ViewModel<ManageStockState> {
     public final static String TITLE = "Buy/Sell Stock";
 

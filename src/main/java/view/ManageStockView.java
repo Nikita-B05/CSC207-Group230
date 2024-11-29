@@ -1,9 +1,7 @@
 package view;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.asset_manager.AssetManagerController;
 import interface_adapter.asset_manager.AssetManagerState;
-import interface_adapter.asset_manager.AssetManagerViewModel;
 import interface_adapter.manage_stock.ManageStockController;
 import interface_adapter.manage_stock.ManageStockState;
 import interface_adapter.manage_stock.ManageStockViewModel;
@@ -19,7 +17,7 @@ import java.beans.PropertyChangeListener;
  * The View for the Manage Stock Use Case.
  */
 public class ManageStockView extends JPanel implements ActionListener, PropertyChangeListener {
-    private final String viewName = "assetManager";
+    private final String viewName = "manageStock";
 
     private final ManageStockViewModel viewModel;
     private ManageStockController controller;
@@ -129,7 +127,7 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        final AssetManagerState state = (AssetManagerState) evt.getNewValue();
+        final ManageStockState state = (ManageStockState) evt.getNewValue();
         updateTheme(state.isDarkMode());
     }
 
