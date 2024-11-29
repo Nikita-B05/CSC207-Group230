@@ -13,11 +13,4 @@ public interface ChooseAvatarUserDataAccessInterface {
      * @return the User object.
      */
     User get(String username);
-
-    /**
-     * Saves the updated user data.
-     *
-     * @param user the User object to save.
-     */
-    void save(User user);
 }

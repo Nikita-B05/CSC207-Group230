@@ -14,10 +14,6 @@ public interface InputNameUserDataAccessInterface {
      */
     User get(String username);
 
-    /**
-     * Saves the updated user data.
-     *
-     * @param user the User object to save.
-     */
-    void save(User user);
+    User getCurrentUser();
+    void updateCharacterName(String characterName);
 }
