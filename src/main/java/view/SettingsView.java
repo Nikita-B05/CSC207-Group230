@@ -1,12 +1,14 @@
 package view;
 
 import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
 import interface_adapter.settings.SettingsController;
 import interface_adapter.settings.SettingsViewModel;
@@ -40,24 +42,35 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
 
         final JLabel title = new JLabel("Settings");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        title.setFont(new Font("Arial", Font.BOLD, 24));
 
         darkModeCheckBox = new JCheckBox("Enable Dark Mode");
+        darkModeCheckBox.setAlignmentX(Component.CENTER_ALIGNMENT);
         darkModeCheckBox.addActionListener(this);
 
         changePasswordButton = new JButton("Change Password");
+        changePasswordButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         changePasswordButton.addActionListener(this);
 
         logOutButton = new JButton("Log Out");
+        logOutButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         logOutButton.addActionListener(this);
 
         cancelButton = new JButton("Cancel");
+        cancelButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         cancelButton.addActionListener(this);
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setBorder(new EmptyBorder(20, 20, 20, 20));
+
         this.add(title);
+        this.add(Box.createRigidArea(new Dimension(0, 20)));
         this.add(darkModeCheckBox);
+        this.add(Box.createRigidArea(new Dimension(0, 15)));
         this.add(changePasswordButton);
+        this.add(Box.createRigidArea(new Dimension(0, 15)));
         this.add(logOutButton);
+        this.add(Box.createRigidArea(new Dimension(0, 15)));
         this.add(cancelButton);
 
         try {
@@ -66,13 +79,11 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     public void setSettingsController(SettingsController settingsController) {
         this.settingsController = settingsController;
     }
-
 
     public void setLogoutController(LogoutController logoutController) {
         this.logoutController = logoutController;
@@ -89,7 +100,6 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
 
         SwingUtilities.updateComponentTreeUI(this);
     }
-
 
     @Override
     public void actionPerformed(ActionEvent evt) {
@@ -109,7 +119,6 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
             settingsController.changeToHomePage(username, darkModeCheckBox.isSelected());
         }
     }
-
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

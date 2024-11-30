@@ -77,4 +77,26 @@ public interface User {
      * Returns the dark mode UI config of the user.
      */
     void setDarkMode(boolean isDarkMode);
+
+    /**
+     * Returns the age of the user.
+     * @return the age of the user.
+     */
+    int getAge();
+
+    /**
+     * Sets the age of the user.
+     */
+    void setAge(int Age);
+
+    /**
+     * Modifies the happiness of the user.
+     */
+    void changeHappiness(double happiness);
+
+    /**
+     * Adds a decision to the decision list of the user.
+     */
+    void addDecision(Decision decision);
+
 }

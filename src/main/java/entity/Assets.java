@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Assets {
     private final int home;
     private final ArrayList<Stock> stocks;
-    private final int cash;
+    private double cash;
     private final int car;
 
     public Assets() {
@@ -30,8 +30,12 @@ public class Assets {
         return stocks;
     }
 
-    public int getCash() {
+    public double getCash() {
         return cash;
+    }
+
+    public void changeCash(double amount) {
+        this.cash += amount;
     }
 
     public int getCar() {

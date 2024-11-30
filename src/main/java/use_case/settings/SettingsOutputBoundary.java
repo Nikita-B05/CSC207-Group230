@@ -7,5 +7,4 @@ public interface SettingsOutputBoundary {
     void prepareChangePasswordView(SettingsOutputData outputData);
     void prepareLogoutView(SettingsOutputData outputData);
     void prepareHomepageView(SettingsOutputData outputData);
-    void updateDarkMode(boolean darkModeEnabled);
 }

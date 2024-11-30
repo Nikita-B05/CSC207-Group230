@@ -1,12 +1,9 @@
 package use_case.homepage;
 
-import data_access.DBUserDataAccessObject;
+import data_access.MongoDBUserDataAccessObject;
 import entity.Avatar;
 import entity.CommonUserFactory;
-import entity.User;
-import entity.UserFactory;
 import org.junit.jupiter.api.Test;
-import use_case.login.*;
 
 import java.util.ArrayList;
 
@@ -17,7 +14,7 @@ public class HomepageInteractorTest {
     @Test
     void switchToChooseAvatarViewTest() {
         HomepageInputData inputData = new HomepageInputData("Paul");
-        HomepageUserDataAccessInterface userRepository = new DBUserDataAccessObject(new CommonUserFactory());
+        HomepageUserDataAccessInterface userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
 
         HomepageOutputBoundary avatarPresenter = new HomepageOutputBoundary() {
             @Override
@@ -50,7 +47,7 @@ public class HomepageInteractorTest {
     @Test
     void switchToPlayGameViewTest() {
         HomepageInputData inputData = new HomepageInputData("Paul");
-        HomepageUserDataAccessInterface userRepository = new DBUserDataAccessObject(new CommonUserFactory());
+        HomepageUserDataAccessInterface userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
 
         HomepageOutputBoundary playGamePresenter = new HomepageOutputBoundary() {
             @Override
@@ -83,7 +80,7 @@ public class HomepageInteractorTest {
     @Test
     void switchToDecisionLogViewTest() {
         HomepageInputData inputData = new HomepageInputData("Paul");
-        HomepageUserDataAccessInterface userRepository = new DBUserDataAccessObject(new CommonUserFactory());
+        HomepageUserDataAccessInterface userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
 
         HomepageOutputBoundary decisionLogPresenter = new HomepageOutputBoundary() {
             @Override
@@ -116,7 +113,7 @@ public class HomepageInteractorTest {
     @Test
     void switchToProfileSettingsViewTest() {
         HomepageInputData inputData = new HomepageInputData("Paul");
-        HomepageUserDataAccessInterface userRepository = new DBUserDataAccessObject(new CommonUserFactory());
+        HomepageUserDataAccessInterface userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
 
         HomepageOutputBoundary settingsPresenter = new HomepageOutputBoundary() {
             @Override

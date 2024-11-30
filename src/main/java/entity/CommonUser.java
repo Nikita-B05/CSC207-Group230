@@ -13,6 +13,7 @@ public class CommonUser implements User {
 
 
     private String characterName;
+    private int age;
     private Avatar avatar;
     private int happiness;
     private int salary;
@@ -23,6 +24,7 @@ public class CommonUser implements User {
     public CommonUser(String username, String password) {
         this.username = username;
         this.password = password;
+        this.age = 18;
         this.isDarkMode = false;
         this.characterName = null;
         this.avatar = new Avatar();
@@ -36,6 +38,7 @@ public class CommonUser implements User {
     public CommonUser(
             String username,
             String password,
+            int age,
             boolean isDarkMode,
             String characterName,
             Avatar avatar,
@@ -47,6 +50,7 @@ public class CommonUser implements User {
     ) {
         this.username = username;
         this.password = password;
+        this.age = age;
         this.isDarkMode = isDarkMode;
         this.characterName = characterName;
         this.avatar = avatar;
@@ -119,6 +123,26 @@ public class CommonUser implements User {
         isDarkMode = darkMode;
     }
 
+    @Override
+    public int getAge() {
+        return this.age;
+    }
+
+    @Override
+    public void setAge(int Age) {
+        this.age = Age;
+    }
+
+    @Override
+    public void changeHappiness(double happiness) {
+        this.happiness += happiness;
+    }
+
+    @Override
+    public void addDecision(Decision decision) {
+        this.decisions.add(decision);
+    }
+
     public void setCharacterName(String characterName) {
         this.characterName = characterName;
     }
@@ -146,6 +170,8 @@ public class CommonUser implements User {
     public void setDecisions(ArrayList<Decision> decisions) {
         this.decisions = decisions;
     }
+
+
 
     @Override
     public int getNetWork() {

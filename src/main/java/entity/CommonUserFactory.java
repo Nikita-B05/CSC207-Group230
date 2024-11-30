@@ -14,15 +14,9 @@ public class CommonUserFactory implements UserFactory {
     }
 
     @Override
-    public User create(String username, String password, boolean isDarkMode) {
-        CommonUser user = new CommonUser(username, password);
-        user.setDarkMode(isDarkMode);
-        return user;
-    }
-
-    @Override
     public User create(String username,
                        String password,
+                       int age,
                        boolean isDarkMode,
                        String characterName,
                        Avatar avatar,
@@ -35,6 +29,7 @@ public class CommonUserFactory implements UserFactory {
         return new CommonUser(
                 username,
                 password,
+                age,
                 isDarkMode,
                 characterName,
                 avatar,

@@ -254,11 +254,10 @@ public class EntityConverter implements EntityConverterInterface {
         }
         final LocalDateTime timestamp = LocalDateTime.parse(timeStampString, formatter);
         final String decisionText = object.getString(DECISION_TEXT);
-        final String decisionReponse = object.getString(DECISION_RESPONSE);
         final int netWorthChange = object.getInt(NET_WORTH_CHANGE);
         final int happinessChange = object.getInt(HAPPINESS_CHANGE);
 
-        return new Decision(timestamp, decisionText, decisionReponse, netWorthChange, happinessChange);
+        return new Decision(timestamp, decisionText, netWorthChange, happinessChange);
     }
 
     private JSONObject toJSONObject(Decision decision) {
@@ -268,8 +267,7 @@ public class EntityConverter implements EntityConverterInterface {
         final JSONObject object = new JSONObject();
         object.put(TIMESTAMP, decision.getTimestamp().format(formatter));
         object.put(DECISION_TEXT, decision.getDecisionText());
-        object.put(DECISION_RESPONSE, decision.getDecisionResponse());
-        object.put(NET_WORTH_CHANGE, decision.getNetWorthChange());
+        object.put(NET_WORTH_CHANGE, decision.getCashChange());
         object.put(HAPPINESS_CHANGE, decision.getHappinessChange());
 
         return object;

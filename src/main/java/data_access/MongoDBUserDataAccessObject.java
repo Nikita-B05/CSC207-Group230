@@ -31,6 +31,7 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
+    private static final String AGE = "age";
     private static final String DARK_MODE = "darkMode";
     private static final String CHARACTER_NAME = "characterName";
     private static final String AVATAR = "avatar";
@@ -63,6 +64,7 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
         if (userDoc != null) {
             String name = userDoc.getString(USERNAME);
             String password = userDoc.getString(PASSWORD);
+            int age = userDoc.getInteger(AGE);
             boolean isDarkMode = userDoc.getBoolean(DARK_MODE, false);
             String characterName = userDoc.getString(CHARACTER_NAME);
             Avatar avatar = converter.toAvatar(userDoc.getString(AVATAR));
@@ -75,6 +77,7 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
             return userFactory.create(
                     name,
                     password,
+                    age,
                     isDarkMode,
                     characterName,
                     avatar,
@@ -126,6 +129,7 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
         Document userDoc = new Document()
                 .append(USERNAME, user.getUsername())
                 .append(PASSWORD, user.getPassword())
+                .append(AGE, user.getAge())
                 .append(DARK_MODE, user.isDarkMode())
                 .append(CHARACTER_NAME, user.getCharacterName())
                 .append(AVATAR, converter.serialize(user.getAvatar()))
