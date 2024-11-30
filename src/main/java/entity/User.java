@@ -1,11 +1,24 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The representation of a user in our program.
  */
 public interface User {
+
+    /**
+     * Sets the characterName of the user.
+     * @param characterName the new character name of the user.
+     */
+    void setCharacterName(String characterName);
+
+    /**
+     * Sets the avatar of the user.
+     * @param avatar the new avatar of the user.
+     */
+    void setAvatar(Avatar avatar);
 
     /**
      * Returns the username of the user.
@@ -69,9 +82,10 @@ public interface User {
 
     /**
      * Returns the net worth (assets - liabilities) of the user.
+     * @param stockPrices is the current market prices of stocks.
      * @return the net worth of the user.
      */
-    int getNetWork();
+    double getNetWorth(HashMap<String, Double> stockPrices);
 
     /**
      * Returns the dark mode UI config of the user.
@@ -79,24 +93,38 @@ public interface User {
     void setDarkMode(boolean isDarkMode);
 
     /**
-     * Returns the age of the user.
-     * @return the age of the user.
+     * Buys a stock for the user.
+     * Precondition: User has sufficient cash.
+     * @param stockCode code of the stock to be bought.
+     * @param quantity number of stock to be bought.
+     * @param buyPrice price of stock to be bought.
      */
-    int getAge();
+    public void buyStock(String stockCode, int quantity, double buyPrice);
 
     /**
-     * Sets the age of the user.
+     * Returns if the user has the funds to buy stock.
+     * @param stockCode code of the stock to be bought.
+     * @param quantity number of stock to be bought.
+     * @param stockPrices is the current market prices of stocks.
+     * @return if the user has the funds to buy stock.
      */
-    void setAge(int Age);
+    public boolean canBuyStock(String stockCode, int quantity, HashMap<String, Double> stockPrices);
 
     /**
-     * Modifies the happiness of the user.
+     * Returns the money made on the stock sold.
+     * Precondition: assumes the user owns enough stock to sell.
+     * @param stockCode code of the stock to be sold.
+     * @param quantity number of stock to be sold.
+     * @param sellPrice price of stock to be sold.
+     * @return the money made on the stock sold.
      */
-    void changeHappiness(double happiness);
+    public double sellStock(String stockCode, int quantity, double sellPrice);
 
     /**
-     * Adds a decision to the decision list of the user.
+     * Returns if the user can sell the stock.
+     * @param stockCode code of the stock to be sold.
+     * @param quantity number of stock to be sold.
+     * @return if the user can sell the stock.
      */
-    void addDecision(Decision decision);
-
+    public boolean isValidSell(String stockCode, int quantity);
 }

@@ -132,6 +132,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         });
 
         this.add(Box.createVerticalGlue());
+        this.add(title);
         this.add(inputPanel);
         this.add(buttons);
         this.add(Box.createVerticalGlue());

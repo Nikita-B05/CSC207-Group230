@@ -1,6 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * A simple implementation of the User interface.
@@ -59,6 +60,19 @@ public class CommonUser implements User {
         this.assets = assets;
         this.liabilities = liabilities;
         this.decisions = decisions;
+    }
+
+    public CommonUser(String testUser) {
+        this.username = testUser;
+        this.password = "password";
+        this.isDarkMode = false;
+        this.characterName = null;
+        this.avatar = new Avatar();
+        this.happiness = 100;
+        this.salary = 0;
+        this.assets = null;
+        this.liabilities = null;
+        this.decisions = new ArrayList<>();
     }
 
     @Override
@@ -174,10 +188,35 @@ public class CommonUser implements User {
 
 
     @Override
-    public int getNetWork() {
-        if (assets == null || liabilities == null) {
+    public void buyStock(String stockCode, int quantity, double buyPrice) {
+        assets.buyStock(stockCode, quantity, buyPrice);
+    }
+
+    @Override
+    public boolean canBuyStock(String stockCode, int quantity, HashMap<String, Double> stockPrices) {
+        return assets.canBuyStock(stockCode, quantity, stockPrices);
+    }
+
+    @Override
+    public double sellStock(String stockCode, int quantity, double sellPrice) {
+        return assets.sellStock(stockCode, quantity, sellPrice);
+    }
+
+    @Override
+    public boolean isValidSell(String stockCode, int quantity) {
+        return assets.isValidSell(stockCode, quantity);
+    }
+
+    @Override
+    public double getNetWorth(HashMap<String, Double> stockPrices) {
+        if (assets == null && liabilities == null) {
             return 0;
+        } else if (assets != null && liabilities == null) {
+            return assets.getTotal(stockPrices);
+        } else if (assets == null && liabilities != null) {
+            return -1 * liabilities.getTotal();
+        } else {
+            return assets.getTotal(stockPrices) - liabilities.getTotal();
         }
-        return assets.getTotal() - liabilities.getTotal();
     }
 }
