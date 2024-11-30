@@ -21,7 +21,7 @@ public class ManageHomeViewModel extends ViewModel<ManageHomeState> {
             "Small 2 bed/1 bath apartment for 500k."
     };
 
-    public final static double[] HOME_PRICES = {1_000_000, 500_000};
+    public final static double[] HOME_PRICES = {1_100_000, 500_000};
 
     public ManageHomeViewModel() {
         super("manageHome");

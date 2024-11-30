@@ -32,19 +32,21 @@ public class ManageHomePresenter implements ManageHomeOutputBoundary {
     }
 
     @Override
-    public void prepareBuySuccessView(String successMessage, double newHome) {
+    public void prepareBuySuccessView(String successMessage, double newHome, double cash) {
         ManageHomeState manageHomeState = manageHomeViewModel.getState();
         manageHomeState.setHome(newHome);
         manageHomeState.setSuccessMessage(successMessage);
+        manageHomeState.setAvailableCash(cash);
         manageHomeViewModel.firePropertyChanged("manageHomeBuySuccess");
         this.manageHomeViewModel.firePropertyChanged();
     }
 
     @Override
-    public void prepareSellSuccessView(String successMessage) {
+    public void prepareSellSuccessView(String successMessage, double cash) {
         ManageHomeState manageHomeState = manageHomeViewModel.getState();
         manageHomeState.setHome(0.0);
         manageHomeState.setSuccessMessage(successMessage);
+        manageHomeState.setAvailableCash(cash);
         manageHomeViewModel.firePropertyChanged("manageHomeSellSuccess");
         this.manageHomeViewModel.firePropertyChanged();
     }

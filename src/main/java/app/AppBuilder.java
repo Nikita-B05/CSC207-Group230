@@ -345,7 +345,7 @@ public class AppBuilder {
         viewManagerModel.setState(assetManagerView.getViewName());
         userDataAccessObject.setCurrentUsername("Paul");
         userDataAccessObject.updateUserDarkMode(true);
-        userDataAccessObject.updateUserCash(100);
+        userDataAccessObject.updateUserCash(1_000_000);
         viewManagerModel.firePropertyChanged();
         return application;
     }

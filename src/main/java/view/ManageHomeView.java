@@ -28,6 +28,8 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
     private final ArrayList<JToggleButton> houseButtons = new ArrayList<>();
     private final JPanel housePanel = new JPanel();
 
+    private final JLabel cashAvailable;
+
     private final JPanel buttonPanel;
     private final JButton backButton;
     private final JButton buyButton;
@@ -82,6 +84,12 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
             constraints.gridy++;
             this.add(housePanel, constraints);
         }
+
+        // Cash Available
+        cashAvailable = new JLabel("Total: $" + state.getAvailableCash());
+        cashAvailable.setHorizontalAlignment(SwingConstants.CENTER);
+        constraints.gridy++;
+        this.add(cashAvailable, constraints);
 
         // Buttons
         backButton = new JButton(ManageHomeViewModel.BACK_LABEL);
@@ -172,12 +180,14 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
             throw new RuntimeException("Success message cannot be null.");
         }
         else {
+            cashAvailable.setText("Cash Available: $" + state.getAvailableCash());
             JOptionPane.showMessageDialog(this, state.getSuccessMessage());
         }
     }
 
     private void handleStateChange(PropertyChangeEvent evt) {
         final ManageHomeState state = (ManageHomeState) evt.getNewValue();
+        cashAvailable.setText("Cash Available: $" + state.getAvailableCash());
         if (state.hasHome()) {
             decriptionLabel.setText(ManageHomeViewModel.SELL_DESCRIPTION + " of value $" + state.getHome() + "?");
             if (housePanel.getParent() == this) {

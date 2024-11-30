@@ -9,17 +9,17 @@ public interface ChooseAssetOutputBoundary {
      * Switches to Manage Home View.
      * @param chooseAssetOutputData the input data
      */
-    public void switchToManageHomeView(ChooseAssetOutputData chooseAssetOutputData);
+    void switchToManageHomeView(ChooseAssetOutputData chooseAssetOutputData);
 
     /**
      * Switches to Manage Stock View.
      * @param chooseAssetOutputData the input data
      */
-    public void switchToManageStockView(ChooseAssetOutputData chooseAssetOutputData);
+    void switchToManageStockView(ChooseAssetOutputData chooseAssetOutputData);
 
     /**
      * Switches to Game Decision View.
      * @param chooseAssetOutputData the input data
      */
-    public void switchToGameDecisionView(ChooseAssetOutputData chooseAssetOutputData);
+    void switchToGameDecisionView(ChooseAssetOutputData chooseAssetOutputData);
 }

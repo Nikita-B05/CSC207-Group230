@@ -15,14 +15,16 @@ public interface ManageHomeOutputBoundary {
      * Prepares the buy success view for the Manage Home Use Case.
      * @param successMessage the explanation of success
      * @param newHome value of the bought home
+     * @param cash cash the user has
      */
-    void prepareBuySuccessView(String successMessage, double newHome);
+    void prepareBuySuccessView(String successMessage, double newHome, double cash);
 
     /**
      * Prepares the sell success view for the Manage Home Use Case.
      * @param successMessage the explanation of success
+     * @param cash cash the user has
      */
-    void prepareSellSuccessView(String successMessage);
+    void prepareSellSuccessView(String successMessage, double cash);
 
     /**
      * Switches to the Asset Manager View.

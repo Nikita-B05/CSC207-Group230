@@ -33,8 +33,12 @@ public class ManageHomeInteractor implements ManageHomeInputBoundary{
                 userDataAccessObject.updateUserCash(
                         user.getAssets().getCash() - manageHomeInputData.getNewHome());
                 userDataAccessObject.updateUserHome(manageHomeInputData.getNewHome());
+                user = userDataAccessObject.getCurrentUser();
                 manageHomePresenter.prepareBuySuccessView(
-                        "Home bought successfully.", manageHomeInputData.getNewHome());
+                        "Home bought successfully.",
+                        manageHomeInputData.getNewHome(),
+                        user.getAssets().getCash()
+                );
             }
         }
         else {
@@ -44,7 +48,9 @@ public class ManageHomeInteractor implements ManageHomeInputBoundary{
             } else {
                 userDataAccessObject.updateUserCash(user.getAssets().getCash() + user.getAssets().getHome());
                 userDataAccessObject.updateUserHome(0.0);
-                manageHomePresenter.prepareSellSuccessView("Home sold successfully.");
+                user = userDataAccessObject.getCurrentUser();
+                manageHomePresenter.prepareSellSuccessView(
+                        "Home sold successfully.", user.getAssets().getCash());
             }
         }
     }

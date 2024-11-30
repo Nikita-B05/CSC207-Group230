@@ -5,6 +5,7 @@ public class ManageHomeState {
     private boolean isDarkMode;
     private String errorMessage;
     private String successMessage;
+    private double availableCash;
 
     public double getHome() {
         return home;
@@ -20,6 +21,10 @@ public class ManageHomeState {
 
     public String getSuccessMessage() {
         return successMessage;
+    }
+
+    public double getAvailableCash() {
+        return availableCash;
     }
 
     public void setHome(double home) {
@@ -40,5 +45,9 @@ public class ManageHomeState {
 
     public void setSuccessMessage(String successMessage) {
         this.successMessage = successMessage;
+    }
+
+    public void setAvailableCash(double availableCash) {
+        this.availableCash = availableCash;
     }
 }

@@ -83,8 +83,8 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
         gbc.gridy = 3;
         this.add(cashAvailable, gbc);
 
-        // Cash Available
-        totalField = new JLabel("Total: $" + state.getQuantity());
+        // Total bill
+        totalField = new JLabel("Total: $0.0");
         totalField.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridy = 4;
         this.add(totalField, gbc);

@@ -13,10 +13,10 @@ public class ChooseAssetOutputData {
     private final Map<String, String> nameToCode;
     private final Map<String, Double> codeToPrice;
 
-    public ChooseAssetOutputData(String username, boolean isDarkMode, double home) {
+    public ChooseAssetOutputData(String username, boolean isDarkMode, double cash, double home) {
         this.username = username;
         this.isDarkMode = isDarkMode;
-        this.cash = 0.0;
+        this.cash = cash;
         this.home = home;
         this.stockNames = new String[0];
         this.nameToCode = new HashMap<>();

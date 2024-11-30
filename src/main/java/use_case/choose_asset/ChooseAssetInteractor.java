@@ -22,6 +22,7 @@ public class ChooseAssetInteractor implements ChooseAssetInputBoundary {
         ChooseAssetOutputData outputData = new ChooseAssetOutputData(
                 user.getUsername(),
                 user.isDarkMode(),
+                user.getAssets().getCash(),
                 user.getAssets() == null ? 0 : user.getAssets().getHome()
         );
         chooseAssetPresenter.switchToManageHomeView(outputData);
