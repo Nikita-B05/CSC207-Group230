@@ -29,6 +29,7 @@ public class ManageHomeController {
     /**
      * Switches to Asset Manager View.
      */
-    public void switchToAssetManagerView() { manageHomeInteractor.switchToAssetManagerView();
+    public void switchToAssetManagerView() {
+        manageHomeInteractor.switchToAssetManagerView();
     }
 }

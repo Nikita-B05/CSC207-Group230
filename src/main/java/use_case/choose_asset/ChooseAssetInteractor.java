@@ -1,7 +1,6 @@
 package use_case.choose_asset;
 
 import entity.User;
-import use_case.login.ChooseAssetStockDataAccessInterface;
 
 public class ChooseAssetInteractor implements ChooseAssetInputBoundary {
     private final ChooseAssetDataAccessInterface userDataAccessObject;
@@ -23,8 +22,7 @@ public class ChooseAssetInteractor implements ChooseAssetInputBoundary {
         ChooseAssetOutputData outputData = new ChooseAssetOutputData(
                 user.getUsername(),
                 user.isDarkMode(),
-                user.getAssets() == null ? 0 : user.getAssets().getHome(),
-                stockDataAccessObject.getStockCodes()
+                user.getAssets() == null ? 0 : user.getAssets().getHome()
         );
         chooseAssetPresenter.switchToManageHomeView(outputData);
     }
@@ -35,8 +33,10 @@ public class ChooseAssetInteractor implements ChooseAssetInputBoundary {
         ChooseAssetOutputData outputData = new ChooseAssetOutputData(
                 user.getUsername(),
                 user.isDarkMode(),
-                user.getAssets() == null ? 0 : user.getAssets().getHome(),
-                stockDataAccessObject.getStockCodes()
+                user.getAssets() == null ? 0.0 : user.getAssets().getCash(),
+                stockDataAccessObject.getStockNames(),
+                stockDataAccessObject.getNameToCode(),
+                stockDataAccessObject.getCodeToPrice()
         );
         chooseAssetPresenter.switchToManageStockView(outputData);
     }

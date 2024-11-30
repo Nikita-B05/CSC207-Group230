@@ -3,6 +3,7 @@ package use_case.homepage;
 import data_access.DBUserDataAccessObject;
 import data_access.MongoDBUserDataAccessObject;
 import entity.*;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import use_case.login.*;
 
@@ -11,6 +12,12 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class HomepageInteractorTest {
+
+    @AfterEach
+    public void tearDown() {
+        MongoDBUserDataAccessObject userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
+        userRepository.deleteUser("testing");
+    }
 
     @Test
     void switchToChooseAvatarViewTest() {
@@ -84,9 +91,9 @@ public class HomepageInteractorTest {
 
     @Test
     void switchToDecisionLogViewTest() {
-        User user = new CommonUser("Paul", "password");
+        User user = new CommonUser("testing", "password");
         MongoDBUserDataAccessObject userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
-        userRepository.setCurrentUsername("Paul");
+        userRepository.setCurrentUsername("testing");
         userRepository.save(user);
 
         HomepageOutputBoundary decisionLogPresenter = new HomepageOutputBoundary() {
@@ -102,7 +109,7 @@ public class HomepageInteractorTest {
 
             @Override
             public void switchToDecisionLogView(HomepageOutputData homepageOutputData) {
-                assertEquals("Paul", homepageOutputData.getUsername());
+                assertEquals("testing", homepageOutputData.getUsername());
                 assertEquals(new Avatar().getId(), homepageOutputData.getAvatar().getId());
                 assertEquals(new ArrayList<>(), homepageOutputData.getDecisions());
             }
@@ -119,9 +126,9 @@ public class HomepageInteractorTest {
 
     @Test
     void switchToProfileSettingsViewTest() {
-        User user = new CommonUser("Paul", "password");
+        User user = new CommonUser("testing", "password");
         MongoDBUserDataAccessObject userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
-        userRepository.setCurrentUsername("Paul");
+        userRepository.setCurrentUsername("testing");
         userRepository.save(user);
 
         HomepageOutputBoundary settingsPresenter = new HomepageOutputBoundary() {
@@ -142,7 +149,7 @@ public class HomepageInteractorTest {
 
             @Override
             public void switchToSettingsView(HomepageOutputData homepageOutputData) {
-                assertEquals("Paul", homepageOutputData.getUsername());
+                assertEquals("testing", homepageOutputData.getUsername());
                 assertEquals(new Avatar().getId(), homepageOutputData.getAvatar().getId());
                 assertEquals(new ArrayList<>(), homepageOutputData.getDecisions());
             }

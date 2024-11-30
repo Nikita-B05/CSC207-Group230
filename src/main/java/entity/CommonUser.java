@@ -148,22 +148,18 @@ public class CommonUser implements User {
         this.decisions = decisions;
     }
 
-    @Override
     public void buyStock(String stockCode, int quantity, double buyPrice) {
         assets.buyStock(stockCode, quantity, buyPrice);
     }
 
-    @Override
     public boolean canBuyStock(String stockCode, int quantity, HashMap<String, Double> stockPrices) {
         return assets.canBuyStock(stockCode, quantity, stockPrices);
     }
 
-    @Override
-    public double sellStock(String stockCode, int quantity, double sellPrice) {
-        return assets.sellStock(stockCode, quantity, sellPrice);
+    public void sellStock(String stockCode, int quantity, double sellPrice) {
+        assets.sellStock(stockCode, quantity, sellPrice);
     }
 
-    @Override
     public boolean isValidSell(String stockCode, int quantity) {
         return assets.isValidSell(stockCode, quantity);
     }

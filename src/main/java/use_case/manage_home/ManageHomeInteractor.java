@@ -2,6 +2,9 @@ package use_case.manage_home;
 
 import entity.User;
 
+/**
+ * The Manage Home Interactor.
+ */
 public class ManageHomeInteractor implements ManageHomeInputBoundary{
 
     private final ManageHomeDataAccessInterface userDataAccessObject;

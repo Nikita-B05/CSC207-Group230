@@ -45,7 +45,11 @@ public class AssetManagerPresenter implements ChooseAssetOutputBoundary {
     public void switchToManageStockView(ChooseAssetOutputData chooseAssetOutputData) {
         ManageStockState state = manageStockViewModel.getState();
         state.setDarkMode(chooseAssetOutputData.isDarkMode());
+        state.setNameToCode(chooseAssetOutputData.getNameToCode());
+        state.setCodeToPrice(chooseAssetOutputData.getCodeToPrice());
         state.setStockNames(chooseAssetOutputData.getStockNames());
+        state.setCode(chooseAssetOutputData.getNameToCode().get(chooseAssetOutputData.getStockNames()[0]));
+        state.setCash(chooseAssetOutputData.getCash());
         manageStockViewModel.setState(state);
         manageStockViewModel.firePropertyChanged();
 

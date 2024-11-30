@@ -6,7 +6,9 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import data_access.MongoDBUserDataAccessObject;
+import entity.CommonUser;
 import entity.CommonUserFactory;
+import entity.User;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.asset_manager.AssetManagerController;
@@ -27,6 +29,8 @@ import interface_adapter.logout.LogoutPresenter;
 import interface_adapter.manage_home.ManageHomeController;
 import interface_adapter.manage_home.ManageHomePresenter;
 import interface_adapter.manage_home.ManageHomeViewModel;
+import interface_adapter.manage_stock.ManageStockController;
+import interface_adapter.manage_stock.ManageStockPresenter;
 import interface_adapter.manage_stock.ManageStockViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
@@ -57,6 +61,9 @@ import use_case.logout.LogoutOutputBoundary;
 import use_case.manage_home.ManageHomeInputBoundary;
 import use_case.manage_home.ManageHomeInteractor;
 import use_case.manage_home.ManageHomeOutputBoundary;
+import use_case.manage_stock.ManageStockInputBoundary;
+import use_case.manage_stock.ManageStockInteractor;
+import use_case.manage_stock.ManageStockOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
@@ -308,7 +315,17 @@ public class AppBuilder {
         final ManageHomeInputBoundary manageHomeInteractor = new ManageHomeInteractor(
                 userDataAccessObject, manageHomeOutputBoundary);
         final ManageHomeController manageHomeController = new ManageHomeController(manageHomeInteractor);
-        manageHomeView.setManageStockController(manageHomeController);
+        manageHomeView.setManageHomeController(manageHomeController);
+        return this;
+    }
+
+    public AppBuilder addManageStockUseCase() {
+        final ManageStockOutputBoundary manageStockOutputBoundary = new ManageStockPresenter(
+                viewManagerModel, manageStockViewModel, assetManagerViewModel);
+        final ManageStockInputBoundary manageStockInteractor = new ManageStockInteractor(
+                userDataAccessObject, polygonApiClient, manageStockOutputBoundary);
+        final ManageStockController manageStockController = new ManageStockController(manageStockInteractor);
+        manageStockView.setManageStockController(manageStockController);
         return this;
     }
 
@@ -327,7 +344,8 @@ public class AppBuilder {
         application.add(cardPanel);
         viewManagerModel.setState(assetManagerView.getViewName());
         userDataAccessObject.setCurrentUsername("Paul");
-        userDataAccessObject.updateUserCash(100_000_000);
+        userDataAccessObject.updateUserDarkMode(true);
+        userDataAccessObject.updateUserCash(100);
         viewManagerModel.firePropertyChanged();
         return application;
     }

@@ -6,6 +6,9 @@ import interface_adapter.asset_manager.AssetManagerViewModel;
 import use_case.manage_home.ManageHomeOutputBoundary;
 import use_case.manage_home.ManageHomeOutputData;
 
+/**
+ * The Presenter for the Manage Home Use Case.
+ */
 public class ManageHomePresenter implements ManageHomeOutputBoundary {
     private final ViewManagerModel viewManagerModel;
     private final ManageHomeViewModel manageHomeViewModel;

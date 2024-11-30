@@ -1,12 +1,12 @@
 package use_case.manage_home;
 
-import use_case.homepage.HomepageOutputBoundary;
-import use_case.homepage.HomepageOutputData;
-
+/**
+ * The output boundary for the Manage Home Use Case.
+ */
 public interface ManageHomeOutputBoundary {
 
     /**
-     * Prepares the failure view for the Login Use Case.
+     * Prepares the failure view for the Manage Home Use Case.
      * @param errorMessage the explanation of the failure
      */
     void prepareFailView(String errorMessage);

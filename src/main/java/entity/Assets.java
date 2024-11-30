@@ -2,11 +2,12 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Assets {
     private final double home;
     private final ArrayList<Stock> stocks;
-    private final double cash;
+    private double cash;
     private final double car;
 
     public Assets() {
@@ -41,36 +42,36 @@ public class Assets {
 
     public void buyStock(String stockCode, int quantity, double buyPrice) {
         stocks.add(new Stock(stockCode, quantity, buyPrice, 365));
+        cash -= quantity * buyPrice;
     }
 
-    public boolean canBuyStock(String stockCode, int quantity, HashMap<String, Double> stockPrices) {
+    public boolean canBuyStock(String stockCode, int quantity, Map<String, Double> stockPrices) {
         return cash >= stockPrices.get(stockCode) * quantity;
     }
 
-    public double sellStock(String stockCode, int quantity, double sellPrice) {
+    public void sellStock(String stockCode, int quantity, double sellPrice) {
         double total = 0;
         for (int i = 0; i < stocks.size(); i++) {
             Stock stock = stocks.get(i);
             if (!stock.getStockCode().equals(stockCode)) continue;
 
-            double buyPrice = stock.getBuyPrice();
-            int multiplier = stock.getMultiplier();
             if (stock.getQuantity() == quantity) {
                 stocks.remove(i);
-                total += quantity * getMultipliedStockPrice(buyPrice, sellPrice, multiplier);
+                total += quantity * sellPrice;
                 break;
             }
             else if (stock.getQuantity() > quantity) {
                 stock.setQuantity(stock.getQuantity() - quantity);
-                total += quantity * getMultipliedStockPrice(buyPrice, sellPrice, multiplier);
+                total += quantity * sellPrice;
+                break;
             }
             else {
                 stocks.remove(i);
                 quantity -= stock.getQuantity();
-                total += stock.getQuantity() * getMultipliedStockPrice(buyPrice, sellPrice, multiplier);
+                total += stock.getQuantity() * sellPrice;
             }
         }
-        return total;
+        cash += total;
     }
 
     public boolean isValidSell(String stockCode, int quantity) {

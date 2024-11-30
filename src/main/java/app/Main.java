@@ -30,6 +30,7 @@ public class Main {
                 .addHomepageUseCase()
                 .addChooseAssetUseCase()
                 .addManageHomeUseCase()
+                .addManageStockUseCase()
                 .build();
 
         application.pack();

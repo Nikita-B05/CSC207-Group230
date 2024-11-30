@@ -18,6 +18,7 @@ import use_case.homepage.HomepageUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.manage_home.ManageHomeDataAccessInterface;
+import use_case.manage_stock.ManageStockDataAccessInterface;
 import use_case.settings.SettingsUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 
@@ -32,7 +33,8 @@ public class MongoDBUserDataAccessObject implements
         HomepageUserDataAccessInterface,
         SettingsUserDataAccessInterface,
         ChooseAssetDataAccessInterface,
-        ManageHomeDataAccessInterface
+        ManageHomeDataAccessInterface,
+        ManageStockDataAccessInterface
 {
 
     private static final String USERNAME = "username";
@@ -133,6 +135,12 @@ public class MongoDBUserDataAccessObject implements
                 assets.getCar()
         );
         updateUser(user, ASSETS, newAssets);
+    }
+
+    @Override
+    public void updateAssets(Assets assets) {
+        User user = getCurrentUser();
+        updateUser(user, ASSETS, assets);
     }
 
     @Override
@@ -240,13 +248,13 @@ public class MongoDBUserDataAccessObject implements
         return userDoc.isPresent();
     }
 
-    private void deleteUser(String user) {
+    public void deleteUser(String user) {
         MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
         usersCollection.deleteMany(Filters.eq(USERNAME, user));
     }
 
     public static void main(String[] args) {
-        User user = new CommonUser("Test", "1234");
+        User user = new CommonUser("test", "1");
         MongoDBUserDataAccessObject dao = new MongoDBUserDataAccessObject(new CommonUserFactory());
         dao.save(user);
         System.out.println(dao.get(user.getUsername()).getSalary());

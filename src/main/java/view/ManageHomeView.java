@@ -1,14 +1,9 @@
 package view;
 
-import data_access.MongoDBUserDataAccessObject;
-import entity.CommonUserFactory;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.homepage.HomepageState;
 import interface_adapter.manage_home.ManageHomeController;
-import interface_adapter.manage_home.ManageHomePresenter;
 import interface_adapter.manage_home.ManageHomeState;
 import interface_adapter.manage_home.ManageHomeViewModel;
-import use_case.manage_home.ManageHomeInteractor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -220,7 +215,7 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
         return viewName;
     }
 
-    public void setManageStockController(ManageHomeController manageHomeController) {
+    public void setManageHomeController(ManageHomeController manageHomeController) {
         this.controller = manageHomeController;
     }
 

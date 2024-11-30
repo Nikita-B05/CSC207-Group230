@@ -1,17 +1,21 @@
 package view;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.asset_manager.AssetManagerState;
+import interface_adapter.manage_home.ManageHomeState;
 import interface_adapter.manage_stock.ManageStockController;
 import interface_adapter.manage_stock.ManageStockState;
 import interface_adapter.manage_stock.ManageStockViewModel;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The View for the Manage Stock Use Case.
@@ -24,6 +28,9 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
 
     private final JComboBox<String> stockSelector;
     private final JTextField quantityField;
+
+    private final JLabel cashAvailable;
+    private final JLabel totalField;
 
     private final JButton backButton;
     private final JButton buyButton;
@@ -70,6 +77,18 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
         gbc.gridy = 2;
         this.add(quantityPanel, gbc);
 
+        // Cash Available
+        cashAvailable = new JLabel("Cash Available: $" + state.getCash());
+        cashAvailable.setHorizontalAlignment(SwingConstants.CENTER);
+        gbc.gridy = 3;
+        this.add(cashAvailable, gbc);
+
+        // Cash Available
+        totalField = new JLabel("Total: $" + state.getQuantity());
+        totalField.setHorizontalAlignment(SwingConstants.CENTER);
+        gbc.gridy = 4;
+        this.add(totalField, gbc);
+
         // Buttons
         backButton = new JButton(ManageStockViewModel.BACK_LABEL);
         buyButton = new JButton(ManageStockViewModel.BUY_LABEL);
@@ -79,7 +98,7 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
         buttonPanel.add(backButton);
         buttonPanel.add(buyButton);
         buttonPanel.add(sellButton);
-        gbc.gridy = 3;
+        gbc.gridy = 5;
         this.add(buttonPanel, gbc);
 
         // Set Look and Feel
@@ -93,25 +112,77 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
         // Add action listeners for buttons
         stockSelector.addActionListener(evt -> {
             if (evt.getSource().equals(stockSelector)) {
-                // controller.doSomething();
+                String stockCode = state.getNameToCode().get((String) stockSelector.getSelectedItem());
+                try {
+                    int quantity;
+                    if (quantityField.getText().isEmpty()) {
+                        quantity = 0;
+                    }
+                    else {
+                        quantity = Integer.parseInt(quantityField.getText());
+                    }
+
+                    state.setCode(stockCode);
+                    double totalAmount = quantity * state.getCodeToPrice().get(state.getCode());
+                    totalField.setText("Total: $" + totalAmount);
+                } catch (NumberFormatException e) {
+                    // Don't update
+                }
+            }
+        });
+
+        quantityField.getDocument().addDocumentListener(new DocumentListener() {
+            private void documentListenerHelper() {
+                state.setQuantity(quantityField.getText());
+                try {
+                    int quantity;
+                    if (quantityField.getText().isEmpty()) {
+                        quantity = 0;
+                    }
+                    else {
+                        quantity = Integer.parseInt(quantityField.getText());
+                    }
+                    double totalAmount = quantity *
+                            state
+                                    .getCodeToPrice()
+                                    .get(state.getNameToCode().get((String) stockSelector.getSelectedItem()));
+                    totalField.setText("Total: $" + totalAmount);
+                } catch (NumberFormatException e) {
+                    // Don't update
+                }
+            }
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                documentListenerHelper();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                documentListenerHelper();
             }
         });
 
         backButton.addActionListener(evt -> {
             if (evt.getSource().equals(backButton)) {
-                // controller.goBack();
+                controller.switchToAssetManagerView();
             }
         });
 
         buyButton.addActionListener(evt -> {
             if (evt.getSource().equals(buyButton)) {
-                // controller.buy();
+                controller.execute(state.getCode(), state.getQuantity(), true);
             }
         });
 
         sellButton.addActionListener(evt -> {
             if (evt.getSource().equals(sellButton)) {
-                // controller.sell();
+                controller.execute(state.getCode(), state.getQuantity(), false);
             }
         });
     }
@@ -127,8 +198,50 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equals("state")) {
+            handleStateChange(evt);
+        }
+        else if (evt.getPropertyName().equals("manageStockError")) {
+            handleErrorInput(evt);
+        }
+        else if (evt.getPropertyName().equals("manageStockBuySuccess")) {
+            handleSuccessInput(evt);
+        }
+        else if (evt.getPropertyName().equals("manageStockSellSuccess")) {
+            handleSuccessInput(evt);
+        }
+    }
+
+    private void handleStateChange(PropertyChangeEvent evt) {
         final ManageStockState state = (ManageStockState) evt.getNewValue();
+        cashAvailable.setText("Cash Available: $" + state.getCash());
         updateTheme(state.isDarkMode());
+        setItems(state.getStockNames());
+    }
+
+    private void handleErrorInput(PropertyChangeEvent evt) {
+        final ManageStockState state = (ManageStockState) evt.getNewValue();
+        if (state.getErrorMessage() == null) {
+            throw new RuntimeException("Error message cannot be null.");
+        }
+        else {
+            JOptionPane.showMessageDialog(this, state.getErrorMessage());
+        }
+    }
+
+    private void handleSuccessInput(PropertyChangeEvent evt) {
+        final ManageStockState state = (ManageStockState) evt.getNewValue();
+        if (state.getSuccessMessage() == null) {
+            throw new RuntimeException("Success message cannot be null.");
+        }
+        else {
+            cashAvailable.setText("Cash Available: $" + state.getCash());
+            JOptionPane.showMessageDialog(this, state.getSuccessMessage());
+        }
+    }
+
+    private void setItems(String[] newItems) {
+        stockSelector.setModel(new DefaultComboBoxModel<>(newItems));
     }
 
     public String getViewName() {
@@ -137,6 +250,11 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
 
     public void setManageStockController(ManageStockController manageStockController) {
         this.controller = manageStockController;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent evt) {
+        System.out.println("AssetManager click: " + evt.getActionCommand());
     }
 
     public static void main(String[] args) {
@@ -151,8 +269,19 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
 
         final ManageStockViewModel viewModel = new ManageStockViewModel();
         final ManageStockState state = viewModel.getState();
-        state.setStockNames(new String[]{"Stock1", "Stock2", "Stock3"});
         state.setDarkMode(false);
+        String[] stockNames = {"Stock1", "Stock2", "Stock3"};
+        state.setStockNames(stockNames);
+        Map<String, Double> nameToPrice = new HashMap<>();
+        nameToPrice.put("Stock1", 1.0);
+        nameToPrice.put("Stock2", 2.0);
+        nameToPrice.put("Stock3", 3.0);
+        state.setCodeToPrice(nameToPrice);
+        Map<String, String> nameToCode = new HashMap<>();
+        nameToCode.put("Stock1", "Stock1");
+        nameToCode.put("Stock2", "Stock2");
+        nameToCode.put("Stock3", "Stock3");
+        state.setNameToCode(nameToCode);
         final ManageStockView view = new ManageStockView(viewModel);
         cardPanel.add(view, view.getViewName());
 
@@ -163,10 +292,5 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
 
         frame.pack();
         frame.setVisible(true);
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent evt) {
-        System.out.println("AssetManager click: " + evt.getActionCommand());
     }
 }
