@@ -6,5 +6,5 @@ package use_case.game_decision;
 public interface GameDecisionInputBoundary {
     void pickDecision(GameDecisionInputData gameDecisionInputData);
     void switchToAssetsManager(GameDecisionInputData gameDecisionInputData);
-    void switchToBankruptcy(GameDecisionInputData gameDecisionInputData);
+    void switchToGameOver(GameDecisionInputData gameDecisionInputData);
 }

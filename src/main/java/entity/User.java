@@ -127,4 +127,12 @@ public interface User {
      * @return if the user can sell the stock.
      */
     public boolean isValidSell(String stockCode, int quantity);
+
+    int getAge();
+
+    public void setAge(int Age);
+
+    public void changeHappiness(double happiness);
+
+    public void addDecision(Decision decision);
 }

@@ -2,7 +2,6 @@ package use_case.game_decision;
 
 import entity.Decision;
 import entity.User;
-import use_case.settings.*;
 
 /**
  * Interactor for the Settings use case.
@@ -20,8 +19,9 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
     @Override
     public void switchToAssetsManager(GameDecisionInputData inputData) {
         User user = userDataAccess.getCurrentUser();
-        GameDecisionOutputBoundary gameDecisionOutputBoundary = new GameDecisionOutputBoundary();
-        outputBoundary.prepareAssetsView(gameDecisionOutputBoundary);
+        GameDecisionOutputData outputData = new GameDecisionOutputData(inputData.getUsername(), inputData.isDarkMode(),
+                inputData.getName(), inputData.getAssets(), inputData.getAge());
+        outputBoundary.prepareAssetsView(outputData);
     }
 
     @Override
@@ -31,15 +31,16 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
         user.addDecision(decision);
         user.getAssets().changeCash(decision.getCashChange());
         user.changeHappiness(decision.getHappinessChange());
-        userDataAccess.updateDecision(user, decision);
-        userDataAccess.updateAssets();
-        userDataAccess.updateHappiness();
+        userDataAccess.updateDecision(decision);
+        userDataAccess.updateAssets(user.getAssets());
+        userDataAccess.updateHappiness(user);
     }
 
     @Override
-    public void switchToBankruptcy(GameDecisionInputData inputData) {
+    public void switchToGameOver(GameDecisionInputData inputData) {
         User user = userDataAccess.getCurrentUser();
-        GameDecisionOutputData outputData = new GameDecisionOutputData();
-        outputBoundary.prepareBankruptcyView();
+        GameDecisionOutputData outputData = new GameDecisionOutputData(inputData.getUsername(), inputData.isDarkMode(),
+                inputData.getName(), inputData.getAssets(), inputData.getAge());
+        outputBoundary.prepareGameOverView(outputData);
     }
 }

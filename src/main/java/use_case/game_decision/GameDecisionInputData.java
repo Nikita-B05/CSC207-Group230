@@ -1,5 +1,6 @@
 package use_case.game_decision;
 
+import entity.Assets;
 import entity.Decision;
 import entity.Question;
 
@@ -8,13 +9,19 @@ import entity.Question;
  */
 public class GameDecisionInputData {
     private final String username;
+    private final int age;
+    private final String name;
     private final boolean darkMode;
     private final Question question;
+    public Assets assets;
 
-    public GameDecisionInputData(String username, boolean darkMode, Question question) {
+    public GameDecisionInputData(String username, int age, String name, boolean darkMode, Question question, Assets assets) {
         this.username = username;
+        this.age = age;
+        this.name = name;
         this.darkMode = darkMode;
         this.question = question;
+        this.assets = assets;
     }
 
     public String getUsername() {
@@ -34,6 +41,14 @@ public class GameDecisionInputData {
     }
 
     public int getAge() {
-        return question.getAge();
+        return this.age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Assets getAssets() {
+        return assets;
     }
 }

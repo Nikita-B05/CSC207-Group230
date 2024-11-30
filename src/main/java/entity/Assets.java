@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class Assets {
     private final double home;
     private final ArrayList<Stock> stocks;
-    private final double cash;
+    private double cash;
     private final double car;
 
     public Assets() {
@@ -96,5 +96,9 @@ public class Assets {
         total += cash;
         total += car;
         return total;
+    }
+
+    public void changeCash(double cashChange) {
+        this.cash += cashChange;
     }
 }
