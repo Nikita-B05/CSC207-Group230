@@ -18,6 +18,8 @@ import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.settings.SettingsUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
+import use_case.choose_avatar.ChooseAvatarUserDataAccessInterface;
+import use_case.input_name.InputNameUserDataAccessInterface;
 
 /**
  * The DAO for user data, now using MongoDB.
@@ -25,6 +27,8 @@ import use_case.signup.SignupUserDataAccessInterface;
 public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
         ChangePasswordUserDataAccessInterface,
+        ChooseAvatarUserDataAccessInterface,
+        InputNameUserDataAccessInterface,
         LogoutUserDataAccessInterface,
         HomepageUserDataAccessInterface,
         SettingsUserDataAccessInterface {
@@ -101,6 +105,18 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
     public void updateUserDarkMode(boolean isDarkMode) {
         User user = getCurrentUser();
         updateUser(user, DARK_MODE, isDarkMode);
+    }
+
+    @Override
+    public void updateCharacterName(String characterName) {
+        User user = getCurrentUser();
+        updateUser(user, CHARACTER_NAME, characterName);
+    }
+
+    @Override
+    public void updateAvatar(Avatar avatar) {
+        User user = getCurrentUser();
+        updateUser(user, AVATAR, avatar);
     }
 
     @Override
