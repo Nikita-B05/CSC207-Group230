@@ -19,7 +19,7 @@ public class DarkModeInteractor implements DarkModeInputBoundary {
     public void toggleDarkMode(DarkModeInputData inputData) {
         User currentUser = userDataAccess.getCurrentUser();
         currentUser.setDarkMode(inputData.isDarkMode());
-        userDataAccess.updateUserDarkMode(currentUser);
+        userDataAccess.updateUserDarkMode(currentUser.isDarkMode());
 
         DarkModeOutputData outputData = new DarkModeOutputData(inputData.isDarkMode());
         outputBoundary.updateUIMode(outputData);

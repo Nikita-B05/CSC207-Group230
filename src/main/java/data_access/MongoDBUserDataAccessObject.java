@@ -21,6 +21,8 @@ import use_case.manage_home.ManageHomeDataAccessInterface;
 import use_case.manage_stock.ManageStockDataAccessInterface;
 import use_case.settings.SettingsUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
+import use_case.choose_avatar.ChooseAvatarUserDataAccessInterface;
+import use_case.input_name.InputNameUserDataAccessInterface;
 
 /**
  * The DAO for user data, now using MongoDB.
@@ -29,6 +31,8 @@ public class MongoDBUserDataAccessObject implements
         SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
         ChangePasswordUserDataAccessInterface,
+        ChooseAvatarUserDataAccessInterface,
+        InputNameUserDataAccessInterface,
         LogoutUserDataAccessInterface,
         HomepageUserDataAccessInterface,
         SettingsUserDataAccessInterface,
@@ -109,6 +113,18 @@ public class MongoDBUserDataAccessObject implements
     public void updateUserDarkMode(boolean isDarkMode) {
         User user = getCurrentUser();
         updateUser(user, DARK_MODE, isDarkMode);
+    }
+
+    @Override
+    public void updateCharacterName(String characterName) {
+        User user = getCurrentUser();
+        updateUser(user, CHARACTER_NAME, characterName);
+    }
+
+    @Override
+    public void updateAvatar(Avatar avatar) {
+        User user = getCurrentUser();
+        updateUser(user, AVATAR, avatar);
     }
 
     @Override
@@ -254,7 +270,7 @@ public class MongoDBUserDataAccessObject implements
     }
 
     public static void main(String[] args) {
-        User user = new CommonUser("test", "1");
+        User user = new CommonUser("Test", "1234");
         MongoDBUserDataAccessObject dao = new MongoDBUserDataAccessObject(new CommonUserFactory());
         dao.save(user);
         System.out.println(dao.get(user.getUsername()).getSalary());

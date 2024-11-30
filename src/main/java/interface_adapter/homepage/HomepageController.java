@@ -13,7 +13,7 @@ public class HomepageController {
     }
 
     /**
-     * Executes the "switch to ChooseCharacter" Use Case.
+     * Executes the "switch to ChooseAvatar" Use Case.
      */
     public void switchToAvatarView() {
         userHomepageUseCaseInteractor.switchToChooseAvatarView();
