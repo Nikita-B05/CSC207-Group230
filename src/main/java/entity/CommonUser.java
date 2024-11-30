@@ -58,6 +58,19 @@ public class CommonUser implements User {
         this.decisions = decisions;
     }
 
+    public CommonUser(String testUser) {
+        this.username = testUser;
+        this.password = "password";
+        this.isDarkMode = false;
+        this.characterName = null;
+        this.avatar = new Avatar();
+        this.happiness = 100;
+        this.salary = 0;
+        this.assets = null;
+        this.liabilities = null;
+        this.decisions = new ArrayList<>();
+    }
+
     @Override
     public String getUsername() {
         return username;

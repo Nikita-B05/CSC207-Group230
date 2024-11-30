@@ -1,18 +1,7 @@
 package data_access;
 
 import java.io.IOException;
-import java.security.cert.CollectionCertStoreParameters;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
-import entity.Decision;
-import org.json.JSONArray;
 
 import converters.EntityConverterInterface;
 import converters.EntityConverter;
@@ -30,8 +19,6 @@ import use_case.homepage.HomepageUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
-
-import javax.swing.text.Document;
 
 /**
  * The DAO for user data.
@@ -147,7 +134,6 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     public void setCurrentUsername(String name) {
         // this isn't implemented for the lab
     }
-
 
     @Override
     public boolean existsByName(String username) {
@@ -307,51 +293,14 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return null;
     }
 
-    public List<Decision> getUserDecisions(String username) {
-        final OkHttpClient client = new OkHttpClient().newBuilder().build();
-        final Request request = new Request.Builder()
-                .url(String.format("http://vm003.teach.cs.toronto.edu:20112/decisions?username=%s", username))
-                .addHeader("Content-Type", CONTENT_TYPE_JSON)
-                .build();
-
-        try {
-            final Response response = client.newCall(request).execute();
-            final JSONObject responseBody = new JSONObject(response.body().string());
-
-            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
-                final JSONArray decisionsArray = responseBody.getJSONArray("decisions");
-                final List<Decision> decisions = new ArrayList<>();
-
-                for (int i = 0; i < decisionsArray.length(); i++) {
-                    final JSONObject decisionObject = decisionsArray.getJSONObject(i);
-                    final String timestampString = decisionObject.getString("timestamp");
-                    LocalDateTime timestamp = LocalDateTime.parse(timestampString, DateTimeFormatter.ofPattern("MM/dd HH:mm"));
-                    final String decisionText = decisionObject.getString("decisionText");
-                    final String decisionResponse = decisionObject.getString("decisionResponse");
-                    final int happinessImpact = decisionObject.getInt("happinessImpact");
-                    final int netWorthImpact = decisionObject.getInt("netWorthImpact");
-
-                    decisions.add(new Decision(timestamp, decisionText, decisionResponse, happinessImpact, netWorthImpact));
-                }
-
-                return decisions;
-            } else {
-                throw new RuntimeException(responseBody.getString(MESSAGE));
-            }
-        } catch (IOException | JSONException ex) {
-            throw new RuntimeException(ex);
-        }
-    }
-
-}
-    public void main(String[] args) {
+    public static void main(String[] args) {
         UserFactory userFactory = new CommonUserFactory();
         DBUserDataAccessObject dao = new DBUserDataAccessObject(userFactory);
         User user = userFactory.create(
                 "Paul",
                 "abc",
                 true,
-                "Paulll",
+                "Joe Roggens",
                 new Avatar(),
                 0,
                 100000,
