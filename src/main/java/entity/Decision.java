@@ -32,8 +32,4 @@ public class Decision {
     public double getHappinessChange() {
         return happinessChange;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> main

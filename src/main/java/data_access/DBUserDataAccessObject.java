@@ -1,21 +1,22 @@
 package data_access;
 
 import java.io.IOException;
-<<<<<<< HEAD
+import java.security.cert.CollectionCertStoreParameters;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
 import entity.Decision;
 import org.json.JSONArray;
-=======
-import java.util.ArrayList;
 
 import converters.EntityConverterInterface;
 import converters.EntityConverter;
 import entity.*;
->>>>>>> main
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,6 +30,8 @@ import use_case.homepage.HomepageUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
+
+import javax.swing.text.Document;
 
 /**
  * The DAO for user data.
@@ -144,6 +147,7 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     public void setCurrentUsername(String name) {
         // this isn't implemented for the lab
     }
+
 
     @Override
     public boolean existsByName(String username) {
@@ -303,7 +307,6 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         return null;
     }
 
-<<<<<<< HEAD
     public List<Decision> getUserDecisions(String username) {
         final OkHttpClient client = new OkHttpClient().newBuilder().build();
         final Request request = new Request.Builder()
@@ -341,15 +344,14 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
     }
 
 }
-=======
-    public static void main(String[] args) {
+    public void main(String[] args) {
         UserFactory userFactory = new CommonUserFactory();
         DBUserDataAccessObject dao = new DBUserDataAccessObject(userFactory);
         User user = userFactory.create(
                 "Paul",
                 "abc",
                 true,
-                "Joe Roggens",
+                "Paulll",
                 new Avatar(),
                 0,
                 100000,
@@ -361,4 +363,3 @@ public class DBUserDataAccessObject implements SignupUserDataAccessInterface,
         user = dao.get("Paul");
     }
 }
->>>>>>> main

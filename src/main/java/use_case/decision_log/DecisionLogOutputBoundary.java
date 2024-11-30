@@ -12,5 +12,6 @@ public interface DecisionLogOutputBoundary {
 
     void prepareFailView(String s);
 
-    <DecisionLogOutputData> void prepareSuccessView(DecisionLogOutputData outputData);
+    void prepareSuccessView(DecisionLogOutputData outputData);
+
 }

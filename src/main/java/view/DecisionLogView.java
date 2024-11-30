@@ -17,7 +17,7 @@ public class DecisionLogView extends JPanel {
         setLayout(new BorderLayout());
 
         // Columns for the decision log table
-        String[] columns = {"Timestamp", "Decision", "Your Answer", "Net Worth Change", "Happiness Change"};
+        String[] columns = {"Time", "Decision", "Your Answer", "Net Worth Change", "Happiness Change"};
 
         // Prepare data for the table
         DefaultTableModel model = new DefaultTableModel(columns, 0);
