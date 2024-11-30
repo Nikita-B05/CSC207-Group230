@@ -53,11 +53,13 @@ public class Assets {
 
     public void sellStock(String stockCode, int quantity, double sellPrice) {
         double total = 0;
-        for (int i = 0; i < stocks.size(); i++) {
+        int i = 0;
+        while (i < stocks.size()) {
             Stock stock = stocks.get(i);
-            if (!stock.getStockCode().equals(stockCode)) continue;
-
-            if (stock.getQuantity() == quantity) {
+            if (!stock.getStockCode().equals(stockCode)) {
+                i++;
+            }
+            else if (stock.getQuantity() == quantity) {
                 stocks.remove(i);
                 total += quantity * getTransformedSellPrice(stock.getBuyPrice(), sellPrice, stock.getMultiplier());
                 break;
