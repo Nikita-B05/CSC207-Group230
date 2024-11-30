@@ -26,8 +26,6 @@ public class PolygonApiClient implements
     private static final Map<String, String> codeToCompanyMap = new HashMap<>();
     private static final Map<String, String> companyToCodeMap = new HashMap<>();
 
-    private static final String STOCK_DATA_YEAR_MONTH = "2024-11";
-
     private final Map<String, Double> codeToPrice = new HashMap<>();
     private String date = "2024-11-01";
 

@@ -2,6 +2,9 @@ package use_case.choose_asset;
 
 import entity.User;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 public class ChooseAssetInteractor implements ChooseAssetInputBoundary {
     private final ChooseAssetDataAccessInterface userDataAccessObject;
     private final ChooseAssetOutputBoundary chooseAssetPresenter;
@@ -44,13 +47,25 @@ public class ChooseAssetInteractor implements ChooseAssetInputBoundary {
         chooseAssetPresenter.switchToManageStockView(outputData);
     }
 
-    // TODO
     private String getDate(int age) {
-        return "2024-11-01";
+        // Get the current date
+        LocalDate currentDate = LocalDate.now();
+
+        // Add a certain number of days
+        int daysToSubtract = 100 - age;
+        LocalDate newDate = currentDate.minusDays(daysToSubtract);
+
+        // Format the date to YYYY-MM-DD
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String formattedDate = newDate.format(formatter);
+
+        return formattedDate;
     }
 
     @Override
     public void switchToGameDecisionView() {
-//        chooseAssetPresenter.switchToGameDecisionView();
+        User user = userDataAccessObject.getCurrentUser();
+        chooseAssetPresenter.switchToGameDecisionView(new ChooseAssetOutputData(user.getUsername()));
+
     }
 }

@@ -13,6 +13,16 @@ public class ChooseAssetOutputData {
     private final Map<String, String> nameToCode;
     private final Map<String, Double> codeToPrice;
 
+    public ChooseAssetOutputData(String username) {
+        this.username = username;
+        isDarkMode = false;
+        cash = 0.0;
+        home = 0.0;
+        stockNames = null;
+        nameToCode = null;
+        codeToPrice = null;
+    }
+
     public ChooseAssetOutputData(String username, boolean isDarkMode, double cash, double home) {
         this.username = username;
         this.isDarkMode = isDarkMode;

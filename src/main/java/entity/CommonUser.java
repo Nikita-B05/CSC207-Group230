@@ -29,8 +29,8 @@ public class CommonUser implements User {
         this.avatar = new Avatar();
         this.happiness = 100;
         this.salary = 0;
-        this.assets = null;
-        this.liabilities = null;
+        this.assets = new Assets();
+        this.liabilities = new Liabilities();
         this.decisions = new ArrayList<>();
     }
 
