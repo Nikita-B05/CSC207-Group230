@@ -62,7 +62,6 @@ public class ManageStockInteractor implements ManageStockInputBoundary {
         else {
             if (assets.isValidSell(stockCode, quantity)) {
                 assets.sellStock(stockCode, quantity, stockPrices.get(stockCode));
-                System.out.println("Assets: " + assets.getCash());
                 userDataAccessObject.updateAssets(assets);
                 user = userDataAccessObject.getCurrentUser();
                 manageStockPresenter.prepareSellSuccessView(

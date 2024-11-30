@@ -1,5 +1,7 @@
 package entity;
 
+import org.bson.io.BsonOutput;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -57,21 +59,26 @@ public class Assets {
 
             if (stock.getQuantity() == quantity) {
                 stocks.remove(i);
-                total += quantity * sellPrice;
+                total += quantity * getTransformedSellPrice(stock.getBuyPrice(), sellPrice, stock.getMultiplier());
                 break;
             }
             else if (stock.getQuantity() > quantity) {
                 stock.setQuantity(stock.getQuantity() - quantity);
-                total += quantity * sellPrice;
+                total += quantity * getTransformedSellPrice(stock.getBuyPrice(), sellPrice, stock.getMultiplier());
                 break;
             }
             else {
                 stocks.remove(i);
                 quantity -= stock.getQuantity();
-                total += stock.getQuantity() * sellPrice;
+                total += stock.getQuantity()
+                        * getTransformedSellPrice(stock.getBuyPrice(), sellPrice, stock.getMultiplier());
             }
         }
         cash += total;
+    }
+
+    private double getTransformedSellPrice(double buyPrice, double sellPrice, int multiplier) {
+        return buyPrice + multiplier * (sellPrice - buyPrice);
     }
 
     public boolean isValidSell(String stockCode, int quantity) {
@@ -82,10 +89,6 @@ public class Assets {
             }
         }
         return totalQuantity >= quantity;
-    }
-
-    private double getMultipliedStockPrice(double buyPrice, double sellPrice, int multiplier) {
-        return multiplier * (sellPrice - buyPrice) + buyPrice;
     }
 
     public double getTotal(HashMap<String, Double> stockPrices) {

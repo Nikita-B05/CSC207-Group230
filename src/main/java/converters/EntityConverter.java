@@ -83,10 +83,10 @@ public class EntityConverter implements EntityConverterInterface {
         if (object == null) {
             return null;
         }
-        final int home = object.getInt(HOME);
+        final double home = object.getDouble(HOME);
         final ArrayList<Stock> stocks = JSONArrayToListOfStock(object.getJSONArray(STOCKS));
-        final int cash = object.getInt(CASH);
-        final int car = object.getInt(CAR);
+        final double cash = object.getDouble(CASH);
+        final double car = object.getDouble(CAR);
 
         return new Assets(home, stocks, cash, car);
     }
@@ -113,7 +113,7 @@ public class EntityConverter implements EntityConverterInterface {
             throw new RuntimeException("JSONObject for stock has null code.");
         }
         final int quantity = object.getInt(QUANTITY);
-        final int price = object.getInt(BUY_PRICE);
+        final double price = object.getDouble(BUY_PRICE);
         final int multiplier = object.getInt(MULTIPLIER);
 
         return new Stock(code, quantity, price, multiplier);

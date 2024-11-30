@@ -24,4 +24,10 @@ public interface ChooseAssetStockDataAccessInterface {
      * @return a map of stock code to price.
      */
     Map<String, Double> getCodeToPrice();
+
+    /**
+     * Updates the object to retrieve prices of the new date.
+     * @param date new date
+     */
+    void setDate(String date);
 }

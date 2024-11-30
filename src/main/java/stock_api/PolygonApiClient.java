@@ -1,7 +1,6 @@
 package stock_api;
 
 import com.google.gson.JsonArray;
-import com.mongodb.client.FindIterable;
 import okhttp3.*;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -12,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Properties;
 
 public class PolygonApiClient implements
@@ -19,14 +19,17 @@ public class PolygonApiClient implements
         ManageStockStockAccessInterface
 {
 
-    private static final String[] stockCodes = {"AAPL", "NVDA", "MSFT", "AMZN"};
-    private static final String[] companyNames = {"Apple", "Nvidia", "Microsoft", "Amazon"};
+    private static final String[] stockCodes = {"AAPL", "NVDA", "MSFT"};
+    private static final String[] companyNames = {"Apple", "Nvidia", "Microsoft"};
 
     // Static HashMaps
     private static final Map<String, String> codeToCompanyMap = new HashMap<>();
     private static final Map<String, String> companyToCodeMap = new HashMap<>();
 
+    private static final String STOCK_DATA_YEAR_MONTH = "2024-11";
+
     private final Map<String, Double> codeToPrice = new HashMap<>();
+    private String date = "2024-11-01";
 
     static {
         for (int i = 0; i < stockCodes.length; i++) {
@@ -108,16 +111,51 @@ public class PolygonApiClient implements
             if (response.isSuccessful()) {
                 String responseBody = response.body().string();
                 JsonObject jsonResponse = JsonParser.parseString(responseBody).getAsJsonObject();
-                System.out.println(jsonResponse);
             } else {
                 System.out.println("Request failed: " + response.code() + " - " + response.message());
             }
         }
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    @Override
+    public void setDate(String date) {
+        String prevDate = this.date;
+        this.date = date;
+        if (!prevDate.equals(date)) {
+            loadCodeToPrice();
+        }
+    }
+
+    private double fetchPrice(String ticker, String date) throws IOException {
+        String url = BASE_URL + "/v1/open-close/" + ticker + "/" + date + "?adjusted=true&apiKey=" + apiKey;
+
+        Request request = new Request.Builder()
+                .url(url)
+                .get()
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (response.isSuccessful()) {
+                String responseBody = response.body().string();
+                JsonObject jsonResponse = JsonParser.parseString(responseBody).getAsJsonObject();
+
+                // Extracting the last trade price
+                return jsonResponse.get("close").getAsDouble();
+
+            } else {
+                throw new RuntimeException("Could not retrieve stock price: "
+                        + response.code() + " - " + response.message());
+            }
+        }
+    }
+
     @Override
     public double getPrice(String ticker) throws IOException {
-        return fetchPrices(ticker)[0];
+        return fetchPrice(ticker, date);
     }
 
     private double[] fetchPrices(String ticker) throws IOException {
@@ -149,8 +187,8 @@ public class PolygonApiClient implements
     public static void main(String[] args) {
         PolygonApiClient apiClient = new PolygonApiClient();
         try {
-            double[] prices = apiClient.fetchPrices("GOOG");
-            System.out.println(prices[0] + ", " + prices[1]);
+            double price = apiClient.getPrice("AAPL");
+            System.out.println(price);
         } catch (IOException e) {
             e.printStackTrace();
         }
