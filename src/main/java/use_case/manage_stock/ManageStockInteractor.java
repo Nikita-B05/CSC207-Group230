@@ -52,7 +52,7 @@ public class ManageStockInteractor implements ManageStockInputBoundary {
                 user = userDataAccessObject.getCurrentUser();
                 manageStockPresenter.prepareBuySuccessView(
                 "Successfully bought " + quantity + " shares of " + codeToName.get(stockCode) + ".",
-                        user.getAssets() == null ? 0.0 : user.getAssets().getCash()
+                        user.getAssets().getCash()
                 );
             }
             else {
@@ -66,7 +66,7 @@ public class ManageStockInteractor implements ManageStockInputBoundary {
                 user = userDataAccessObject.getCurrentUser();
                 manageStockPresenter.prepareSellSuccessView(
                     "Successfully sold " + quantity + " shares of " + codeToName.get(stockCode) + ".",
-                        user.getAssets() == null ? 0.0 : user.getAssets().getCash()
+                        user.getAssets().getCash()
                 );
             }
             else {

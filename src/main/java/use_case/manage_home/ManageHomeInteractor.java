@@ -26,7 +26,7 @@ public class ManageHomeInteractor implements ManageHomeInputBoundary{
                 manageHomePresenter.prepareFailView("Please select a house to buy.");
             }
             // Check that user has sufficient cash, and either confirm buy or fail.
-            else if (user.getAssets() == null || user.getAssets().getCash() < manageHomeInputData.getNewHome()) {
+            else if (user.getAssets().getCash() < manageHomeInputData.getNewHome()) {
                 manageHomePresenter.prepareFailView("You do not have the cash for this transaction.");
             }
             else {

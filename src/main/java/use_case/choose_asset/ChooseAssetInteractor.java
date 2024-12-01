@@ -26,7 +26,7 @@ public class ChooseAssetInteractor implements ChooseAssetInputBoundary {
                 user.getUsername(),
                 user.isDarkMode(),
                 user.getAssets().getCash(),
-                user.getAssets() == null ? 0 : user.getAssets().getHome()
+                user.getAssets().getHome()
         );
         chooseAssetPresenter.switchToManageHomeView(outputData);
     }
@@ -35,11 +35,12 @@ public class ChooseAssetInteractor implements ChooseAssetInputBoundary {
     public void switchToManageStockView() {
         User user = userDataAccessObject.getCurrentUser();
         // TODO
+        getDate(10);
 //        stockDataAccessObject.setDate(getDate(user.getAge()));
         ChooseAssetOutputData outputData = new ChooseAssetOutputData(
                 user.getUsername(),
                 user.isDarkMode(),
-                user.getAssets() == null ? 0.0 : user.getAssets().getCash(),
+                user.getAssets().getCash(),
                 stockDataAccessObject.getStockNames(),
                 stockDataAccessObject.getNameToCode(),
                 stockDataAccessObject.getCodeToPrice()
