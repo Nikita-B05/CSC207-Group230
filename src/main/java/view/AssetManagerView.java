@@ -25,6 +25,7 @@ public class AssetManagerView extends JPanel implements ActionListener, Property
 
     private final JButton manageStock;
     private final JButton manageHome;
+    private final JButton done;
 
     public AssetManagerView(AssetManagerViewModel assetManagerViewModel) {
         this.assetManagerViewModel = assetManagerViewModel;
@@ -35,6 +36,7 @@ public class AssetManagerView extends JPanel implements ActionListener, Property
         title = new JLabel(AssetManagerViewModel.TITLE);
         manageStock = new JButton(AssetManagerViewModel.MANAGE_STOCK_LABEL);
         manageHome = new JButton(AssetManagerViewModel.MANAGE_HOME_LABEL);
+        done = new JButton(AssetManagerViewModel.DONE_LABEL);
 
         // Set the layout to BoxLayout and add padding
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -44,6 +46,7 @@ public class AssetManagerView extends JPanel implements ActionListener, Property
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         manageStock.setAlignmentX(Component.CENTER_ALIGNMENT);
         manageHome.setAlignmentX(Component.CENTER_ALIGNMENT);
+        done.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Add content to the panel
         this.add(Box.createVerticalGlue());
@@ -52,6 +55,8 @@ public class AssetManagerView extends JPanel implements ActionListener, Property
         this.add(manageHome);
         this.add(Box.createVerticalStrut(10));  // Add space between buttons
         this.add(manageStock);
+        this.add(Box.createVerticalStrut(20));  // Add space between buttons
+        this.add(done);
         this.add(Box.createVerticalGlue());
 
         // Add action listeners for buttons
@@ -64,6 +69,12 @@ public class AssetManagerView extends JPanel implements ActionListener, Property
         manageStock.addActionListener(evt -> {
             if (evt.getSource().equals(manageStock)) {
                 assetManagerController.switchToManageStockView();
+            }
+        });
+
+        done.addActionListener(evt -> {
+            if (evt.getSource().equals(done)) {
+                assetManagerController.switchToGameDecisionView();
             }
         });
 

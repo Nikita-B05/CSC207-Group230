@@ -9,6 +9,7 @@ public class AssetManagerViewModel extends ViewModel<AssetManagerState> {
     public static final String TITLE = "Asset Manager";
     public static final String MANAGE_STOCK_LABEL = "Buy/Sell Stock";
     public static final String MANAGE_HOME_LABEL = "Buy/Sell Home";
+    public static final String DONE_LABEL = "Done";
 
     public AssetManagerViewModel() {
         super("assetManager");
