@@ -2,6 +2,7 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Question {
     private int age;
@@ -14,6 +15,20 @@ public class Question {
         this.questionText = questionText;
         this.decisions = new ArrayList<>();
         this.selectedDecision = null;
+    }
+
+    public static Question fromJson(Map<String, Object> json) {
+        int age = (int) json.get("age");
+        String questionText = (String) json.get("questionText");
+
+        Question question = new Question(age, questionText);
+
+        List<Map<String, Object>> decisionsJson = (List<Map<String, Object>>) json.get("decisions");
+        for (Map<String, Object> decisionJson : decisionsJson) {
+            question.addDecision(Decision.fromJson(decisionJson));
+        }
+
+        return question;
     }
 
 

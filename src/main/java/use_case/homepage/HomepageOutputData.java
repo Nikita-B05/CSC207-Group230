@@ -2,22 +2,27 @@ package use_case.homepage;
 
 import entity.Avatar;
 import entity.Decision;
+import entity.Question;
 
 import java.util.ArrayList;
 
 public class HomepageOutputData {
     private final String username;
+    private final String characterName;
     private final Avatar avatar;
     private final boolean isDarkMode;
     private final ArrayList<Decision> decisions;
+    private int age;
+    private Question question;
 
-    // If needed, add stats: network, quality of life, happiness
-
-    public HomepageOutputData(String username, Avatar avatar, boolean isDarkMode, ArrayList<Decision> decisions) {
+    public HomepageOutputData(String username, String characterName, Avatar avatar, boolean isDarkMode, ArrayList<Decision> decisions, int age, Question question) {
         this.username = username;
+        this.characterName = characterName;
         this.avatar = avatar;
         this.isDarkMode = isDarkMode;
         this.decisions = decisions;
+        this.age = age;
+        this.question = question;
     }
 
     public String getUsername() {
@@ -34,5 +39,17 @@ public class HomepageOutputData {
 
     public ArrayList<Decision> getDecisions() {
         return decisions;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getCharacterName() {
+        return characterName;
+    }
+
+    public Question getQuestion(int age) {
+        return question;
     }
 }

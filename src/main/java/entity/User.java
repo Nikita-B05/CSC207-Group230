@@ -2,6 +2,7 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The representation of a user in our program.
@@ -60,7 +61,7 @@ public interface User {
      * Returns the salary of the user.
      * @return the salary of the user.
      */
-    public int getSalary();
+    public double getSalary();
 
     /**
      * Returns the assets of the user.
@@ -135,4 +136,8 @@ public interface User {
     public void changeHappiness(double happiness);
 
     public void addDecision(Decision decision);
+
+    public void modifySalary(double modification);
+
+    public Map<Integer, Question> getQuestion();
 }

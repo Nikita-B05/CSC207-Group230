@@ -23,9 +23,12 @@ public class HomepageInteractor implements HomepageInputBoundary  {
         final User user = userDataAccessObject.get(username);
         homepagePresenter.switchToChooseAvatarView(new HomepageOutputData(
                 username,
+                user.getCharacterName(),
                 user.getAvatar(),
                 user.isDarkMode(),
-                user.getDecisions()
+                user.getDecisions(),
+                user.getAge(),
+                user.getQuestion().get(user.getAge())
         ));
     }
 
@@ -35,9 +38,12 @@ public class HomepageInteractor implements HomepageInputBoundary  {
         final User user = userDataAccessObject.get(username);
         homepagePresenter.switchToPlayGameView(new HomepageOutputData(
                 username,
+                user.getCharacterName(),
                 user.getAvatar(),
                 user.isDarkMode(),
-                user.getDecisions()
+                user.getDecisions(),
+                user.getAge(),
+                user.getQuestion().get(user.getAge())
         ));
     }
 
@@ -47,9 +53,12 @@ public class HomepageInteractor implements HomepageInputBoundary  {
         final User user = userDataAccessObject.get(username);
         homepagePresenter.switchToDecisionLogView(new HomepageOutputData(
                 username,
+                user.getCharacterName(),
                 user.getAvatar(),
                 user.isDarkMode(),
-                user.getDecisions()
+                user.getDecisions(),
+                user.getAge(),
+                user.getQuestion().get(user.getAge())
         ));
     }
 
@@ -59,9 +68,12 @@ public class HomepageInteractor implements HomepageInputBoundary  {
         final User user = userDataAccessObject.get(username);
         homepagePresenter.switchToSettingsView(new HomepageOutputData(
                 username,
+                user.getCharacterName(),
                 user.getAvatar(),
                 user.isDarkMode(),
-                user.getDecisions()
+                user.getDecisions(),
+                user.getAge(),
+                user.getQuestion().get(user.getAge())
         ));
     }
 }

@@ -7,4 +7,5 @@ public interface GameDecisionInputBoundary {
     void pickDecision(GameDecisionInputData gameDecisionInputData);
     void switchToAssetsManager(GameDecisionInputData gameDecisionInputData);
     void switchToGameOver(GameDecisionInputData gameDecisionInputData);
+    void switchToHomeview(GameDecisionInputData gameDecisionInputData);
 }

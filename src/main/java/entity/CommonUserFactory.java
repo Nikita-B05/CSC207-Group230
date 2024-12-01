@@ -1,7 +1,9 @@
 package entity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Factory for creating CommonUser objects.
@@ -21,7 +23,7 @@ public class CommonUserFactory implements UserFactory {
                        String characterName,
                        Avatar avatar,
                        int happiness,
-                       int salary,
+                       double salary,
                        Assets assets,
                        Liabilities liabilities,
                        ArrayList<Decision> decisions

@@ -1,7 +1,11 @@
 package entity;
 
+import question_reader.QuestionReader;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple implementation of the User interface.
@@ -17,10 +21,11 @@ public class CommonUser implements User {
     private int age;
     private Avatar avatar;
     private int happiness;
-    private int salary;
+    private double salary;
     private Assets assets;
     private Liabilities liabilities;
     private ArrayList<Decision> decisions;
+    private Map<Integer, Question> questionBank;
 
     public CommonUser(String username, String password) {
         this.username = username;
@@ -34,6 +39,7 @@ public class CommonUser implements User {
         this.assets = null;
         this.liabilities = null;
         this.decisions = new ArrayList<>();
+        this.questionBank = QuestionReader.parseQuestions("src/main/java/question_reader/samplequestionjson.txt");
     }
 
     public CommonUser(
@@ -44,7 +50,7 @@ public class CommonUser implements User {
             String characterName,
             Avatar avatar,
             int happiness,
-            int salary,
+            double salary,
             Assets assets,
             Liabilities liabilities,
             ArrayList<Decision> decisions
@@ -60,6 +66,7 @@ public class CommonUser implements User {
         this.assets = assets;
         this.liabilities = liabilities;
         this.decisions = decisions;
+        this.questionBank = QuestionReader.parseQuestions("src/main/java/question_reader/samplequestionjson.txt");
     }
 
     public CommonUser(String testUser) {
@@ -73,6 +80,8 @@ public class CommonUser implements User {
         this.assets = null;
         this.liabilities = null;
         this.decisions = new ArrayList<>();
+        this.questionBank = QuestionReader.parseQuestions("src/main/java/question_reader/samplequestionjson.txt");
+
     }
 
     @Override
@@ -106,7 +115,7 @@ public class CommonUser implements User {
     }
 
     @Override
-    public int getSalary() {
+    public double getSalary() {
         return salary;
     }
 
@@ -205,6 +214,16 @@ public class CommonUser implements User {
     @Override
     public boolean isValidSell(String stockCode, int quantity) {
         return assets.isValidSell(stockCode, quantity);
+    }
+
+    @Override
+    public void modifySalary(double factor){
+        this.salary += factor;
+    }
+
+    @Override
+    public Map<Integer, Question> getQuestion() {
+        return this.questionBank;
     }
 
     @Override

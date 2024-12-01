@@ -1,6 +1,8 @@
 package entity;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Factory for creating users.
@@ -36,7 +38,7 @@ public interface UserFactory {
                 String characterName,
                 Avatar avatar,
                 int happiness,
-                int salary,
+                double salary,
                 Assets assets,
                 Liabilities liabilities,
                 ArrayList<Decision> decisions

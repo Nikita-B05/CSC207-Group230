@@ -10,15 +10,17 @@ public class GameDecisionOutputData {
     private boolean isDarkMode;
     private final String name;
     private final Assets assets;
+    private final Avatar avatar;
 
     private final int age;
 
 
-    public GameDecisionOutputData(String username, boolean isDarkMode, String name, Assets assets, int age) {
+    public GameDecisionOutputData(String username, boolean isDarkMode, String name, Assets assets, Avatar avatar, int age) {
         this.username = username;
         this.isDarkMode = isDarkMode;
         this.name = name;
         this.assets = assets;
+        this.avatar = avatar;
         this.age = age;
     }
 
@@ -40,5 +42,9 @@ public class GameDecisionOutputData {
 
     public String getUsername() {
         return username;
+    }
+
+    public Avatar getAvatar() {
+        return avatar;
     }
 }
