@@ -10,12 +10,10 @@ import java.util.List;
 public interface DecisionLogUserDataAccessInterface {
     /**
      * Loads the decision log.
-     * @param user The user.
+     * @param username to look up the user.
      * @return The decision log.
      */
-    String loadDecisionLog(User user);
-
     List<Decision> getDecisions(String username);
 
-    List<Decision> getCurrentUsername(String username);
+    User get(String username);
 }

@@ -1,6 +1,7 @@
 package data_access;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import entity.*;
 import org.bson.Document;
 
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
+import use_case.decision_log.DecisionLogUserDataAccessInterface;
 import use_case.homepage.HomepageUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
@@ -31,7 +33,8 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
         InputNameUserDataAccessInterface,
         LogoutUserDataAccessInterface,
         HomepageUserDataAccessInterface,
-        SettingsUserDataAccessInterface {
+        SettingsUserDataAccessInterface,
+        DecisionLogUserDataAccessInterface {
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
@@ -53,6 +56,11 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
         this.userFactory = userFactory;
         this.mongoDBConnection = new MongoDBConnection();
         this.converter = new EntityConverter();
+    }
+
+    @Override
+    public List<Decision> getDecisions(String username) {
+        return List.of();
     }
 
     @Override

@@ -1,5 +1,10 @@
 package use_case.decision_log;
 
+import entity.Decision;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * The Input Data for the decision log Use Case.
  */
@@ -14,4 +19,6 @@ public class DecisionLogInputData {
     public String getUsername() {
         return username;
     }
+
+    public List<Decision> getDecisions() { return new ArrayList<>(); }
 }

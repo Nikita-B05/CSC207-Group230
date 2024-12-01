@@ -21,6 +21,12 @@ public interface User {
     void setAvatar(Avatar avatar);
 
     /**
+     * Sets the decisions of the user.
+     * @param decisions the new decisions of the user.
+     */
+    void setDecisions(ArrayList<Decision> decisions);
+
+    /**
      * Returns the username of the user.
      * @return the username of the user.
      */

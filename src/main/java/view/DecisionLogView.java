@@ -5,15 +5,43 @@ import entity.Decision;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DecisionLogView extends JPanel {
+import interface_adapter.decision_log.DecisionLogController;
+import interface_adapter.decision_log.DecisionLogViewModel;
+import interface_adapter.dark_mode.DarkModeController;
+import use_case.decision_log.DecisionLogInputBoundary;
+
+public class DecisionLogView extends JPanel implements ActionListener, PropertyChangeListener {
+
+    private final String viewName = "decisionLog";
+    private DecisionLogController decisionLogController;
+    private final DecisionLogViewModel decisionLogViewModel;
+    private final JCheckBox darkModeCheckBox;
+
     private JTable historyTable;
     private JScrollPane scrollPane;
 
-    public DecisionLogView(List<Decision> decisions) {
+    private final JLabel statsValues;
+    private final JButton backButton;
+
+    public DecisionLogView(DecisionLogViewModel decisionLogViewModel,
+                           DecisionLogController decisionLogController,
+                           DarkModeController darkModeController,
+                           JCheckBox darkModeCheckBox) {
+        this.decisionLogViewModel = decisionLogViewModel;
+        this.decisionLogController = decisionLogController;
+        this.darkModeCheckBox = darkModeCheckBox;
+
+        // Register property change listener
+        this.decisionLogViewModel.addPropertyChangeListener(this);
+
         setLayout(new BorderLayout());
 
         // Top Panel for Title
@@ -27,18 +55,7 @@ public class DecisionLogView extends JPanel {
 
         // Prepare data for the table
         DefaultTableModel model = new DefaultTableModel(columns, 0);
-        int totalNetWorthChange = 0;
-        int totalHappinessChange = 0;
-
-        for (Decision decision : decisions) {
-            Object[] row = {decision.getTimestamp(), decision.getDecisionText(), decision.getDecisionResponse(),
-                    decision.getNetWorthChange(), decision.getHappinessChange()};
-            model.addRow(row);
-
-            // Accumulate stats
-            totalNetWorthChange += decision.getNetWorthChange();
-            totalHappinessChange += decision.getHappinessChange();
-        }
+        updateTableModel(model, decisionLogViewModel.getDecisions());
 
         // Create the decision log table
         historyTable = new JTable(model);
@@ -59,8 +76,7 @@ public class DecisionLogView extends JPanel {
         statsHeader.setFont(new Font("Arial", Font.BOLD, 14));
         statsHeader.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel statsValues = new JLabel(String.format("Net Worth: %d, Happiness: %d",
-                totalNetWorthChange, totalHappinessChange));
+        statsValues = new JLabel(getStatsText());
         statsValues.setFont(new Font("Arial", Font.PLAIN, 14));
         statsValues.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -69,9 +85,10 @@ public class DecisionLogView extends JPanel {
         statsPanel.add(statsValues);
 
         // Button section
-        JButton backButton = new JButton("Return to Homepage");
+        backButton = new JButton("Return to Homepage");
         backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         backButton.setPreferredSize(backButton.getMinimumSize()); // Adjust button size to fit text
+        backButton.addActionListener(this); // Add action listener
 
         // Add stats and button to the bottom panel
         bottomPanel.add(statsPanel);
@@ -79,31 +96,85 @@ public class DecisionLogView extends JPanel {
         bottomPanel.add(backButton);
 
         add(bottomPanel, BorderLayout.SOUTH);
+    }
 
-        // Button action
-        backButton.addActionListener(e -> {
-            System.out.println("returning to homepage...");
-        });
+    private void updateTheme(boolean isDarkMode) {
+        darkModeCheckBox.setSelected(isDarkMode);
+
+        if (isDarkMode) {
+            ColorTheme.applyDarkMode(this);
+        } else {
+            ColorTheme.applyLightMode(this);
+        }
+
+        SwingUtilities.updateComponentTreeUI(this);
+    }
+
+    private void updateTableModel(DefaultTableModel model, List<Decision> decisions) {
+        model.setRowCount(0); // Clear existing rows
+        for (Decision decision : decisions) {
+            Object[] row = {decision.getTimestamp(), decision.getDecisionText(), decision.getDecisionResponse(),
+                    decision.getNetWorthChange(), decision.getHappinessChange()};
+            model.addRow(row);
+        }
+    }
+
+    private String getStatsText() {
+        return String.format("Net Worth: %.2f, Happiness: %.2f",
+                decisionLogViewModel.getTotalNetWorthChange(),
+                decisionLogViewModel.getTotalHappinessChange());
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (e.getSource().equals(backButton)) {
+            String username = decisionLogViewModel.getUsername();
+            decisionLogController.switchToHomepageView(username);
+        }
+    }
+
+    public String getViewName() {
+        return viewName;
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        updateTableModel((DefaultTableModel) historyTable.getModel(), decisionLogViewModel.getDecisions());
+        statsValues.setText(getStatsText());
+        updateTheme(decisionLogViewModel.isDarkModeEnabled());
     }
 
     public static void main(String[] args) {
-        // Create a mock list of decisions
-        List<Decision> mockDecisions = new ArrayList<>();
-        mockDecisions.add(new Decision(LocalDateTime.now().minusDays(1), "Buy a new car",
-                "Yes", -5000, -10));
-        mockDecisions.add(new Decision(LocalDateTime.now().minusDays(2), "Take a vacation",
-                "No", 0, 20));
-        mockDecisions.add(new Decision(LocalDateTime.now(), "Invest in stocks",
-                "Yes", 2000, 5));
+        // Create sample decisions for testing
+        List<Decision> decisions = new ArrayList<>();
+        decisions.add(new Decision(LocalDateTime.now(), "Invest in stocks", "Yes", 500, 20));
+        decisions.add(new Decision(LocalDateTime.now(), "Buy a car", "No", -10000, -5));
+        decisions.add(new Decision(LocalDateTime.now(), "Start a business", "Yes", 20000, 50));
 
-        // Create the decision log view
-        DecisionLogView decisionLogView = new DecisionLogView(mockDecisions);
+        // Create a DecisionLogViewModel and populate it with sample data
+        DecisionLogViewModel decisionLogViewModel = new DecisionLogViewModel();
+        decisionLogViewModel.setDecisions(decisions);
+        decisionLogViewModel.setDarkModeEnabled(false); // Default to light mode
 
-        // Set up the JFrame
-        JFrame frame = new JFrame("Decision Log");
+        // Create dummy controllers
+        DecisionLogController decisionLogController = new DecisionLogController(null, null);
+        DarkModeController darkModeController = new DarkModeController(null);
+
+        // Create a JCheckBox for dark mode
+        JCheckBox darkModeCheckBox = new JCheckBox("Dark Mode");
+
+        // Create the DecisionLogView
+        DecisionLogView decisionLogView = new DecisionLogView(decisionLogViewModel, decisionLogController, darkModeController, darkModeCheckBox);
+
+        // Set up the JFrame to display the view
+        JFrame frame = new JFrame("Decision Log Preview");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(800, 600);
         frame.setContentPane(decisionLogView);
-        frame.setVisible(true);
+        frame.setSize(800, 600); // Set the window size
+        frame.setVisible(true); // Make the window visible
+    }
+
+    public void DecisionLogController(DecisionLogController decisionLogController) {
+        this.decisionLogController = decisionLogController;
     }
 }
