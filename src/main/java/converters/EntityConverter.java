@@ -183,8 +183,8 @@ public class EntityConverter implements EntityConverterInterface {
         if (object == null) {
             return null;
         }
-        final int loan = object.getInt(LOAN);
-        final int creditCard = object.getInt(CREDIT_CARD);
+        final double loan = object.getDouble(LOAN);
+        final double creditCard = object.getDouble(CREDIT_CARD);
 
         return new Liabilities(loan, creditCard);
     }
