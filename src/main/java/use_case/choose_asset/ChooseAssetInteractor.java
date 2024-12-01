@@ -49,18 +49,10 @@ public class ChooseAssetInteractor implements ChooseAssetInputBoundary {
     }
 
     private String getDate(int age) {
-        // Get the current date
-        LocalDate currentDate = LocalDate.now();
-
         // Add a certain number of days
-        int daysToSubtract = 100 - age;
-        LocalDate newDate = currentDate.minusDays(daysToSubtract);
-
-        // Format the date to YYYY-MM-DD
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String formattedDate = newDate.format(formatter);
-
-        return formattedDate;
+        int year = 2000 + (age - 18);
+        String date = year + "-01-31";
+        return date;
     }
 
     @Override

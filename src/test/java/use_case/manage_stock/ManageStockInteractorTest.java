@@ -8,18 +8,18 @@ import entity.User;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import stock_api.PolygonApiClient;
-import use_case.manage_home.*;
+import stock_api.PolygonStockDataAccessObject;
+import stock_api.VantageStockDataAccessObject;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ManageStockInteractorTest {
-    private static PolygonApiClient stockClient;
+    private static VantageStockDataAccessObject stockClient;
     private static MongoDBUserDataAccessObject userRepository;
 
     @BeforeAll
     public static void setUp() {
-        stockClient = new PolygonApiClient();
+        stockClient = new VantageStockDataAccessObject();
         User user = new CommonUser("testing", "password");
         userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
         userRepository.setCurrentUsername("testing");

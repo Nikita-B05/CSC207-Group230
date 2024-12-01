@@ -61,26 +61,21 @@ public class Assets {
             }
             else if (stock.getQuantity() == quantity) {
                 stocks.remove(i);
-                total += quantity * getTransformedSellPrice(stock.getBuyPrice(), sellPrice, stock.getMultiplier());
+                total += quantity * sellPrice;
                 break;
             }
             else if (stock.getQuantity() > quantity) {
                 stock.setQuantity(stock.getQuantity() - quantity);
-                total += quantity * getTransformedSellPrice(stock.getBuyPrice(), sellPrice, stock.getMultiplier());
+                total += quantity * sellPrice;
                 break;
             }
             else {
                 stocks.remove(i);
                 quantity -= stock.getQuantity();
-                total += stock.getQuantity()
-                        * getTransformedSellPrice(stock.getBuyPrice(), sellPrice, stock.getMultiplier());
+                total += stock.getQuantity() * sellPrice;
             }
         }
         cash += total;
-    }
-
-    private double getTransformedSellPrice(double buyPrice, double sellPrice, int multiplier) {
-        return buyPrice + multiplier * (sellPrice - buyPrice);
     }
 
     public boolean isValidSell(String stockCode, int quantity) {

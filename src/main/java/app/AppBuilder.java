@@ -6,9 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import data_access.MongoDBUserDataAccessObject;
-import entity.CommonUser;
 import entity.CommonUserFactory;
-import entity.User;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
 import interface_adapter.asset_manager.AssetManagerController;
@@ -44,7 +42,8 @@ import interface_adapter.signup.SignupViewModel;
 import interface_adapter.settings.SettingsController;
 import interface_adapter.settings.SettingsPresenter;
 import interface_adapter.settings.SettingsViewModel;
-import stock_api.PolygonApiClient;
+import stock_api.PolygonStockDataAccessObject;
+import stock_api.VantageStockDataAccessObject;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
@@ -98,8 +97,9 @@ public class AppBuilder {
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
-    private final MongoDBUserDataAccessObject userDataAccessObject = new MongoDBUserDataAccessObject(new CommonUserFactory());
-    private final PolygonApiClient polygonApiClient = new PolygonApiClient();
+    private final MongoDBUserDataAccessObject userDataAccessObject =
+            new MongoDBUserDataAccessObject(new CommonUserFactory());
+    private final VantageStockDataAccessObject stockDataAccessObject = new VantageStockDataAccessObject();
 
     // Existing Views and ViewModels
     private SignupView signupView;
@@ -364,7 +364,7 @@ public class AppBuilder {
         final ChooseAssetOutputBoundary chooseAssetOutputBoundary = new AssetManagerPresenter(
                 assetManagerViewModel, viewManagerModel, manageHomeViewModel, manageStockViewModel);
         final ChooseAssetInputBoundary chooseAssetInteractor = new ChooseAssetInteractor(
-                userDataAccessObject, chooseAssetOutputBoundary, polygonApiClient);
+                userDataAccessObject, chooseAssetOutputBoundary, stockDataAccessObject);
         final AssetManagerController assetManagerController = new AssetManagerController(chooseAssetInteractor);
         assetManagerView.setAssetManagerController(assetManagerController);
         return this;
@@ -384,7 +384,7 @@ public class AppBuilder {
         final ManageStockOutputBoundary manageStockOutputBoundary = new ManageStockPresenter(
                 viewManagerModel, manageStockViewModel, assetManagerViewModel);
         final ManageStockInputBoundary manageStockInteractor = new ManageStockInteractor(
-                userDataAccessObject, polygonApiClient, manageStockOutputBoundary);
+                userDataAccessObject, stockDataAccessObject, manageStockOutputBoundary);
         final ManageStockController manageStockController = new ManageStockController(manageStockInteractor);
         manageStockView.setManageStockController(manageStockController);
         return this;
