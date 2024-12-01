@@ -1,36 +1,49 @@
 package use_case.decision_log;
 
+import data_access.MongoDBUserDataAccessObject;
 import entity.Decision;
+import entity.User;
+
 import java.util.List;
 
 /**
  * The Decision Log Interactor.
  */
 public class DecisionLogInteractor implements DecisionLogInputBoundary {
-    private final DecisionLogDataAccessInterface decisionDataAccessObject;
+    private final DecisionLogUserDataAccessInterface decisionDataAccessObject;
     private final DecisionLogOutputBoundary decisionLogPresenter;
+    private final MongoDBUserDataAccessObject decisionRepository;
 
-    public DecisionLogInteractor(DecisionLogDataAccessInterface decisionDataAccessInterface,
-                                 DecisionLogOutputBoundary decisionLogOutputBoundary) {
+
+    public DecisionLogInteractor(DecisionLogUserDataAccessInterface decisionDataAccessInterface,
+                                 DecisionLogOutputBoundary decisionLogOutputBoundary, MongoDBUserDataAccessObject userRepository) {
         this.decisionDataAccessObject = decisionDataAccessInterface;
         this.decisionLogPresenter = decisionLogOutputBoundary;
+        this.decisionRepository = userRepository;
     }
 
     @Override
-    public void execute(DecisionLogInputData decisionLogInputData) {
-        // Retrieve username from input data
-        String username = decisionLogInputData.getUsername();
+    public void execute(DecisionLogInputData inputData) {
+        String username = inputData.getUsername();
 
-        // Fetch decisions for the user
-        List<Decision> decisions = decisionDataAccessObject.getDecisions(username);
+        try {
+            // Retrieve the full User object from the database
+            User user = decisionRepository.get(username);
 
-        if (decisions.isEmpty()) {
-            // No decisions found
-            decisionLogPresenter.prepareFailView("No decisions found for " + username);
-        } else {
-            // Prepare the decision log output data
-            DecisionLogOutputData outputData = new DecisionLogOutputData(decisions);
-            decisionLogPresenter.prepareSuccessView(outputData);
+            // Extract the list of decisions from the User object
+            List<Decision> decisions = user.getDecisions();
+
+            if (decisions == null || decisions.isEmpty()) {
+                // If no decisions are found, trigger the failure view
+                decisionLogPresenter.prepareFailView("No decisions found for " + username);
+            } else {
+                // If decisions are found, prepare the success view
+                DecisionLogOutputData outputData = new DecisionLogOutputData(decisions, username);
+                decisionLogPresenter.prepareSuccessView(outputData);
+            }
+        } catch (Exception e) {
+            // Handle any unexpected exceptions and prepare the fail view
+            decisionLogPresenter.prepareFailView(e.getMessage());
         }
     }
 
@@ -38,5 +51,10 @@ public class DecisionLogInteractor implements DecisionLogInputBoundary {
     public void switchToHomepageView() {
         // Implement navigation logic to homepage
         decisionLogPresenter.switchToHomePageView();
+    }
+
+    @Override
+    public void switchToDecisionLogView(DecisionLogInputData inputData) {
+
     }
 }

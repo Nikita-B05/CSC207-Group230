@@ -11,10 +11,11 @@ public class GameOverView extends JPanel {
         JPanel centerPanel = new JPanel();
         centerPanel.setLayout(new BoxLayout(centerPanel, BoxLayout.Y_AXIS));
         JLabel gameOverLabel = new JLabel("Game Over");
+        gameOverLabel.setForeground(Color.RED);
         gameOverLabel.setFont(new Font("Arial", Font.BOLD, 24));
         gameOverLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        JLabel messageLabel = new JLabel("You have run out of money and assets!");
+        JLabel messageLabel = new JLabel("you have crippling debt and depression:)");
         messageLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         messageLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -26,13 +27,10 @@ public class GameOverView extends JPanel {
 
         // Button Panel
         JPanel buttonPanel = new JPanel();
-        JButton restartButton = new JButton("Restart Game");
-        JButton exitButton = new JButton("Exit");
+        JButton restartButton = new JButton("Return to Homepage");
         buttonPanel.add(restartButton);
-        buttonPanel.add(exitButton);
 
-        restartButton.addActionListener(e -> System.out.println("Restarting game..."));
-        exitButton.addActionListener(e -> System.exit(0));
+        restartButton.addActionListener(e -> System.out.println("returning to homepage..."));
 
         add(centerPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);

@@ -1,8 +1,13 @@
 package use_case.decision_log;
 
+import entity.CommonUserFactory;
 import entity.Decision;
-import data_access.MongoDBDecisionDataAccessObject;
+import data_access.MongoDBUserDataAccessObject;
+import entity.User;
 import org.junit.jupiter.api.Test;
+import use_case.homepage.HomepageInputBoundary;
+import use_case.homepage.HomepageInteractor;
+import use_case.login.LoginUserDataAccessInterface;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,11 +43,8 @@ class DecisionLogInteractorTest {
         decisions.add(decision1);
         decisions.add(decision2);
 
-        // Add decisions to mock MongoDB repository (using MongoDBDecisionDataAccessObject)
-        MongoDBDecisionDataAccessObject decisionRepository = new MongoDBDecisionDataAccessObject();
-        for (Decision decision : decisions) {
-            decisionRepository.save(decision);
-        }
+        // Add decisions to the MongoDBUserDataAccessObject repository
+        MongoDBUserDataAccessObject userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
 
         // Create successPresenter that checks if success logic is handled correctly
         DecisionLogOutputBoundary successPresenter = new DecisionLogOutputBoundary() {
@@ -62,14 +64,20 @@ class DecisionLogInteractorTest {
             }
 
             @Override
+            public void switchToDecisionLogView(DecisionLogOutputData outputData) {
+                // Assert that Decision Log view is being called with expected data
+                assertNotNull(outputData);
+                assertEquals("Paul", outputData.getUsername());  // Example username check
+            }
+
+            @Override
             public void switchToHomePageView() {
-                // Handle navigation if needed
+                fail("Use case HomepageView is unexpected.");
             }
         };
 
         // Create interactor and execute
-        DecisionLogInputBoundary interactor =
-                new DecisionLogInteractor(decisionRepository, successPresenter);
+        DecisionLogInputBoundary interactor = new DecisionLogInteractor(userRepository, successPresenter);
         DecisionLogInputData inputData = new DecisionLogInputData(username);
         interactor.execute(inputData);
     }
@@ -80,7 +88,23 @@ class DecisionLogInteractorTest {
         String username = "Paul";
 
         // Create an empty repository (simulate no decisions for the user)
-        MongoDBDecisionDataAccessObject repository = new MongoDBDecisionDataAccessObject();
+        DecisionLogUserDataAccessInterface decisionRepository = new DecisionLogUserDataAccessInterface() {
+
+            @Override
+            public String loadDecisionLog(User user) {
+                return "";
+            }
+
+            @Override
+            public List<Decision> getDecisions(String username) {
+                return List.of();
+            }
+
+            @Override
+            public List<Decision> getCurrentUsername(String username) {
+                return List.of();
+            }
+        };
 
         // Create the presenter that checks if failure is handled correctly
         DecisionLogOutputBoundary failurePresenter = new DecisionLogOutputBoundary() {
@@ -95,14 +119,23 @@ class DecisionLogInteractorTest {
             }
 
             @Override
+            public void switchToDecisionLogView(DecisionLogOutputData outputData) {
+                // Assert that Decision Log view is being called with expected data
+                assertNotNull(outputData);
+                assertEquals("Paul", outputData.getUsername());  // Example username check
+                }
+
+            boolean wasHomePageViewCalled = false;
+            @Override
             public void switchToHomePageView() {
-                // Handle navigation if needed
+                // Assert that navigation to the home page view is triggered
+                wasHomePageViewCalled = true;
             }
         };
 
         // Create interactor and execute
         DecisionLogInputBoundary interactor =
-                new DecisionLogInteractor(repository, failurePresenter);
+                new DecisionLogInteractor(decisionRepository, failurePresenter);
         DecisionLogInputData inputData = new DecisionLogInputData(username);
         interactor.execute(inputData);
     }
@@ -110,7 +143,7 @@ class DecisionLogInteractorTest {
     @Test
     void switchToHomepageTest() {
         // Arrange: Set up the repository and presenter
-        MongoDBDecisionDataAccessObject repository = new MongoDBDecisionDataAccessObject();
+        LoginUserDataAccessInterface userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
         DecisionLogOutputBoundary presenter = new DecisionLogOutputBoundary() {
             @Override
             public void prepareSuccessView(DecisionLogOutputData outputData) {
@@ -120,6 +153,11 @@ class DecisionLogInteractorTest {
             @Override
             public void prepareFailView(String error) {
                 // No failure view needed for this test
+            }
+
+            @Override
+            public void switchToDecisionLogView(DecisionLogOutputData outputData) {
+
             }
 
             @Override

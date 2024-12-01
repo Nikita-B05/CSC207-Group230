@@ -16,4 +16,6 @@ public interface DecisionLogInputBoundary {
      * Executes the switch to Homepage view use case.
      */
     void switchToHomepageView();
+
+    void switchToDecisionLogView(DecisionLogInputData inputData);
 }
