@@ -1,8 +1,8 @@
 package use_case.game_decision;
 
 import entity.Decision;
+import entity.Question;
 import entity.User;
-import use_case.settings.SettingsOutputData;
 
 /**
  * Interactor for the Settings use case.
@@ -21,13 +21,15 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
     public void switchToAssetsManager(GameDecisionInputData inputData) {
         User user = userDataAccess.getCurrentUser();
         GameDecisionOutputData outputData = new GameDecisionOutputData(inputData.getUsername(), inputData.isDarkMode(),
-                inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge());
+                inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge(), inputData.getHappiness(), inputData.getSalary());
         outputBoundary.prepareAssetsView(outputData);
     }
 
     @Override
     public void pickDecision(GameDecisionInputData inputData) {
         User user = userDataAccess.getCurrentUser();
+        Question question = inputData.getQuestion();
+        question.setSelectedDecision(inputData.getDecisionQuestion());
         Decision decision = inputData.getDecisionQuestion();
         user.addDecision(decision);
         user.modifySalary(decision.getSalaryChange());
@@ -43,7 +45,7 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
     public void switchToGameOver(GameDecisionInputData inputData) {
         User user = userDataAccess.getCurrentUser();
         GameDecisionOutputData outputData = new GameDecisionOutputData(inputData.getUsername(), inputData.isDarkMode(),
-                inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge());
+                inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge(), inputData.getHappiness(), inputData.getSalary());
         outputBoundary.prepareGameOverView(outputData);
     }
 
@@ -51,7 +53,7 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
     public void switchToHomeview(GameDecisionInputData inputData) {
         User user = userDataAccess.getCurrentUser();
         GameDecisionOutputData outputData = new GameDecisionOutputData(inputData.getUsername(), inputData.isDarkMode(),
-                inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge());
+                inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge(), inputData.getHappiness(), inputData.getSalary());
         outputBoundary.prepareHomepageView(outputData);
 
     }

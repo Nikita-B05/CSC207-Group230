@@ -28,7 +28,9 @@ public class HomepageInteractor implements HomepageInputBoundary  {
                 user.isDarkMode(),
                 user.getDecisions(),
                 user.getAge(),
-                user.getQuestion().get(user.getAge())
+                user.getQuestion().get(user.getAge()),
+                user.getHappiness(),
+                user.getSalary()
         ));
     }
 
@@ -43,7 +45,9 @@ public class HomepageInteractor implements HomepageInputBoundary  {
                 user.isDarkMode(),
                 user.getDecisions(),
                 user.getAge(),
-                user.getQuestion().get(user.getAge())
+                user.getQuestion().get(user.getAge()),
+                user.getHappiness(),
+                user.getSalary()
         ));
     }
 
@@ -58,7 +62,9 @@ public class HomepageInteractor implements HomepageInputBoundary  {
                 user.isDarkMode(),
                 user.getDecisions(),
                 user.getAge(),
-                user.getQuestion().get(user.getAge())
+                user.getQuestion().get(user.getAge()),
+                user.getHappiness(),
+                user.getSalary()
         ));
     }
 
@@ -73,7 +79,9 @@ public class HomepageInteractor implements HomepageInputBoundary  {
                 user.isDarkMode(),
                 user.getDecisions(),
                 user.getAge(),
-                user.getQuestion().get(user.getAge())
+                user.getQuestion().get(user.getAge()),
+                user.getHappiness(),
+                user.getSalary()
         ));
     }
 }

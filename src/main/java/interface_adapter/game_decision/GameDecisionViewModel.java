@@ -8,7 +8,7 @@ import interface_adapter.ViewModel;
 public class GameDecisionViewModel extends ViewModel<GameDecisionState>{
 
     public GameDecisionViewModel() {
-        super("GameDecision");
+        super("game decision");
         setState(new GameDecisionState());
     }
 }

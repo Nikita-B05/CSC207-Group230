@@ -16,6 +16,8 @@ public class GameDecisionState {
     private Assets assets;
     private String decisionError;
     private Avatar avatar;
+    private int happiness;
+    private double salary;
 
 
     public String getDecisionError() {
@@ -87,4 +89,20 @@ public class GameDecisionState {
     }
 
     public void setAvatar(Avatar avatar) {this.avatar = avatar;}
+
+    public void setHappiness(int happiness) {
+        this.happiness = happiness;
+    }
+
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    public int getHappiness() {
+        return happiness;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
 }
