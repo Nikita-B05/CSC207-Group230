@@ -27,7 +27,7 @@ public interface ChooseAssetStockDataAccessInterface {
 
     /**
      * Updates the object to retrieve prices of the new date.
-     * @param date new date
+     * @param age of the user
      */
-    void setDate(String date);
+    void setDate(int age);
 }

@@ -35,8 +35,7 @@ public class ChooseAssetInteractor implements ChooseAssetInputBoundary {
     public void switchToManageStockView() {
         User user = userDataAccessObject.getCurrentUser();
         // TODO
-        getDate(10);
-//        stockDataAccessObject.setDate(getDate(user.getAge()));
+        stockDataAccessObject.setDate(10);
         ChooseAssetOutputData outputData = new ChooseAssetOutputData(
                 user.getUsername(),
                 user.isDarkMode(),
@@ -46,13 +45,6 @@ public class ChooseAssetInteractor implements ChooseAssetInputBoundary {
                 stockDataAccessObject.getCodeToPrice()
         );
         chooseAssetPresenter.switchToManageStockView(outputData);
-    }
-
-    private String getDate(int age) {
-        // Add a certain number of days
-        int year = 2000 + (age - 18);
-        String date = year + "-01-31";
-        return date;
     }
 
     @Override

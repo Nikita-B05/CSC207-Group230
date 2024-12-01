@@ -14,12 +14,12 @@ import stock_api.VantageStockDataAccessObject;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ManageStockInteractorTest {
-    private static VantageStockDataAccessObject stockClient;
+    private static PolygonStockDataAccessObject stockClient;
     private static MongoDBUserDataAccessObject userRepository;
 
     @BeforeAll
     public static void setUp() {
-        stockClient = new VantageStockDataAccessObject();
+        stockClient = new PolygonStockDataAccessObject();
         User user = new CommonUser("testing", "password");
         userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
         userRepository.setCurrentUsername("testing");

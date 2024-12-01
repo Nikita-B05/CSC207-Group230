@@ -40,7 +40,7 @@ public class VantageStockDataAccessObject implements
 
     private static final String BASE_URL =
             "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&outputsize=full";
-    private String apiKey;
+    private final String apiKey;
     private final OkHttpClient client;
 
     public VantageStockDataAccessObject() {
@@ -56,7 +56,7 @@ public class VantageStockDataAccessObject implements
                 throw new RuntimeException("Configuration file not found: " + fileName);
             }
             properties.load(input);
-            return properties.getProperty("polygonApi.key");
+            return properties.getProperty("vantageApi.key");
         } catch (IOException e) {
             throw new RuntimeException("Failed to load API key from properties file", e);
         }
@@ -101,10 +101,15 @@ public class VantageStockDataAccessObject implements
         return date;
     }
 
+    private String generateDate(int age) {
+        int year = 2000 + (age - 18);
+        return year + "-01-31";
+    }
+
     @Override
-    public void setDate(String date) {
+    public void setDate(int age) {
         String prevDate = this.date;
-        this.date = date;
+        this.date = generateDate(age);
         if (!prevDate.equals(date)) {
             loadCodeToPrice();
         }
@@ -112,6 +117,7 @@ public class VantageStockDataAccessObject implements
 
     private double fetchData(String ticker) throws IOException {
         String url = BASE_URL + "&symbol=" + ticker + "&apikey=" + apiKey;
+        System.out.println(url);
 
         Request request = new Request.Builder()
                 .url(url)

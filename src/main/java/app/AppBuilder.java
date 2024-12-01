@@ -99,7 +99,7 @@ public class AppBuilder {
 
     private final MongoDBUserDataAccessObject userDataAccessObject =
             new MongoDBUserDataAccessObject(new CommonUserFactory());
-    private final VantageStockDataAccessObject stockDataAccessObject = new VantageStockDataAccessObject();
+    private final PolygonStockDataAccessObject stockDataAccessObject = new PolygonStockDataAccessObject();
 
     // Existing Views and ViewModels
     private SignupView signupView;

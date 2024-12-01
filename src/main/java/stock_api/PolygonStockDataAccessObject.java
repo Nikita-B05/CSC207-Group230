@@ -8,6 +8,8 @@ import use_case.manage_stock.ManageStockStockAccessInterface;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -17,8 +19,8 @@ public class PolygonStockDataAccessObject implements
         ManageStockStockAccessInterface
 {
 
-    private static final String[] stockCodes = {"AAPL", "NVDA", "MSFT"};
-    private static final String[] companyNames = {"Apple", "Nvidia", "Microsoft"};
+    private static final String[] stockCodes = {"AAPL", "NVDA"};
+    private static final String[] companyNames = {"Apple", "Nvidia"};
 
     // Static HashMaps
     private static final Map<String, String> codeToCompanyMap = new HashMap<>();
@@ -117,10 +119,26 @@ public class PolygonStockDataAccessObject implements
         return date;
     }
 
+    private String generateDate(int age) {
+        // Format the date to YYYY-MM-DD
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        // Get the current date
+        LocalDate currentDate = LocalDate.parse("2024-10-01", formatter);
+
+        // Add a certain number of days
+        int daysToAdd = age - 18;
+        LocalDate newDate = currentDate.plusDays(daysToAdd);
+
+        String formattedDate = newDate.format(formatter);
+
+        return formattedDate;
+    }
+
     @Override
-    public void setDate(String date) {
+    public void setDate(int age) {
         String prevDate = this.date;
-        this.date = date;
+        this.date = generateDate(age);
         if (!prevDate.equals(date)) {
             loadCodeToPrice();
         }
@@ -157,6 +175,7 @@ public class PolygonStockDataAccessObject implements
     public static void main(String[] args) {
         PolygonStockDataAccessObject apiClient = new PolygonStockDataAccessObject();
         try {
+            apiClient.setDate(10);
             double price = apiClient.getPrice("AAPL");
             System.out.println(price);
         } catch (IOException e) {
