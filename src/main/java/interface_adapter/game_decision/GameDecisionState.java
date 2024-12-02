@@ -21,6 +21,7 @@ public class GameDecisionState {
     private int happiness;
     private double salary;
     private Map<String, Double> stockPrices;
+    private double netWorth;
 
     public String getDecisionError() {
         return decisionError;
@@ -114,5 +115,14 @@ public class GameDecisionState {
 
     public void setStockPrices(Map<String, Double> stockPrices) {
         this.stockPrices = stockPrices;
+        setNetWorth(this.assets.getTotal(this.stockPrices));
+    }
+
+    public void setNetWorth(double netWorth){
+        this.netWorth = netWorth;
+    }
+
+    public double getNetWorth() {
+        return netWorth;
     }
 }
