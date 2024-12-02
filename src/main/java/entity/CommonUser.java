@@ -27,7 +27,7 @@ public class CommonUser implements User {
     public CommonUser(String username, String password) {
         this.username = username;
         this.password = password;
-        this.age = 18;
+        this.age = 22;
         this.isDarkMode = false;
         this.characterName = null;
         this.avatar = new Avatar();
@@ -153,8 +153,16 @@ public class CommonUser implements User {
     }
 
     @Override
-    public void changeHappiness(double happiness) {
-        this.happiness += happiness;
+    public void changeHappiness(int happiness) {
+        if (this.happiness + happiness >= 100) {
+            this.happiness = 100;
+        }
+        else if (this.happiness + happiness <= 0) {
+            this.happiness = 0; // if happiness is less than 0, call Game Over
+        }
+        else{
+            this.happiness += happiness;
+        }
     }
 
     @Override
@@ -194,12 +202,18 @@ public class CommonUser implements User {
         assets.buyStock(stockCode, quantity, buyPrice);
     }
 
+    @Override
+    public boolean canBuyStock(String stockCode, int quantity, Map<String, Double> stockPrices) {
+        return assets.canBuyStock(stockCode, quantity, stockPrices);
+    }
+
     public boolean canBuyStock(String stockCode, int quantity, HashMap<String, Double> stockPrices) {
         return assets.canBuyStock(stockCode, quantity, stockPrices);
     }
 
-    public void sellStock(String stockCode, int quantity, double sellPrice) {
+    public double sellStock(String stockCode, int quantity, double sellPrice) {
         assets.sellStock(stockCode, quantity, sellPrice);
+        return sellPrice;
     }
 
     public boolean isValidSell(String stockCode, int quantity) {

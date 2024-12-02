@@ -8,10 +8,10 @@ public class Decision {
     private LocalDateTime timestamp;
     private final String decisionText;
     private final double cashChange;
-    private final double happinessChange;
+    private final int happinessChange;
     private final double salaryChange;
 
-    public Decision(LocalDateTime timestamp, String decisionText, double cashChange, double happinessChange, double salaryChange) {
+    public Decision(LocalDateTime timestamp, String decisionText, double cashChange, int happinessChange, double salaryChange) {
         this.timestamp = timestamp;
         this.decisionText = decisionText;
         this.cashChange = cashChange;
@@ -24,7 +24,7 @@ public class Decision {
         LocalDateTime timestamp = LocalDateTime.parse((String) json.get("timestamp"), formatter);
         String decisionText = (String) json.get("decisionText");
         double cashChange = ((Number) json.get("cashChange")).doubleValue();
-        double happinessChange = ((Number) json.get("happinessChange")).doubleValue();
+        int happinessChange = ((Number) json.get("happinessChange")).intValue();
         double salaryChange = ((Number) json.get("salaryChange")).doubleValue();
 
         return new Decision(timestamp, decisionText, cashChange, happinessChange, salaryChange);
@@ -45,7 +45,7 @@ public class Decision {
         return cashChange;
     }
 
-    public double getHappinessChange() {
+    public int getHappinessChange() {
         return happinessChange;
     }
 

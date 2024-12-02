@@ -8,9 +8,9 @@ import entity.User;
  */
 public class DarkModeInteractor implements DarkModeInputBoundary {
     private final DarkModeOutputBoundary outputBoundary;
-    private final MongoDBUserDataAccessObject userDataAccess;
+    private final DarkModeUserDataAccessInterface userDataAccess;
 
-    public DarkModeInteractor(DarkModeOutputBoundary outputBoundary, MongoDBUserDataAccessObject userDataAccess) {
+    public DarkModeInteractor(DarkModeOutputBoundary outputBoundary, DarkModeUserDataAccessInterface userDataAccess) {
         this.outputBoundary = outputBoundary;
         this.userDataAccess = userDataAccess;
     }
