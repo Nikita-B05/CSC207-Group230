@@ -190,6 +190,11 @@ public class CommonUser implements User {
         this.happiness = happiness;
     }
 
+    @Override
+    public void setSalary(int salary) {
+        this.salary = salary;
+    }
+
     public void setAssets(Assets assets) {
         this.assets = assets;
     }

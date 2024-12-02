@@ -160,9 +160,5 @@ public interface User {
      */
     public void setHappiness(int happiness);
 
-    void setHappiness(int happiness);
-
     void setSalary(int salary);
-
-    void setAssets(Assets assets);
 }

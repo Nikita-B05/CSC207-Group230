@@ -47,8 +47,7 @@ public class MongoDBUserDataAccessObject implements
         ManageStockDataAccessInterface,
         DarkModeUserDataAccessInterface,
         GameDecisionUserDataAccessInterface,
-        GameSuccessUserDataAccessInterface {
-        GameDecisionUserDataAccessInterface,
+        GameSuccessUserDataAccessInterface,
         GameOverUserDataAccessInterface {
 
     private static final String USERNAME = "username";
@@ -208,11 +207,6 @@ public class MongoDBUserDataAccessObject implements
     @Override
     public void updateHappiness(User user) {
         updateUser(user, HAPPINESS, user.getHappiness());
-    }
-
-    @Override
-    public void updateAge(User user) {
-        updateUser(user, AGE, user.getAge());
     }
 
     @Override

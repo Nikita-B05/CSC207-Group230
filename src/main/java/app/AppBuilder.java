@@ -407,9 +407,8 @@ public class AppBuilder {
                         viewManagerModel,
                         homepageViewModel,
                         assetManagerViewModel,
-                        gameSuccessViewModel,
-                        assetManagerViewModel,
-                        gameOverViewModel
+                        gameOverViewModel,
+                        gameSuccessViewModel
                 );
         final GameDecisionInputBoundary gameDecisionInteractor =
                 new GameDecisionInteractor(userDataAccessObject, gameDecisionOutputBoundary, stockDataAccessObject);
