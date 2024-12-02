@@ -1,17 +1,13 @@
 package app;
 
 import java.awt.CardLayout;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 //import data_access.InMemoryUserDataAccessObject;
 import data_access.MongoDBUserDataAccessObject;
-import entity.CommonUser;
 import entity.CommonUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.ViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.ChangePasswordViewModel;
@@ -52,7 +48,6 @@ import use_case.choose_avatar.ChooseAvatarOutputBoundary;
 import use_case.game_decision.GameDecisionInputBoundary;
 import use_case.game_decision.GameDecisionInteractor;
 import use_case.game_decision.GameDecisionOutputBoundary;
-import use_case.decision_log.DecisionLogUserDataAccessInterface;
 import use_case.homepage.HomepageInputBoundary;
 import use_case.homepage.HomepageInteractor;
 import use_case.homepage.HomepageOutputBoundary;
@@ -110,8 +105,8 @@ public class AppBuilder {
     private ChangePasswordView changePasswordView;
     private SettingsView settingsView;
     private SettingsViewModel settingsViewModel;
-    private DecisionLogViewModel DecisionLogViewModel;
-    private DecisionLogView DecisionLogView;
+    private DecisionLogViewModel decisionLogViewModel;
+    private DecisionLogView decisionLogView;
 
     // New Views and ViewModels for Choose Avatar and Input Name
     private ChooseAvatarViewModel chooseAvatarViewModel;
@@ -263,7 +258,7 @@ public class AppBuilder {
         // Updated to include ChooseAvatarViewModel in the HomepagePresenter
         final HomepageOutputBoundary homepageOutputBoundary = new HomepagePresenter(
                 viewManagerModel, homepageViewModel, settingsViewModel, chooseAvatarViewModel,
-                gameDecisionViewModel, DecisionLogViewModel);
+                gameDecisionViewModel, decisionLogViewModel);
         final HomepageInputBoundary homepageInteractor = new HomepageInteractor(
                 userDataAccessObject, homepageOutputBoundary, stockDataAccessObject);
 
@@ -305,9 +300,12 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addGameDecisionUseCase() {
-        final GameDecisionOutputBoundary gameDecisionOutputBoundary = new GameDecisionPresenter(gameDecisionViewModel, viewManagerModel, homepageViewModel);
-        final GameDecisionInputBoundary gameDecisionInteractor = new GameDecisionInteractor(userDataAccessObject, gameDecisionOutputBoundary);
-        final GameDecisionController gameDecisionController = new GameDecisionController(gameDecisionInteractor);
+        final GameDecisionOutputBoundary gameDecisionOutputBoundary =
+                new GameDecisionPresenter(gameDecisionViewModel, viewManagerModel, homepageViewModel);
+        final GameDecisionInputBoundary gameDecisionInteractor =
+                new GameDecisionInteractor(userDataAccessObject, gameDecisionOutputBoundary);
+        final GameDecisionController gameDecisionController =
+                new GameDecisionController(gameDecisionInteractor);
         gameDecisionView.setController(gameDecisionController);
         return this;
     }
@@ -361,22 +359,18 @@ public class AppBuilder {
      */
     public AppBuilder addDecisionLogUseCase() {
         // Create the DecisionLogPresenter instance
-        final DecisionLogPresenter decisionLogPresenter =
+        DecisionLogPresenter decisionLogPresenter =
                 new DecisionLogPresenter(new DecisionLogViewModel(), new ViewManagerModel());
 
         // Create the DecisionLogInteractor instance
-        final DecisionLogInputBoundary decisionLogInteractor =
+        DecisionLogInputBoundary decisionLogInteractor =
                 new DecisionLogInteractor(userDataAccessObject, decisionLogPresenter, userDataAccessObject);
 
-        final DecisionLogOutputBoundary decisionLogOutputBoundary = new DecisionLogPresenter(
-                new DecisionLogViewModel(), new ViewManagerModel());
-
         // Create the DecisionLogController instance
-        final DecisionLogController DecisionLogController =
+        final DecisionLogController decisionLogController =
                 new DecisionLogController(decisionLogInteractor, decisionLogPresenter);
-        final DecisionLogInputBoundary DecisionLogInteractor =
-                new DecisionLogInteractor(userDataAccessObject, decisionLogOutputBoundary, userDataAccessObject);
-        DecisionLogView.DecisionLogController(DecisionLogController);
+        decisionLogView.setDecisionLogController(decisionLogController);
+
         return this;
     }
 
@@ -384,21 +378,14 @@ public class AppBuilder {
      * Adds the Decision Log Use Case to the application.
      * @return this builder
      */
-    public AppBuilder addDecisionLogView() {
-        // Create the DecisionLogPresenter instance
-        final DecisionLogPresenter decisionLogPresenter =
-                new DecisionLogPresenter(new DecisionLogViewModel(), new ViewManagerModel());
-
-        final DecisionLogOutputBoundary decisionLogOutputBoundary = new DecisionLogPresenter(
-                new DecisionLogViewModel(), new ViewManagerModel());
-
-        final DecisionLogInputBoundary DecisionLogInteractor =
-                new DecisionLogInteractor(userDataAccessObject, decisionLogOutputBoundary, userDataAccessObject);
-
-        final DecisionLogController DecisionLogController =
-                new DecisionLogController(DecisionLogInteractor, decisionLogPresenter);
-        DecisionLogView.DecisionLogController(DecisionLogController);
-        return this;
+    public void addDecisionLogView() {
+        if (this.decisionLogView == null) {
+            throw new IllegalStateException("DecisionLogView must be initialized before setting the controller.");
+        }
+        this.decisionLogView.setDecisionLogController(new DecisionLogController(
+                new DecisionLogInteractor(userDataAccessObject, new DecisionLogPresenter(
+                        new DecisionLogViewModel(), viewManagerModel), userDataAccessObject),
+                new DecisionLogPresenter(new DecisionLogViewModel(), viewManagerModel)));
     }
 
     /**

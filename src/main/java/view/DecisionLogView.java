@@ -1,6 +1,8 @@
 package view;
 
+import data_access.MongoDBUserDataAccessObject;
 import entity.Decision;
+import entity.User;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -16,6 +18,7 @@ import java.util.List;
 import interface_adapter.decision_log.DecisionLogController;
 import interface_adapter.decision_log.DecisionLogViewModel;
 import interface_adapter.dark_mode.DarkModeController;
+import interface_adapter.settings.SettingsController;
 import use_case.decision_log.DecisionLogInputBoundary;
 
 public class DecisionLogView extends JPanel implements ActionListener, PropertyChangeListener {
@@ -30,6 +33,7 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
 
     private final JLabel statsValues;
     private final JButton backButton;
+    private MongoDBUserDataAccessObject userDataAccess;
 
     public DecisionLogView(DecisionLogViewModel decisionLogViewModel,
                            DecisionLogController decisionLogController,
@@ -98,6 +102,10 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
+    public void setDecisionLogController(DecisionLogController decisionLogController) {
+        this.decisionLogController = decisionLogController;
+    }
+
     private void updateTheme(boolean isDarkMode) {
         darkModeCheckBox.setSelected(isDarkMode);
 
@@ -112,8 +120,9 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
 
     private void updateTableModel(DefaultTableModel model, List<Decision> decisions) {
         model.setRowCount(0); // Clear existing rows
+        User user = userDataAccess.getCurrentUser();
         for (Decision decision : decisions) {
-            Object[] row = {decision.getTimestamp(), decision.getDecisionText(), decision.getDecisionResponse(),
+            Object[] row = {user.getAge(), decision.getDecisionText(), user.getDecisions(),
                     decision.getNetWorthChange(), decision.getHappinessChange()};
             model.addRow(row);
         }
@@ -147,9 +156,12 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
     public static void main(String[] args) {
         // Create sample decisions for testing
         List<Decision> decisions = new ArrayList<>();
-        decisions.add(new Decision(LocalDateTime.now(), "Invest in stocks", -10, 500, 20, 10, "yes"));
-        decisions.add(new Decision(LocalDateTime.now(), "Buy a car", -10000, -10000, -5, 10, "yes"));
-        decisions.add(new Decision(LocalDateTime.now(), "Start a business", -100, 20000, 50, 10, "yes"));
+        decisions.add(new Decision(LocalDateTime.now(),
+                "Buy a house", -500000, -500000, -10));
+        decisions.add(new Decision(LocalDateTime.now(),
+                "Buy a car", -10000, -10000, -5));
+        decisions.add(new Decision(LocalDateTime.now(),
+                "Start a business", -100, 20000, 50));
 
         // Create a DecisionLogViewModel and populate it with sample data
         DecisionLogViewModel decisionLogViewModel = new DecisionLogViewModel();
@@ -157,14 +169,16 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
         decisionLogViewModel.setDarkModeEnabled(false); // Default to light mode
 
         // Create dummy controllers
-        DecisionLogController decisionLogController = new DecisionLogController(null, null);
+        DecisionLogController decisionLogController =
+                new DecisionLogController(null, null);
         DarkModeController darkModeController = new DarkModeController(null);
 
         // Create a JCheckBox for dark mode
         JCheckBox darkModeCheckBox = new JCheckBox("Dark Mode");
 
         // Create the DecisionLogView
-        DecisionLogView decisionLogView = new DecisionLogView(decisionLogViewModel, decisionLogController, darkModeController, darkModeCheckBox);
+        DecisionLogView decisionLogView =
+                new DecisionLogView(decisionLogViewModel, decisionLogController, darkModeController, darkModeCheckBox);
 
         // Set up the JFrame to display the view
         JFrame frame = new JFrame("Decision Log Preview");

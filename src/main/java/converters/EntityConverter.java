@@ -257,8 +257,7 @@ public class EntityConverter implements EntityConverterInterface {
         final int happinessChange = object.getInt(HAPPINESS_CHANGE);
         final int salaryChange = object.getInt(SALARY_CHANGE);
 
-
-        return new Decision(timestamp, cashChange, happinessChange, happinessChange, salaryChange);
+        return new Decision(timestamp, decisionText, netWorthChange, happinessChange, salaryChange);
     }
 
     private JSONObject toJSONObject(Decision decision) {
@@ -268,7 +267,7 @@ public class EntityConverter implements EntityConverterInterface {
         final JSONObject object = new JSONObject();
         object.put(TIMESTAMP, decision.getTimestamp().format(formatter));
         object.put(DECISION_TEXT, decision.getDecisionText());
-        object.put(NET_WORTH_CHANGE, decision.getCashChange());
+        object.put(NET_WORTH_CHANGE, decision.getNetWorthChange());
         object.put(HAPPINESS_CHANGE, decision.getHappinessChange());
         object.put(SALARY_CHANGE, decision.getSalaryChange());
 

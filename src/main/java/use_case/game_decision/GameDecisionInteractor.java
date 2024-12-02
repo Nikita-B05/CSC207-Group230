@@ -33,7 +33,7 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
         Decision decision = inputData.getDecisionQuestion();
         user.addDecision(decision);
         user.modifySalary(decision.getSalaryChange());
-        user.getAssets().changeCash(decision.getCashChange());
+        user.getAssets().changeCash(decision.getNetWorthChange());
         user.changeHappiness(decision.getHappinessChange());
         userDataAccess.updateSalary(user);
         userDataAccess.updateDecision(user);
