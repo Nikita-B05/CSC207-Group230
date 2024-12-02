@@ -1,8 +1,6 @@
 package data_access;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -15,10 +13,13 @@ import entity.*;
 import org.bson.Document;
 
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
+import use_case.choose_asset.ChooseAssetDataAccessInterface;
 import use_case.game_decision.GameDecisionUserDataAccessInterface;
 import use_case.homepage.HomepageUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
+import use_case.manage_home.ManageHomeDataAccessInterface;
+import use_case.manage_stock.ManageStockDataAccessInterface;
 import use_case.settings.SettingsUserDataAccessInterface;
 import use_case.signup.SignupUserDataAccessInterface;
 import use_case.choose_avatar.ChooseAvatarUserDataAccessInterface;
@@ -27,7 +28,8 @@ import use_case.input_name.InputNameUserDataAccessInterface;
 /**
  * The DAO for user data, now using MongoDB.
  */
-public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterface,
+public class MongoDBUserDataAccessObject implements
+        SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
         ChangePasswordUserDataAccessInterface,
         ChooseAvatarUserDataAccessInterface,
@@ -35,6 +37,9 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
         LogoutUserDataAccessInterface,
         HomepageUserDataAccessInterface,
         SettingsUserDataAccessInterface,
+        ChooseAssetDataAccessInterface,
+        ManageHomeDataAccessInterface,
+        ManageStockDataAccessInterface,
         GameDecisionUserDataAccessInterface {
 
     private static final String USERNAME = "username";
@@ -128,6 +133,38 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
     }
 
     @Override
+    public void updateUserCash(double newCash) {
+        User user = getCurrentUser();
+        Assets assets = user.getAssets() == null ? new Assets() : user.getAssets();
+        Assets newAssets = new Assets(
+                assets.getHome(),
+                assets.getStocks(),
+                newCash,
+                assets.getCar()
+        );
+        updateUser(user, ASSETS, newAssets);
+    }
+
+    @Override
+    public void updateUserHome(double newHome) {
+        User user = getCurrentUser();
+        Assets assets = user.getAssets() == null ? new Assets() : user.getAssets();
+        Assets newAssets = new Assets(
+                newHome,
+                assets.getStocks(),
+                assets.getCash(),
+                assets.getCar()
+        );
+        updateUser(user, ASSETS, newAssets);
+    }
+
+    @Override
+    public void updateAssets(Assets assets) {
+        User user = getCurrentUser();
+        updateUser(user, ASSETS, assets);
+    }
+
+    @Override
     public String getCurrentUsername() {
         if (currentUsername == null) {
             throw new IllegalStateException("No current user is set");
@@ -141,6 +178,12 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
             throw new IllegalStateException("No current user is logged in");
         }
         return get(currentUsername);
+    }
+
+    @Override
+    public void incrementAge() {
+        User user = getCurrentUser();
+        updateUser(user, AGE, user.getAge() + 1);
     }
 
     @Override
@@ -161,6 +204,32 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
     @Override
     public void updateSalary(User user) {
         updateUser(user, SALARY, user.getSalary());
+    }
+
+    @Override
+    public void addSalary() {
+        User user = getCurrentUser();
+        Assets assets = user.getAssets();
+        Assets newAssets = new Assets(
+                assets.getHome(),
+                assets.getStocks(),
+                assets.getCash() + user.getSalary(),
+                assets.getCar()
+        );
+        updateUser(user, ASSETS, newAssets);
+    }
+
+    @Override
+    public void appreciateHome() {
+        User user = getCurrentUser();
+        Assets assets = user.getAssets();
+        Assets newAssets = new Assets(
+                assets.getHome() * 1.05,
+                assets.getStocks(),
+                assets.getCash(),
+                assets.getCar()
+        );
+        updateUser(user, ASSETS, newAssets);
     }
 
     @Override
@@ -252,12 +321,12 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
         return userDoc.isPresent();
     }
 
-    private void deleteUser(String user) {
+    public void deleteUser(String user) {
         MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
         usersCollection.deleteMany(Filters.eq(USERNAME, user));
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         User user = new CommonUser("Test", "1234");
         MongoDBUserDataAccessObject dao = new MongoDBUserDataAccessObject(new CommonUserFactory());
         dao.save(user);

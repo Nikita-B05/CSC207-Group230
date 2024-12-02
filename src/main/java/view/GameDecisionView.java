@@ -72,7 +72,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
         confirmButton = new JButton("Submit");
         confirmButton.addActionListener(this);
 
-        cancelButton = new JButton("Cancel");
+        cancelButton = new JButton("Menu");
         cancelButton.addActionListener(this);
     }
 
@@ -166,7 +166,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
             int happiness = state.getHappiness();
             double netWorth = state.getAssets().getTotal(state.getStockPrices());
 
-            if ((age >= 22 && (happiness <= 0 || netWorth <= 0))) {
+            if ((age >= 22 && (happiness < 0 || netWorth < 0))) {
                 gameDecisionController.switchToGameOver(
                         state.getUsername(),
                         age,

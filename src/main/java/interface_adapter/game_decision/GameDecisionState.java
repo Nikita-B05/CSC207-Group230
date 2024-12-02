@@ -22,7 +22,6 @@ public class GameDecisionState {
     private double salary;
     private Map<String, Double> stockPrices;
 
-
     public String getDecisionError() {
         return decisionError;
     }
