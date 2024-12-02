@@ -181,6 +181,12 @@ public class MongoDBUserDataAccessObject implements
     }
 
     @Override
+    public void incrementAge() {
+        User user = getCurrentUser();
+        updateUser(user, AGE, user.getAge() + 1);
+    }
+
+    @Override
     public void updateDecision(User user) {
         updateUser(user, DECISIONS, user.getDecisions());
     }
@@ -198,6 +204,19 @@ public class MongoDBUserDataAccessObject implements
     @Override
     public void updateSalary(User user) {
         updateUser(user, SALARY, user.getSalary());
+    }
+
+    @Override
+    public void addSalary() {
+        User user = getCurrentUser();
+        Assets assets = user.getAssets();
+        Assets newAssets = new Assets(
+                assets.getHome(),
+                assets.getStocks(),
+                assets.getCash() + user.getSalary(),
+                assets.getCar()
+        );
+        updateUser(user, ASSETS, newAssets);
     }
 
     @Override

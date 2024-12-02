@@ -1,6 +1,7 @@
 package interface_adapter.asset_manager;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.game_decision.GameDecisionViewModel;
 import interface_adapter.manage_home.ManageHomeState;
 import interface_adapter.manage_home.ManageHomeViewModel;
 import interface_adapter.manage_stock.ManageStockState;
@@ -14,19 +15,20 @@ public class AssetManagerPresenter implements ChooseAssetOutputBoundary {
     private final ViewManagerModel viewManagerModel;
     private final ManageHomeViewModel manageHomeViewModel;
     private final ManageStockViewModel manageStockViewModel;
-//    private final GameDecisionViewModel gameDecisionViewModel;
+    private final GameDecisionViewModel gameDecisionViewModel;
 
     public AssetManagerPresenter(
             AssetManagerViewModel assetManagerViewModel,
             ViewManagerModel viewManagerModel,
             ManageHomeViewModel manageHomeViewModel,
-            ManageStockViewModel manageStockViewModel
-//            GameDecisionViewModel
+            ManageStockViewModel manageStockViewModel,
+            GameDecisionViewModel gameDecisionViewModel
     ) {
         this.assetManagerViewModel = assetManagerViewModel;
         this.viewManagerModel = viewManagerModel;
         this.manageHomeViewModel = manageHomeViewModel;
         this.manageStockViewModel = manageStockViewModel;
+        this.gameDecisionViewModel = gameDecisionViewModel;
     }
 
     @Override
@@ -52,6 +54,7 @@ public class AssetManagerPresenter implements ChooseAssetOutputBoundary {
         state.setStockNames(chooseAssetOutputData.getStockNames());
         state.setCode(chooseAssetOutputData.getNameToCode().get(chooseAssetOutputData.getStockNames()[0]));
         state.setCash(chooseAssetOutputData.getCash());
+        state.setQuantity("");
         manageStockViewModel.setState(state);
         manageStockViewModel.firePropertyChanged();
 
@@ -61,6 +64,17 @@ public class AssetManagerPresenter implements ChooseAssetOutputBoundary {
 
     @Override
     public void switchToGameDecisionView(ChooseAssetOutputData chooseAssetOutputData) {
-        // TODO
+        gameDecisionViewModel.getState().setAssets(chooseAssetOutputData.getAssets());
+        gameDecisionViewModel.getState().setAge(chooseAssetOutputData.getAge());
+        gameDecisionViewModel.getState().setAvatar(chooseAssetOutputData.getAvatar());
+        gameDecisionViewModel.getState().setCharacterName(chooseAssetOutputData.getCharacterName());
+        gameDecisionViewModel.getState().setQuestion(chooseAssetOutputData.getQuestion());
+        gameDecisionViewModel.getState().setDarkModeEnabled(chooseAssetOutputData.isDarkMode());
+        gameDecisionViewModel.getState().setStockPrices(chooseAssetOutputData.getStockPrices());
+        gameDecisionViewModel.getState().setSalary(chooseAssetOutputData.getSalary());
+        gameDecisionViewModel.getState().setHappiness(chooseAssetOutputData.getHappiness());
+        gameDecisionViewModel.firePropertyChanged();
+        viewManagerModel.setState(gameDecisionViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 }

@@ -20,6 +20,6 @@ public class AssetManagerController {
     }
 
     public void switchToGameDecisionView() {
-        // TODO
+        chooseAssetInteractor.switchToGameDecisionView();
     }
 }

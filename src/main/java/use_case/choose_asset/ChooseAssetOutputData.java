@@ -1,5 +1,9 @@
 package use_case.choose_asset;
 
+import entity.Assets;
+import entity.Avatar;
+import entity.Question;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,11 +11,20 @@ public class ChooseAssetOutputData {
 
     private final String username;
     private final boolean isDarkMode;
-    private final double cash;
-    private final double home;
-    private final String[] stockNames;
-    private final Map<String, String> nameToCode;
-    private final Map<String, Double> codeToPrice;
+    private double cash;
+    private double home;
+    private String[] stockNames;
+    private Map<String, String> nameToCode;
+    private Map<String, Double> codeToPrice;
+
+    private Assets assets;
+    private int age;
+    private String characterName;
+    private Avatar avatar;
+    private Question question;
+    private Map<String, Double> stockPrices;
+    private double salary;
+    private int happiness;
 
     public ChooseAssetOutputData(String username) {
         this.username = username;
@@ -50,6 +63,30 @@ public class ChooseAssetOutputData {
         this.codeToPrice = codeToPrice;
     }
 
+    public ChooseAssetOutputData(
+            String username,
+            boolean isDarkMode,
+            Assets assets,
+            int age,
+            String characterName,
+            Avatar avatar,
+            Question question,
+            Map<String, Double> stockPrices,
+            double salary,
+            int happiness
+    ) {
+        this.username = username;
+        this.isDarkMode = isDarkMode;
+        this.assets = assets;
+        this.age = age;
+        this.characterName = characterName;
+        this.avatar = avatar;
+        this.question = question;
+        this.stockPrices = stockPrices;
+        this.salary = salary;
+        this.happiness = happiness;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -76,5 +113,37 @@ public class ChooseAssetOutputData {
 
     public Map<String, Double> getCodeToPrice() {
         return codeToPrice;
+    }
+
+    public Assets getAssets() {
+        return assets;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public String getCharacterName() {
+        return characterName;
+    }
+
+    public Avatar getAvatar() {
+        return avatar;
+    }
+
+    public Question getQuestion() {
+        return question;
+    }
+
+    public Map<String, Double> getStockPrices() {
+        return stockPrices;
+    }
+
+    public double getSalary() {
+        return salary;
+    }
+
+    public int getHappiness() {
+        return happiness;
     }
 }

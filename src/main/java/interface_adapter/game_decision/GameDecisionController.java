@@ -14,17 +14,7 @@ public class GameDecisionController {
         this.gameDecisionInteractor = gameDecisionInteractor;
     }
 
-    public void pickDecision(String username, int age, String characterName, boolean darkMode, Question question, Assets assets, Avatar avatar, Decision decision, int happiness, double salary) {
-        final GameDecisionInputData inputData = new GameDecisionInputData(username, age, characterName, darkMode, question, assets, avatar, decision, happiness, salary);
-        gameDecisionInteractor.pickDecision(inputData);
-    }
-
-    public void switchToHomepage(String username, int age, String characterName, boolean darkMode, Question question, Assets assets, Avatar avatar, Decision decision, int happiness, double salary) {
-        final GameDecisionInputData inputData = new GameDecisionInputData(username, age, characterName, darkMode, question, assets, avatar, decision, happiness, salary);
-        gameDecisionInteractor.switchToHomeview(inputData);
-    }
-
-    public void switchToAssetsManager(
+    public void pickDecision(
             String username,
             int age,
             String characterName,
@@ -39,7 +29,13 @@ public class GameDecisionController {
         final GameDecisionInputData inputData =
                 new GameDecisionInputData(
                         username, age, characterName, darkMode, question, assets, avatar, decision, happiness, salary);
+        gameDecisionInteractor.pickDecision(inputData);
         gameDecisionInteractor.switchToAssetsManager(inputData);
+    }
+
+    public void switchToHomepage(String username, int age, String characterName, boolean darkMode, Question question, Assets assets, Avatar avatar, Decision decision, int happiness, double salary) {
+        final GameDecisionInputData inputData = new GameDecisionInputData(username, age, characterName, darkMode, question, assets, avatar, decision, happiness, salary);
+        gameDecisionInteractor.switchToHomeview(inputData);
     }
 
     public void switchToGameOver(String username, int age, String characterName, boolean darkMode, Question question, Assets assets, Avatar avatar, Decision decision, int happiness, double salary) {

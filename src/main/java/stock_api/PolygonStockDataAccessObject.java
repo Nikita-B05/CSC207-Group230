@@ -63,8 +63,10 @@ public class PolygonStockDataAccessObject implements
         for (String code : stockCodes) {
             try {
                 codeToPrice.put(code, getPrice(code));
-            } catch (Exception e) {
-                throw new RuntimeException("Could not generate code to price map: ", e);
+            }
+            catch (Exception e) {
+                // throw new RuntimeException("Could not generate code to price map: ", e);
+                // Fail silently
             }
         }
     }
@@ -131,7 +133,7 @@ public class PolygonStockDataAccessObject implements
         LocalDate currentDate = LocalDate.parse("2024-10-01", formatter);
 
         // Add a certain number of days
-        int daysToAdd = age - 18;
+        int daysToAdd = age - 20;
         LocalDate newDate = currentDate.plusDays(daysToAdd);
 
         String formattedDate = newDate.format(formatter);

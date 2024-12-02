@@ -72,7 +72,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
         confirmButton = new JButton("Submit");
         confirmButton.addActionListener(this);
 
-        cancelButton = new JButton("Cancel");
+        cancelButton = new JButton("Menu");
         cancelButton.addActionListener(this);
     }
 

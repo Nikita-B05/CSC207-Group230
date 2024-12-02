@@ -400,7 +400,12 @@ public class AppBuilder {
      */
     public AppBuilder addChooseAssetUseCase() {
         final ChooseAssetOutputBoundary chooseAssetOutputBoundary = new AssetManagerPresenter(
-                assetManagerViewModel, viewManagerModel, manageHomeViewModel, manageStockViewModel);
+                assetManagerViewModel,
+                viewManagerModel,
+                manageHomeViewModel,
+                manageStockViewModel,
+                gameDecisionViewModel
+        );
         final ChooseAssetInputBoundary chooseAssetInteractor = new ChooseAssetInteractor(
                 userDataAccessObject, chooseAssetOutputBoundary, stockDataAccessObject);
         final AssetManagerController assetManagerController = new AssetManagerController(chooseAssetInteractor);

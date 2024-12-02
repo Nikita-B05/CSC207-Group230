@@ -10,10 +10,11 @@ public class ChooseAssetInteractor implements ChooseAssetInputBoundary {
     private final ChooseAssetOutputBoundary chooseAssetPresenter;
     private final ChooseAssetStockDataAccessInterface stockDataAccessObject;
 
-    public ChooseAssetInteractor(ChooseAssetDataAccessInterface userDataAccessInterface,
-                                 ChooseAssetOutputBoundary chooseAssetOutputBoundary,
-                                 ChooseAssetStockDataAccessInterface stockDataAccessInterface)
-    {
+    public ChooseAssetInteractor(
+            ChooseAssetDataAccessInterface userDataAccessInterface,
+            ChooseAssetOutputBoundary chooseAssetOutputBoundary,
+            ChooseAssetStockDataAccessInterface stockDataAccessInterface
+    ) {
         this.userDataAccessObject = userDataAccessInterface;
         this.chooseAssetPresenter = chooseAssetOutputBoundary;
         this.stockDataAccessObject = stockDataAccessInterface;
@@ -34,8 +35,7 @@ public class ChooseAssetInteractor implements ChooseAssetInputBoundary {
     @Override
     public void switchToManageStockView() {
         User user = userDataAccessObject.getCurrentUser();
-        // TODO
-        stockDataAccessObject.setDate(10);
+        stockDataAccessObject.setDate(user.getAge());
         ChooseAssetOutputData outputData = new ChooseAssetOutputData(
                 user.getUsername(),
                 user.isDarkMode(),
@@ -50,7 +50,19 @@ public class ChooseAssetInteractor implements ChooseAssetInputBoundary {
     @Override
     public void switchToGameDecisionView() {
         User user = userDataAccessObject.getCurrentUser();
-        chooseAssetPresenter.switchToGameDecisionView(new ChooseAssetOutputData(user.getUsername()));
+        ChooseAssetOutputData outputData = new ChooseAssetOutputData(
+                user.getUsername(),
+                user.isDarkMode(),
+                user.getAssets(),
+                user.getAge(),
+                user.getCharacterName(),
+                user.getAvatar(),
+                user.getQuestion().get(user.getAge()),
+                stockDataAccessObject.getCodeToPrice(),
+                user.getSalary(),
+                user.getHappiness()
+        );
+        chooseAssetPresenter.switchToGameDecisionView(outputData);
 
     }
 }
