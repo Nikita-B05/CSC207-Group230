@@ -246,11 +246,6 @@ public class EntityConverter implements EntityConverterInterface {
         if (object == null) {
             return null;
         }
-
-        final String timeStampString = object.getString(TIMESTAMP);
-        if (timeStampString == null) {
-            throw new RuntimeException("JSONDecisionObject is not null and has null timestamp: " + object.toString());
-        }
         final int age = object.optInt(AGE, 22);
         final String decisionText = object.getString(DECISION_TEXT);
         final String response = object.optString(DECISION_RESPONSE, "");

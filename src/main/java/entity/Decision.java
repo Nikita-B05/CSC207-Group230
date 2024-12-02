@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Decision {
@@ -25,13 +27,28 @@ public class Decision {
         int age = (int) json.get("age");
         String decisionText = (json.get("decisionText") != null) ? (String) json.get("decisionText") : "No decision";
         String response = (String) json.get("response");
-        double netWorthChange = ((Number) json.get("netWorthChange")).doubleValue();
+        double netWorthChange = (Integer) json.get("cashChange");
         int happinessChange = ((Number) json.get("happinessChange")).intValue();
         double salaryChange = ((Number) json.get("salaryChange")).doubleValue();
 
         return new Decision(age, decisionText, response, happinessChange, happinessChange, salaryChange);
     }
 
+    public static Map<String, Double> calculateTotalStats(List<Decision> decisions) {
+        double totalNetWorthChange = 0;
+        int totalHappinessChange = 0;
+
+        for (Decision decision : decisions) {
+            totalNetWorthChange += decision.getNetWorthChange();
+            totalHappinessChange += decision.getHappinessChange();
+        }
+
+        Map<String, Double> totals = new HashMap<>();
+        totals.put("totalNetWorth", totalNetWorthChange);
+        totals.put("totalHappiness", (double) totalHappinessChange);
+
+        return totals;
+    }
 
     public int getAge() { return age; }
     public String getDecisionText() { return decisionText; }

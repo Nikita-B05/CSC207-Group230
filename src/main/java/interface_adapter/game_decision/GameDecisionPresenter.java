@@ -50,7 +50,7 @@ public class GameDecisionPresenter implements GameDecisionOutputBoundary {
 // username, name, avatar, cash, happiness
     @Override
     public void prepareGameOverView(GameDecisionOutputData outputData) {
-//        gameOverViewModel.getState().setDarkMode(outputData.isDarkMode());
+//        gameOverViewModel.getState().setDarkModeEnabled(outputData.isDarkModeEnabled());
 //        gameOverViewModel.getState().setName(outputData.getName());
 //        gameOverViewModel.getState().setUsername(outputData.getUsername());
 //        gameOverViewModel.getState().setAvatar(outputData.getAvatar());
@@ -63,7 +63,7 @@ public class GameDecisionPresenter implements GameDecisionOutputBoundary {
 
     @Override
     public void prepareGameSuccessView(GameDecisionOutputData outputData) {
-//        gameSuccessViewModel.getState().setDarkMode(outputData.isDarkMode());
+//        gameSuccessViewModel.getState().setDarkModeEnabled(outputData.isDarkModeEnabled());
 //        gameSuccessViewModel.getState().setName(outputData.getName());
 //        gameSuccessViewModel.getState().setUsername(outputData.getUsername());
 //        gameSuccessViewModel.getState().setAvatar(outputData.getAvatar());

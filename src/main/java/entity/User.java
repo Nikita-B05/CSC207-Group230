@@ -137,11 +137,22 @@ public interface User {
      * @param happiness the amount to change user's happiness by.
      */
     void changeHappiness(int happiness);
-    public void changeHappiness(int happiness);
 
     public void addDecision(Decision decision);
 
     public void modifySalary(double modification);
 
     public Map<Integer, Question> getQuestion();
+
+    /**
+     * Set the user's new salary.
+     * @param salary the user's new salary.
+     */
+    public void setSalary(double salary);
+
+    /**
+     * Set the user's new happiness.
+     * @param happiness the user's new happiness.
+     */
+    public void setHappiness(int happiness);
 }

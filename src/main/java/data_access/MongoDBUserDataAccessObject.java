@@ -14,6 +14,8 @@ import org.bson.Document;
 
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.choose_asset.ChooseAssetDataAccessInterface;
+import use_case.dark_mode.DarkModeUserDataAccessInterface;
+import use_case.decision_log.DecisionLogUserDataAccessInterface;
 import use_case.game_decision.GameDecisionUserDataAccessInterface;
 import use_case.homepage.HomepageUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;

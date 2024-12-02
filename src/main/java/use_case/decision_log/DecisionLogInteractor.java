@@ -23,15 +23,17 @@ public class DecisionLogInteractor implements DecisionLogInputBoundary {
         this.decisionLogPresenter = decisionLogOutputBoundary;
     }
 
-
     @Override
     public void switchToHomepageView() {
         User user = userDataAccessObject.getCurrentUser();
+        List<Decision> decisions = user.getDecisions();
+        
         DecisionLogOutputData outputData = new DecisionLogOutputData(
-                user.getUsername(),
-                user.getDecisions(),
-                user.isDarkMode()
+            user.getUsername(),
+            decisions,
+            user.isDarkMode()
         );
+        
         decisionLogPresenter.switchToHomepageView(outputData);
     }
 }

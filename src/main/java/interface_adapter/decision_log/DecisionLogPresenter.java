@@ -25,26 +25,19 @@ public class DecisionLogPresenter implements DecisionLogOutputBoundary {
         this.homepageViewModel = homepageViewModel;
     }
 
-    public void switchToHomepageView(GameDecisionOutputData outputData) {
-        homepageViewModel.getState().setUsername(outputData.getUsername());
-        homepageViewModel.getState().setDarkMode(outputData.isDarkMode());
-        homepageViewModel.getState().setAvatar(outputData.getAvatar());
-        homepageViewModel.getState().setName(outputData.getName());
-        homepageViewModel.firePropertyChanged();
-
-        viewManagerModel.setState(homepageViewModel.getViewName());
-        viewManagerModel.firePropertyChanged();
-
-    }
-
     @Override
     public void switchToHomepageView(DecisionLogOutputData decisionLogOutputData) {
-        HomepageState state = homepageViewModel.getState();
+        // Update the decision log view model first
+        DecisionLogState state = decisionLogViewModel.getState();
         state.setUsername(decisionLogOutputData.getUsername());
-        state.setDarkMode(decisionLogOutputData.isDarkMode());
-        state.setAvatar(decisionLogOutputData.getAvatar());
-        state.setName(decisionLogOutputData.getName());
-        homepageViewModel.setState(state);
+        state.setDecisions(decisionLogOutputData.getDecisions());
+        state.setDarkModeEnabled(decisionLogOutputData.isDarkMode());
+        decisionLogViewModel.firePropertyChanged();
+
+        // Then handle the homepage transition
+        HomepageState homepageState = homepageViewModel.getState();
+        homepageState.setUsername(decisionLogOutputData.getUsername());
+        homepageState.setDarkMode(decisionLogOutputData.isDarkMode());
         homepageViewModel.firePropertyChanged();
 
         viewManagerModel.setState(homepageViewModel.getViewName());

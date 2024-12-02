@@ -231,6 +231,11 @@ public class CommonUser implements User {
     }
 
     @Override
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
+    @Override
     public double getNetWorth(Map<String, Double> stockPrices) {
         if (assets == null && liabilities == null) {
             return 0;

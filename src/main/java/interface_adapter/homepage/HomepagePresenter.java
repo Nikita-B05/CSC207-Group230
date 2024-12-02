@@ -72,8 +72,9 @@ public class HomepagePresenter implements HomepageOutputBoundary {
         decisionLogViewModel.getState().setUsername(homepageOutputData.getUsername());
         decisionLogViewModel.getState().setDarkModeEnabled(homepageOutputData.isDarkMode());
         decisionLogViewModel.getState().setDecisions(homepageOutputData.getDecisions());
-        viewManagerModel.setState(decisionLogViewModel.getViewName()); // Use the instance's getViewName method
-        homepageViewModel.firePropertyChanged();
+        decisionLogViewModel.firePropertyChanged();
+        viewManagerModel.setState(decisionLogViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 
     @Override

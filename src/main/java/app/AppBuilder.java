@@ -204,7 +204,7 @@ public class AppBuilder {
      */
     public AppBuilder addDecisionLogView() {
         decisionLogViewModel = new DecisionLogViewModel();
-        decisionLogView = new DecisionLogView(decisionLogViewModel, userDataAccessObject);
+        decisionLogView = new DecisionLogView(decisionLogViewModel);
         cardPanel.add(decisionLogView, decisionLogView.getViewName());
         return this;
     }
