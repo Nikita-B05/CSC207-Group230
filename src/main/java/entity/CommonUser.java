@@ -1,8 +1,11 @@
 package entity;
 
 import question_reader.QuestionReader;
+
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -170,6 +173,10 @@ public class CommonUser implements User {
         this.decisions.add(decision);
     }
 
+    public void setDecisions(ArrayList<Decision> decisions) {
+        this.decisions = decisions;
+    }
+
     public void setCharacterName(String characterName) {
         this.characterName = characterName;
     }
@@ -182,6 +189,10 @@ public class CommonUser implements User {
         this.happiness = happiness;
     }
 
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
+
     public void setSalary(int salary) {
         this.salary = salary;
     }
@@ -192,10 +203,6 @@ public class CommonUser implements User {
 
     public void setLiabilities(Liabilities liabilities) {
         this.liabilities = liabilities;
-    }
-
-    public void setDecisions(ArrayList<Decision> decisions) {
-        this.decisions = decisions;
     }
 
     public void buyStock(String stockCode, int quantity, double buyPrice) {
@@ -245,4 +252,5 @@ public class CommonUser implements User {
             return assets.getTotal(stockPrices) - liabilities.getTotal();
         }
     }
+
 }

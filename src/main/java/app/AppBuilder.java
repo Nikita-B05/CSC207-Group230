@@ -22,6 +22,9 @@ import interface_adapter.dark_mode.DarkModeController;
 import interface_adapter.game_decision.GameDecisionController;
 import interface_adapter.game_decision.GameDecisionPresenter;
 import interface_adapter.game_decision.GameDecisionViewModel;
+import interface_adapter.game_over.GameOverController;
+import interface_adapter.game_over.GameOverPresenter;
+import interface_adapter.game_over.GameOverViewModel;
 import interface_adapter.homepage.HomepageController;
 import interface_adapter.homepage.HomepagePresenter;
 import interface_adapter.homepage.HomepageViewModel;
@@ -58,6 +61,9 @@ import use_case.choose_asset.ChooseAssetOutputBoundary;
 import use_case.game_decision.GameDecisionInputBoundary;
 import use_case.game_decision.GameDecisionInteractor;
 import use_case.game_decision.GameDecisionOutputBoundary;
+import use_case.game_over.GameOverInputBoundary;
+import use_case.game_over.GameOverInteractor;
+import use_case.game_over.GameOverOutputBoundary;
 import use_case.homepage.HomepageInputBoundary;
 import use_case.homepage.HomepageInteractor;
 import use_case.homepage.HomepageOutputBoundary;
@@ -133,6 +139,9 @@ public class AppBuilder {
     private GameDecisionViewModel gameDecisionViewModel;
     private GameDecisionView gameDecisionView;
 
+    private GameOverViewModel gameOverViewModel;
+    private GameOverView gameOverView;
+
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
     }
@@ -178,6 +187,13 @@ public class AppBuilder {
         chooseAvatarViewModel = new ChooseAvatarViewModel();
         chooseAvatarView = new ChooseAvatarView(chooseAvatarViewModel);
         cardPanel.add(chooseAvatarView, chooseAvatarView.getViewName());
+        return this;
+    }
+
+    public AppBuilder addGameOverView() {
+        gameOverViewModel = new GameOverViewModel();
+        gameOverView = new GameOverView(gameOverViewModel);
+        cardPanel.add(gameOverView, gameOverView.getViewName());
         return this;
     }
 
@@ -345,13 +361,30 @@ public class AppBuilder {
                         gameDecisionViewModel,
                         viewManagerModel,
                         homepageViewModel,
-                        assetManagerViewModel
+                        assetManagerViewModel,
+                        gameOverViewModel
                 );
         final GameDecisionInputBoundary gameDecisionInteractor =
                 new GameDecisionInteractor(userDataAccessObject, gameDecisionOutputBoundary);
         final GameDecisionController gameDecisionController =
                 new GameDecisionController(gameDecisionInteractor);
         gameDecisionView.setController(gameDecisionController);
+        return this;
+    }
+
+    /**
+     * Adds the Game Over Use Case to the application.
+     * @return this builder
+     */
+
+    public AppBuilder addGameOverUseCase() {
+        final GameOverOutputBoundary gameOverOutputBoundary =
+                new GameOverPresenter(gameOverViewModel, viewManagerModel, homepageViewModel);
+        final GameOverInputBoundary gameOverInteractor =
+                new GameOverInteractor(userDataAccessObject, gameOverOutputBoundary);
+        final GameOverController gameOverController =
+                new GameOverController(gameOverInteractor);
+        gameOverView.setController(gameOverController);
         return this;
     }
 
