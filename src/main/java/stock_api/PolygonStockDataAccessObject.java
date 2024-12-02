@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import use_case.choose_asset.ChooseAssetStockDataAccessInterface;
 import use_case.manage_stock.ManageStockStockAccessInterface;
+import use_case.homepage.HomepageStockAccessInterface;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,9 +17,8 @@ import java.util.Properties;
 
 public class PolygonStockDataAccessObject implements
         ChooseAssetStockDataAccessInterface,
-        ManageStockStockAccessInterface
-{
-
+        HomepageStockAccessInterface,
+        ManageStockStockAccessInterface {
     private static final String[] stockCodes = {"AAPL", "NVDA"};
     private static final String[] companyNames = {"Apple", "Nvidia"};
 
@@ -77,7 +77,6 @@ public class PolygonStockDataAccessObject implements
         return companyNames;
     }
 
-//    @Override
     public Map<String, String> getCodeToName() {
         return codeToCompanyMap;
     }
@@ -94,6 +93,11 @@ public class PolygonStockDataAccessObject implements
 
     @Override
     public Map<String, Double> getCodeToPrice() {
+        return codeToPrice;
+    }
+
+    @Override
+    public Map<String, Double> getStockPrices() {
         return codeToPrice;
     }
 

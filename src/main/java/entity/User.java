@@ -1,7 +1,7 @@
 package entity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The representation of a user in our program.
@@ -48,7 +48,7 @@ public interface User {
      * Returns the salary of the user.
      * @return the salary of the user.
      */
-    public int getSalary();
+    double getSalary();
 
     /**
      * Returns the assets of the user.
@@ -73,22 +73,22 @@ public interface User {
      * @param stockPrices is the current market prices of stocks.
      * @return the net worth of the user.
      */
-    double getNetWorth(HashMap<String, Double> stockPrices);
+    double getNetWorth(Map<String, Double> stockPrices);
 
     /**
-     * Sets the user's username
+     * Sets the user's username.
      * @param username new username
      */
     void setUsername(String username);
 
     /**
-     * Sets the user's password
+     * Sets the user's password.
      * @param password new password
      */
     void setPassword(String password);
 
     /**
-     * Sets the user's darkMode
+     * Sets the user's darkMode.
      * @param isDarkMode new darkMode
      */
     void setDarkMode(boolean isDarkMode);
@@ -106,32 +106,68 @@ public interface User {
     void setAvatar(Avatar avatar);
 
     /**
-     * Sets the user's happiness
+     * Sets the user's happiness.
      * @param happiness new happiness
      */
     void setHappiness(int happiness);
 
     /**
-     * Sets the user's salary
+     * Sets the user's salary.
      * @param salary new salary
      */
     void setSalary(int salary);
 
     /**
-     * Sets the user's assets
+     * Sets the user's assets.
      * @param assets new assets
      */
     void setAssets(Assets assets);
 
     /**
-     * Sets the user's liabilities
+     * Sets the user's liabilities.
      * @param liabilities new liabilities
      */
     void setLiabilities(Liabilities liabilities);
 
     /**
-     * Sets the user's decisions
+     * Sets the user's decisions.
      * @param decisions new decisions
      */
     void setDecisions(ArrayList<Decision> decisions);
+
+    /**
+     * Returns the age of the user.
+     * @return the age of the user.
+     */
+    int getAge();
+
+    /**
+     * Sets the user's age.
+     * @param age new age
+     */
+    void setAge(int age);
+
+    /**
+     * Changes the user's happiness by happiness.
+     * @param happiness the amount to change user's happiness by.
+     */
+    void changeHappiness(double happiness);
+
+    /**
+     * Adds a decision to the user.
+     * @param decision the decision to be added.
+     */
+    void addDecision(Decision decision);
+
+    /**
+     * Changes the user's salary by modification.
+     * @param modification the amount to change user's salary by.
+     */
+    void modifySalary(double modification);
+
+    /**
+     * Returns the map of age to question.
+     * @return the map of age to question.
+     */
+    Map<Integer, Question> getQuestion();
 }

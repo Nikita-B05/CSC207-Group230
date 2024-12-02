@@ -9,55 +9,88 @@ public class HomepageInteractor implements HomepageInputBoundary  {
 
     private final HomepageUserDataAccessInterface userDataAccessObject;
     private final HomepageOutputBoundary homepagePresenter;
+    private final HomepageStockAccessInterface stockAccessObject;
 
     public HomepageInteractor(
             HomepageUserDataAccessInterface homepageUserDataAccessInterface,
-            HomepageOutputBoundary homepageOutputBoundary) {
+            HomepageOutputBoundary homepageOutputBoundary,
+            HomepageStockAccessInterface homepageStockAccessInterface) {
         this.userDataAccessObject = homepageUserDataAccessInterface;
         this.homepagePresenter = homepageOutputBoundary;
+        this.stockAccessObject = homepageStockAccessInterface;
     }
 
     @Override
-    public void switchToChooseAvatarView() {
-        final User user = userDataAccessObject.getCurrentUser();
+    public void switchToChooseAvatarView(HomepageInputData homepageInputData) {
+        final String username = homepageInputData.getUsername();
+        final User user = userDataAccessObject.get(username);
         homepagePresenter.switchToChooseAvatarView(new HomepageOutputData(
-                user.getUsername(),
+                username,
+                user.getCharacterName(),
                 user.getAvatar(),
                 user.isDarkMode(),
-                user.getDecisions()
+                user.getDecisions(),
+                user.getAge(),
+                user.getQuestion().get(user.getAge()),
+                user.getHappiness(),
+                user.getSalary(),
+                user.getAssets()
         ));
     }
 
     @Override
-    public void switchToPlayGameView() {
-        final User user = userDataAccessObject.getCurrentUser();
-        homepagePresenter.switchToPlayGameView(new HomepageOutputData(
-                user.getUsername(),
+    public void switchToPlayGameView(HomepageInputData homepageInputData) {
+        final String username = homepageInputData.getUsername();
+        final User user = userDataAccessObject.get(username);
+        final HomepageOutputData outputData = new HomepageOutputData(
+                username,
+                user.getCharacterName(),
                 user.getAvatar(),
                 user.isDarkMode(),
-                user.getDecisions()
-        ));
+                user.getDecisions(),
+                user.getAge(),
+                user.getQuestion().get(user.getAge()),
+                user.getHappiness(),
+                user.getSalary(),
+                user.getAssets()
+        );
+        outputData.setStockPrices(stockAccessObject.getStockPrices());
+        homepagePresenter.switchToPlayGameView(outputData);
     }
 
     @Override
-    public void switchToDecisionLogView() {
-        final User user = userDataAccessObject.getCurrentUser();
+    public void switchToDecisionLogView(HomepageInputData homepageInputData) {
+        final String username = homepageInputData.getUsername();
+        final User user = userDataAccessObject.get(username);
         homepagePresenter.switchToDecisionLogView(new HomepageOutputData(
-                user.getUsername(),
+                username,
+                user.getCharacterName(),
                 user.getAvatar(),
                 user.isDarkMode(),
-                user.getDecisions()
+                user.getDecisions(),
+                user.getAge(),
+                user.getQuestion().get(user.getAge()),
+                user.getHappiness(),
+                user.getSalary(),
+                user.getAssets()
         ));
     }
 
     @Override
-    public void switchToProfileSettingsView() {
-        final User user = userDataAccessObject.getCurrentUser();
+    public void switchToProfileSettingsView(HomepageInputData homepageInputData) {
+        final String username = homepageInputData.getUsername();
+        final User user = userDataAccessObject.get(username);
         homepagePresenter.switchToSettingsView(new HomepageOutputData(
-                user.getUsername(),
+                username,
+                user.getCharacterName(),
                 user.getAvatar(),
                 user.isDarkMode(),
-                user.getDecisions()
+                user.getDecisions(),
+                user.getAge(),
+                user.getQuestion().get(user.getAge()),
+                user.getHappiness(),
+                user.getSalary(),
+                user.getAssets()
         ));
     }
 }

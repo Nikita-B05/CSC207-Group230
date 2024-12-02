@@ -1,9 +1,6 @@
 package entity;
 
-import org.bson.io.BsonOutput;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 public class Assets {
@@ -88,7 +85,7 @@ public class Assets {
         return totalQuantity >= quantity;
     }
 
-    public double getTotal(HashMap<String, Double> stockPrices) {
+    public double getTotal(Map<String, Double> stockPrices) {
         double total = 0;
         total += home;
         for (Stock stock : stocks) {
@@ -97,5 +94,9 @@ public class Assets {
         total += cash;
         total += car;
         return total;
+    }
+
+    public void changeCash(double cashChange) {
+        this.cash += cashChange;
     }
 }

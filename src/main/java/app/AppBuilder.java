@@ -19,6 +19,9 @@ import interface_adapter.choose_avatar.ChooseAvatarController;
 import interface_adapter.choose_avatar.ChooseAvatarPresenter;
 import interface_adapter.choose_avatar.ChooseAvatarViewModel;
 import interface_adapter.dark_mode.DarkModeController;
+import interface_adapter.game_decision.GameDecisionController;
+import interface_adapter.game_decision.GameDecisionPresenter;
+import interface_adapter.game_decision.GameDecisionViewModel;
 import interface_adapter.homepage.HomepageController;
 import interface_adapter.homepage.HomepagePresenter;
 import interface_adapter.homepage.HomepageViewModel;
@@ -43,7 +46,6 @@ import interface_adapter.settings.SettingsController;
 import interface_adapter.settings.SettingsPresenter;
 import interface_adapter.settings.SettingsViewModel;
 import stock_api.PolygonStockDataAccessObject;
-import stock_api.VantageStockDataAccessObject;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
@@ -53,6 +55,9 @@ import use_case.choose_avatar.ChooseAvatarOutputBoundary;
 import use_case.choose_asset.ChooseAssetInputBoundary;
 import use_case.choose_asset.ChooseAssetInteractor;
 import use_case.choose_asset.ChooseAssetOutputBoundary;
+import use_case.game_decision.GameDecisionInputBoundary;
+import use_case.game_decision.GameDecisionInteractor;
+import use_case.game_decision.GameDecisionOutputBoundary;
 import use_case.homepage.HomepageInputBoundary;
 import use_case.homepage.HomepageInteractor;
 import use_case.homepage.HomepageOutputBoundary;
@@ -125,6 +130,9 @@ public class AppBuilder {
     private InputNameViewModel inputNameViewModel;
     private InputNameView inputNameView;
 
+    private GameDecisionViewModel gameDecisionViewModel;
+    private GameDecisionView gameDecisionView;
+
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
     }
@@ -170,6 +178,17 @@ public class AppBuilder {
         chooseAvatarViewModel = new ChooseAvatarViewModel();
         chooseAvatarView = new ChooseAvatarView(chooseAvatarViewModel);
         cardPanel.add(chooseAvatarView, chooseAvatarView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Game Decision View to the application.
+     * @return this builder
+     */
+    public AppBuilder addGameDecisionView() {
+        gameDecisionViewModel = new GameDecisionViewModel();
+        gameDecisionView = new GameDecisionView(gameDecisionViewModel);
+        cardPanel.add(gameDecisionView, gameDecisionView.getViewName());
         return this;
     }
 
@@ -283,9 +302,9 @@ public class AppBuilder {
     public AppBuilder addHomepageUseCase() {
         // Updated to include ChooseAvatarViewModel in the HomepagePresenter
         final HomepageOutputBoundary homepageOutputBoundary = new HomepagePresenter(
-                viewManagerModel, homepageViewModel, settingsViewModel, chooseAvatarViewModel);
+                viewManagerModel, homepageViewModel, settingsViewModel, chooseAvatarViewModel, gameDecisionViewModel);
         final HomepageInputBoundary homepageInteractor = new HomepageInteractor(
-                userDataAccessObject, homepageOutputBoundary);
+                userDataAccessObject, homepageOutputBoundary, stockDataAccessObject);
 
         final HomepageController homepageController = new HomepageController(homepageInteractor);
         homepageView.setHomepageController(homepageController);
@@ -317,6 +336,18 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the Game Decision Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addGameDecisionUseCase() {
+        final GameDecisionOutputBoundary gameDecisionOutputBoundary = new GameDecisionPresenter(gameDecisionViewModel, viewManagerModel, homepageViewModel);
+        final GameDecisionInputBoundary gameDecisionInteractor = new GameDecisionInteractor(userDataAccessObject, gameDecisionOutputBoundary);
+        final GameDecisionController gameDecisionController = new GameDecisionController(gameDecisionInteractor);
+        gameDecisionView.setController(gameDecisionController);
+        return this;
+    }
+
+    /**
      * Adds the Change Password Use Case to the application.
      * @return this builder
      */
@@ -330,7 +361,6 @@ public class AppBuilder {
         changePasswordView.setChangePasswordController(changePasswordController);
         return this;
     }
-
 
     /**
      * Adds the Logout Use Case to the application.
@@ -349,7 +379,7 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addSettingsUseCase() {
-        final SettingsOutputBoundary settingsOutputBoundary = new SettingsPresenter(settingsViewModel, viewManagerModel, changePasswordViewModel, homepageViewModel);
+        final SettingsOutputBoundary settingsOutputBoundary = new SettingsPresenter(settingsViewModel, viewManagerModel, changePasswordViewModel, homepageViewModel, loginViewModel);
         final SettingsInputBoundary settingsInteractor = new SettingsInteractor(userDataAccessObject, settingsOutputBoundary);
         final SettingsController settingsController = new SettingsController(settingsInteractor);
         settingsView.setSettingsController(settingsController);
@@ -395,19 +425,15 @@ public class AppBuilder {
      * @return the application
      */
     public JFrame build() {
-//        final JFrame application = new JFrame("Application");
-//        application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//        application.add(cardPanel);
-//        viewManagerModel.setState(signupView.getViewName());
-//        viewManagerModel.firePropertyChanged();
         final JFrame application = new JFrame("Application");
         application.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         application.add(cardPanel);
-        viewManagerModel.setState(assetManagerView.getViewName());
-        userDataAccessObject.setCurrentUsername("Paul");
-        userDataAccessObject.updateUserDarkMode(true);
-        userDataAccessObject.updateUserCash(1_000_000);
+        viewManagerModel.setState(signupView.getViewName());
         viewManagerModel.firePropertyChanged();
         return application;
+    }
+
+    public ViewManager getViewManager() {
+        return viewManager;
     }
 }
