@@ -195,7 +195,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
                 return;
             }
 
-            if (age >= 33) {
+            if (age >= 32) {
                 gameDecisionController.switchToGameSuccess(
                         state.getUsername(),
                         age,

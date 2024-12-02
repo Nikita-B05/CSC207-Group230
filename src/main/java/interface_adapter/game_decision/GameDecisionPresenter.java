@@ -5,7 +5,7 @@ import interface_adapter.asset_manager.AssetManagerViewModel;
 import use_case.game_decision.GameDecisionOutputBoundary;
 import use_case.game_decision.GameDecisionOutputData;
 import interface_adapter.homepage.HomepageViewModel;
-//import interface_adapter.asset_manager.AssetManagerViewModel;
+import interface_adapter.game_success.GameSuccessViewModel;
 //import interface_adapter.gameover.GameoverViewModel;
 
 public class GameDecisionPresenter implements GameDecisionOutputBoundary {
@@ -14,6 +14,7 @@ public class GameDecisionPresenter implements GameDecisionOutputBoundary {
     private final ViewManagerModel viewManagerModel;
     private final HomepageViewModel homepageViewModel;
     private final AssetManagerViewModel assetManagerViewModel;
+    private final GameSuccessViewModel gameSuccessViewModel;
 //    private final GameoverViewModel gameoverViewModel;
 
 
@@ -21,12 +22,14 @@ public class GameDecisionPresenter implements GameDecisionOutputBoundary {
             GameDecisionViewModel gameDecisionViewModel,
             ViewManagerModel viewManagerModel,
             HomepageViewModel homepageViewModel,
-            AssetManagerViewModel assetManagerViewModel
+            AssetManagerViewModel assetManagerViewModel,
+            GameSuccessViewModel gameSuccessViewModel
     ) {
         this.gameDecisionViewModel = gameDecisionViewModel;
         this.viewManagerModel = viewManagerModel;
         this.homepageViewModel = homepageViewModel;
         this.assetManagerViewModel = assetManagerViewModel;
+        this.gameSuccessViewModel = gameSuccessViewModel;
 //        this.gameoverViewModel = gameoverViewModel
     }
 
@@ -63,15 +66,16 @@ public class GameDecisionPresenter implements GameDecisionOutputBoundary {
 
     @Override
     public void prepareGameSuccessView(GameDecisionOutputData outputData) {
-//        gameSuccessViewModel.getState().setDarkMode(outputData.isDarkMode());
-//        gameSuccessViewModel.getState().setName(outputData.getName());
-//        gameSuccessViewModel.getState().setUsername(outputData.getUsername());
-//        gameSuccessViewModel.getState().setAvatar(outputData.getAvatar());
-//        gameSuccessViewModel.getState().setAssets(outputData.getAssets());
-//        gameSuccessViewModel.getState().setHappiness(outputData.getHappiness());
-//        gameSuccessViewModel.firePropertyChanged();
-//        viewManagerModel.setState(gameSuccessViewModel.getViewName());
-//        viewManagerModel.firePropertyChanged();
+        System.out.println("game decision presenter!");
+        gameSuccessViewModel.getState().setDarkMode(outputData.isDarkMode());
+        gameSuccessViewModel.getState().setCharacterName(outputData.getName());
+        gameSuccessViewModel.getState().setUsername(outputData.getUsername());
+        gameSuccessViewModel.getState().setAvatar(outputData.getAvatar());
+        gameSuccessViewModel.getState().setNetWorth(outputData.getNetWorth());
+        gameSuccessViewModel.getState().setHappiness(outputData.getHappiness());
+        gameSuccessViewModel.firePropertyChanged();
+        viewManagerModel.setState(gameSuccessViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
 
     }
 

@@ -139,4 +139,10 @@ public interface User {
     public void modifySalary(double modification);
 
     public Map<Integer, Question> getQuestion();
+
+    void setHappiness(int happiness);
+
+    void setSalary(int salary);
+
+    void setAssets(Assets assets);
 }

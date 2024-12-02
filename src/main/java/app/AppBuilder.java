@@ -22,6 +22,9 @@ import interface_adapter.dark_mode.DarkModeController;
 import interface_adapter.game_decision.GameDecisionController;
 import interface_adapter.game_decision.GameDecisionPresenter;
 import interface_adapter.game_decision.GameDecisionViewModel;
+import interface_adapter.game_success.GameSuccesController;
+import interface_adapter.game_success.GameSuccessPresenter;
+import interface_adapter.game_success.GameSuccessViewModel;
 import interface_adapter.homepage.HomepageController;
 import interface_adapter.homepage.HomepagePresenter;
 import interface_adapter.homepage.HomepageViewModel;
@@ -58,6 +61,9 @@ import use_case.choose_asset.ChooseAssetOutputBoundary;
 import use_case.game_decision.GameDecisionInputBoundary;
 import use_case.game_decision.GameDecisionInteractor;
 import use_case.game_decision.GameDecisionOutputBoundary;
+import use_case.game_success.GameSuccessInputBoundary;
+import use_case.game_success.GameSuccessInteractor;
+import use_case.game_success.GameSuccessOutputBoundary;
 import use_case.homepage.HomepageInputBoundary;
 import use_case.homepage.HomepageInteractor;
 import use_case.homepage.HomepageOutputBoundary;
@@ -123,6 +129,8 @@ public class AppBuilder {
     private ManageHomeView manageHomeView;
     private ManageStockViewModel manageStockViewModel;
     private ManageStockView manageStockView;
+    private GameSuccessViewModel gameSuccessViewModel;
+    private GameSuccessView gameSuccessView;
 
     // New Views and ViewModels for Choose Avatar and Input Name
     private ChooseAvatarViewModel chooseAvatarViewModel;
@@ -269,6 +277,17 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the Game Success View to the application.
+     * @return this builder
+     */
+    public AppBuilder addGameSuccessView() {
+        gameSuccessViewModel = new GameSuccessViewModel();
+        gameSuccessView = new GameSuccessView(gameSuccessViewModel);
+        cardPanel.add(gameSuccessView, gameSuccessView.getViewName());
+        return this;
+    }
+
+    /**
      * Adds the Signup Use Case to the application.
      * @return this builder
      */
@@ -345,10 +364,11 @@ public class AppBuilder {
                         gameDecisionViewModel,
                         viewManagerModel,
                         homepageViewModel,
-                        assetManagerViewModel
+                        assetManagerViewModel,
+                        gameSuccessViewModel
                 );
         final GameDecisionInputBoundary gameDecisionInteractor =
-                new GameDecisionInteractor(userDataAccessObject, gameDecisionOutputBoundary);
+                new GameDecisionInteractor(userDataAccessObject, gameDecisionOutputBoundary, stockDataAccessObject);
         final GameDecisionController gameDecisionController =
                 new GameDecisionController(gameDecisionInteractor);
         gameDecisionView.setController(gameDecisionController);
@@ -413,6 +433,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the Manage Home Use Case to the application.
+     * @return this builder
+     */
     public AppBuilder addManageHomeUseCase() {
         final ManageHomeOutputBoundary manageHomeOutputBoundary = new ManageHomePresenter(
                 viewManagerModel, manageHomeViewModel, assetManagerViewModel);
@@ -423,6 +447,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the Manage Stock Use Case to the application.
+     * @return this builder
+     */
     public AppBuilder addManageStockUseCase() {
         final ManageStockOutputBoundary manageStockOutputBoundary = new ManageStockPresenter(
                 viewManagerModel, manageStockViewModel, assetManagerViewModel);
@@ -430,6 +458,23 @@ public class AppBuilder {
                 userDataAccessObject, stockDataAccessObject, manageStockOutputBoundary);
         final ManageStockController manageStockController = new ManageStockController(manageStockInteractor);
         manageStockView.setManageStockController(manageStockController);
+        return this;
+    }
+
+    /**
+     * Adds the Game Success Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addGameSuccessUseCase() {
+        final GameSuccessOutputBoundary gameSuccessOutputBoundary = new GameSuccessPresenter(
+                gameSuccessViewModel,
+                homepageViewModel,
+                viewManagerModel
+        );
+        final GameSuccessInputBoundary gameSuccessInputBoundary = new GameSuccessInteractor(
+                gameSuccessOutputBoundary, userDataAccessObject);
+        final GameSuccesController gameSuccesController = new GameSuccesController(gameSuccessInputBoundary);
+        gameSuccessView.setController(gameSuccesController);
         return this;
     }
 

@@ -16,6 +16,7 @@ import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.choose_asset.ChooseAssetDataAccessInterface;
 import use_case.dark_mode.DarkModeUserDataAccessInterface;
 import use_case.game_decision.GameDecisionUserDataAccessInterface;
+import use_case.game_success.GameSuccessUserDataAccessInterface;
 import use_case.homepage.HomepageUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
@@ -42,7 +43,8 @@ public class MongoDBUserDataAccessObject implements
         ManageHomeDataAccessInterface,
         ManageStockDataAccessInterface,
         DarkModeUserDataAccessInterface,
-        GameDecisionUserDataAccessInterface {
+        GameDecisionUserDataAccessInterface,
+        GameSuccessUserDataAccessInterface {
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
@@ -201,6 +203,11 @@ public class MongoDBUserDataAccessObject implements
     @Override
     public void updateHappiness(User user) {
         updateUser(user, HAPPINESS, user.getHappiness());
+    }
+
+    @Override
+    public void updateAge(User user) {
+        updateUser(user, AGE, user.getAge());
     }
 
     @Override

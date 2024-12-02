@@ -175,28 +175,28 @@
       "decisions": [
         {
         "timestamp": "2024-01-01T00:00:00",
-          "decisionText": "Host an unforgettable party with 50 guests",
+          "decisionText": "Host an unforgettable party with 50 guests (20K)",
           "cashChange": -20000,
           "happinessChange": 20,
           "salaryChange": 0
         },
         {
         "timestamp": "2024-01-01T00:00:00",
-          "decisionText": "Book a nice trip to the Bahamas",
-          "cashChange": -5000,
+          "decisionText": "Book a nice trip to the Bahamas (7.5k)",
+          "cashChange": -7500,
           "happinessChange": 15,
           "salaryChange": 0
         },
         {
         "timestamp": "2024-01-01T00:00:00",
-          "decisionText": "Buy yourself a $5000 high-end watch",
+          "decisionText": "Buy yourself a high-end watch (5K)",
           "cashChange": -5000,
           "happinessChange": 10,
           "salaryChange": 0
         },
         {
         "timestamp": "2024-01-01T00:00:00",
-          "decisionText": "Have a small gathering at home",
+          "decisionText": "Have a small gathering at home ($250)",
           "cashChange": -250,
           "happinessChange": 5,
           "salaryChange": 0
@@ -243,14 +243,14 @@
       "decisions": [
         {
         "timestamp": "2024-01-01T00:00:00",
-          "decisionText": "Buy a private gym membership",
+          "decisionText": "Buy a private gym membership (5K)",
           "cashChange": 0,
           "happinessChange": 20,
           "salaryChange": -5000
         },
         {
         "timestamp": "2024-01-01T00:00:00",
-          "decisionText": "Hire a nutritionist",
+          "decisionText": "Hire a nutritionist (5K)",
           "cashChange": 0,
           "happinessChange": 10,
           "salaryChange": -5000
