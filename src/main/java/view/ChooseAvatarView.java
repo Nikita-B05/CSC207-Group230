@@ -1,5 +1,11 @@
 package view;
 
+import entity.Avatar;
+import interface_adapter.choose_avatar.ChooseAvatarController;
+import interface_adapter.choose_avatar.ChooseAvatarState;
+import interface_adapter.choose_avatar.ChooseAvatarViewModel;
+
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,36 +14,17 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.*;
-
-import entity.Avatar;
-import interface_adapter.choose_avatar.ChooseAvatarController;
-import interface_adapter.choose_avatar.ChooseAvatarState;
-import interface_adapter.choose_avatar.ChooseAvatarViewModel;
-
 /**
  * The View for the Choose Avatar Use Case.
  */
 public class ChooseAvatarView extends JPanel implements ActionListener, PropertyChangeListener {
-
-    // Constants
-    private static final int TITLE_FONT_SIZE = 18;
-    private static final int AVATAR_PANEL_ROWS = 2;
-    private static final int AVATAR_PANEL_COLS = 3;
-    private static final int AVATAR_PANEL_HGAP = 10;
-    private static final int AVATAR_PANEL_VGAP = 10;
-    private static final int PANEL_PADDING = 20;
-    private static final int AVATAR_BUTTON_BORDER_WIDTH = 2;
-    private static final int AVATAR_BUTTON_EMPTY_BORDER = 2;
-    private static final int FOR_LOOP_AVATAR = 6;
-
     private final String viewName = "chooseAvatar";
     private final ChooseAvatarViewModel viewModel;
     private ChooseAvatarController controller;
 
     private final List<JToggleButton> avatarButtons = new ArrayList<>();
     private final ButtonGroup avatarGroup = new ButtonGroup();
-    private final List<Avatar> avatarList;  // Renamed to avoid shadowing the field
+    private final List<Avatar> avatars;
 
     private final JLabel titleLabel;
     private final JPanel avatarPanel;
@@ -50,33 +37,30 @@ public class ChooseAvatarView extends JPanel implements ActionListener, Property
         // Title Label
         titleLabel = new JLabel("Choose Your Avatar");
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, TITLE_FONT_SIZE));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
 
         // Avatar Panel
         avatarPanel = new JPanel();
-        avatarPanel.setLayout(new GridLayout(AVATAR_PANEL_ROWS, AVATAR_PANEL_COLS, AVATAR_PANEL_HGAP,
-                AVATAR_PANEL_VGAP));
-        avatarPanel.setBorder(BorderFactory.createEmptyBorder(PANEL_PADDING, PANEL_PADDING, PANEL_PADDING,
-                PANEL_PADDING));
+        avatarPanel.setLayout(new GridLayout(2, 3, 10, 10));
+        avatarPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        avatarList = loadAvatars();  // Renamed to avoid shadowing the field
-        for (Avatar avatar : avatarList) {
-            final ImageIcon icon = avatar.getIcon();
-            final JToggleButton avatarButton = new JToggleButton(icon);
-            avatarButton.setBorder(BorderFactory.createEmptyBorder(AVATAR_BUTTON_EMPTY_BORDER,
-                    AVATAR_BUTTON_EMPTY_BORDER,
-                    AVATAR_BUTTON_EMPTY_BORDER, AVATAR_BUTTON_EMPTY_BORDER));
+        // Load avatars
+        avatars = loadAvatars();
+        for (Avatar avatar : avatars) {
+            ImageIcon icon = avatar.getIcon();
+            JToggleButton avatarButton = new JToggleButton(icon);
+            avatarButton.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
             avatarButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             avatarButton.setFocusPainted(false);
             avatarButton.setContentAreaFilled(false);
 
-            avatarButton.addItemListener(evt -> {  // Renamed to 'evt' to follow conventions
+            // Add ItemListener to update border on selection
+            avatarButton.addItemListener(evt -> {
                 if (avatarButton.isSelected()) {
-                    avatarButton.setBorder(BorderFactory.createLineBorder(Color.BLUE, AVATAR_BUTTON_BORDER_WIDTH));
+                    avatarButton.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
                 }
                 else {
-                    avatarButton.setBorder(BorderFactory.createEmptyBorder(AVATAR_BUTTON_EMPTY_BORDER,
-                            AVATAR_BUTTON_EMPTY_BORDER, AVATAR_BUTTON_EMPTY_BORDER, AVATAR_BUTTON_EMPTY_BORDER));
+                    avatarButton.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
                 }
             });
 
@@ -85,27 +69,28 @@ public class ChooseAvatarView extends JPanel implements ActionListener, Property
             avatarButtons.add(avatarButton);
         }
 
-        final JButton confirmButton = new JButton("Confirm");
-        confirmButton.addActionListener(evt -> {
-            final int selectedIndex = getSelectedAvatarIndex();
+        // Confirm Button
+        JButton confirmButton = new JButton("Confirm");
+        confirmButton.addActionListener(e -> {
+            int selectedIndex = getSelectedAvatarIndex();
             if (selectedIndex == -1) {
                 JOptionPane.showMessageDialog(this, "Please select an avatar.",
                         "No Avatar Selected", JOptionPane.WARNING_MESSAGE);
+                return;
             }
-            else {
-                final Avatar selectedAvatar = avatarList.get(selectedIndex);
-                final ChooseAvatarState state = viewModel.getState();
-                controller.selectAvatar(state.getUsername(), selectedAvatar);
-            }
+
+            Avatar selectedAvatar = avatars.get(selectedIndex);
+            ChooseAvatarState state = viewModel.getState();
+            controller.selectAvatar(state.getUsername(), selectedAvatar);
         });
 
         // Button Panel
         buttonPanel = new JPanel();
         buttonPanel.add(confirmButton);
 
-        // Layout Setup
+        // Layout setup
         this.setLayout(new BorderLayout());
-        this.setBorder(BorderFactory.createEmptyBorder(PANEL_PADDING, PANEL_PADDING, PANEL_PADDING, PANEL_PADDING));
+        this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         this.add(titleLabel, BorderLayout.NORTH);
         this.add(avatarPanel, BorderLayout.CENTER);
         this.add(buttonPanel, BorderLayout.SOUTH);
@@ -114,8 +99,8 @@ public class ChooseAvatarView extends JPanel implements ActionListener, Property
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             updateTheme(viewModel.getState().isDarkMode());
         }
-        catch (Exception ex) {  // Renamed to 'ex' to follow conventions
-            ex.printStackTrace();
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -155,16 +140,15 @@ public class ChooseAvatarView extends JPanel implements ActionListener, Property
     }
 
     private List<Avatar> loadAvatars() {
-        final List<Avatar> avatars = new ArrayList<>();
-        for (int i = 1; i <= FOR_LOOP_AVATAR; i++) {
-            final String imagePath = "/images/avatar" + i + ".png";
+        List<Avatar> avatars = new ArrayList<>();
+        for (int i = 1; i <= 6; i++) {
+            String imagePath = "/images/avatar" + i + ".png";
             ImageIcon icon = null;
             try {
                 icon = new ImageIcon(getClass().getResource(imagePath));
-            }
-            catch (Exception ex) {  // Renamed to 'ex' to follow conventions
+            } catch (Exception e) {
                 System.err.println("Could not load image: " + imagePath);
-                ex.printStackTrace();
+                e.printStackTrace();
             }
             if (icon != null) {
                 avatars.add(new Avatar("Avatar " + i, imagePath));
@@ -179,6 +163,6 @@ public class ChooseAvatarView extends JPanel implements ActionListener, Property
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Intentionally left blank
+
     }
 }
