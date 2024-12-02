@@ -87,7 +87,6 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
 
     @Override
     public void switchToGameSuccess(GameDecisionInputData inputData) {
-        System.out.println("Interacting");
         User user = userDataAccess.getCurrentUser();
         stockDataAccessObject.setDate(user.getAge());
         GameDecisionOutputData outputData = new GameDecisionOutputData(inputData.getUsername(), inputData.isDarkMode(),

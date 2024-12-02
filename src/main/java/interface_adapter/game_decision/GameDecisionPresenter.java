@@ -67,7 +67,6 @@ public class GameDecisionPresenter implements GameDecisionOutputBoundary {
 
     @Override
     public void prepareGameSuccessView(GameDecisionOutputData outputData) {
-        System.out.println("game decision presenter!");
         gameSuccessViewModel.getState().setDarkMode(outputData.isDarkMode());
         gameSuccessViewModel.getState().setCharacterName(outputData.getName());
         gameSuccessViewModel.getState().setUsername(outputData.getUsername());
