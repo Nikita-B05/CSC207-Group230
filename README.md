@@ -39,31 +39,35 @@ financial challenges, the game aims to empower users with practical financial kn
 ## Features
 
 **1. User Authentication**:
-  - Secure sign-up and login system with password validation.
+  - Secure sign-up and login system with password validation and appropriate username input verification.
   - Unique usernames for each account.
 
 **2. Character Customization**:
   - Select from six avatar options.
-  - Create a personalized character name, verified using the NameAPI.
+  - If an avatar is not selected, do not let the user proceed.
+  - Create a personalized and appropriate character name, verified using the NameAPI. Also accounts for empty name
+input edge case.
+  - Updates home page character image and name.
+  - 
 
 **3. Interactive Financial Decision-Making**:
   - Encounter realistic scenarios requiring financial decisions.
-  - Decisions impact net worth, happiness, and quality of life.
+  - Accounts for making mandatory decisions.
+  - Saves user's progress and lets them go back to the home page.
+  - Decisions impact net worth and happiness.
 
 **4. Settings Management**:
-  - Change password and toggle between dark and light modes.
+  - Change password feature.
+  - Dark/light mode toggle.
+  - Allows the user to log out.
 
 **5. Decision Logs**:
   - View logs of past decisions and their effects on metrics.
 
 **6. Winning and Losing Conditions**:
-  - Win by navigating through all decisions without going bankrupt or losing happiness.
-  - Lose if net worth drops or happiness drops below zero.
+  - Win by navigating through all decisions without going bankrupt or having happiness hit 0.
+  - Lose if net worth or happiness drops below zero.
   - Game resets after a win or loss.
-
-**7. Leaderboard**:
-  - View leaderboard of users with the highest net worth and happiness scores.
-  - View your own position in the leaderboard given your net worth and happiness scores.
 
 ---
 
