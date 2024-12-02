@@ -64,6 +64,5 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
         GameDecisionOutputData outputData = new GameDecisionOutputData(inputData.getUsername(), inputData.isDarkMode(),
                 inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge(), inputData.getHappiness(), inputData.getSalary());
         outputBoundary.prepareGameSuccessView(outputData);
-
     }
 }

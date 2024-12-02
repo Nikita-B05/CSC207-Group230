@@ -24,8 +24,21 @@ public class GameDecisionController {
         gameDecisionInteractor.switchToHomeview(inputData);
     }
 
-    public void switchToAssetsManager(String username, int age, String characterName, boolean darkMode, Question question, Assets assets, Avatar avatar, Decision decision, int happiness, double salary) {
-        final GameDecisionInputData inputData = new GameDecisionInputData(username, age, characterName, darkMode, question, assets, avatar, decision, happiness, salary);
+    public void switchToAssetsManager(
+            String username,
+            int age,
+            String characterName,
+            boolean darkMode,
+            Question question,
+            Assets assets,
+            Avatar avatar,
+            Decision decision,
+            int happiness,
+            double salary
+    ) {
+        final GameDecisionInputData inputData =
+                new GameDecisionInputData(
+                        username, age, characterName, darkMode, question, assets, avatar, decision, happiness, salary);
         gameDecisionInteractor.switchToAssetsManager(inputData);
     }
 

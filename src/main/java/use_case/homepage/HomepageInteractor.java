@@ -5,8 +5,7 @@ import entity.User;
 /**
  * The Homepage Interactor.
  */
-public class HomepageInteractor implements HomepageInputBoundary  {
-
+public class HomepageInteractor implements HomepageInputBoundary {
     private final HomepageUserDataAccessInterface userDataAccessObject;
     private final HomepageOutputBoundary homepagePresenter;
     private final HomepageStockAccessInterface stockAccessObject;

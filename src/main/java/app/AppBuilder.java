@@ -340,9 +340,17 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addGameDecisionUseCase() {
-        final GameDecisionOutputBoundary gameDecisionOutputBoundary = new GameDecisionPresenter(gameDecisionViewModel, viewManagerModel, homepageViewModel);
-        final GameDecisionInputBoundary gameDecisionInteractor = new GameDecisionInteractor(userDataAccessObject, gameDecisionOutputBoundary);
-        final GameDecisionController gameDecisionController = new GameDecisionController(gameDecisionInteractor);
+        final GameDecisionOutputBoundary gameDecisionOutputBoundary =
+                new GameDecisionPresenter(
+                        gameDecisionViewModel,
+                        viewManagerModel,
+                        homepageViewModel,
+                        assetManagerViewModel
+                );
+        final GameDecisionInputBoundary gameDecisionInteractor =
+                new GameDecisionInteractor(userDataAccessObject, gameDecisionOutputBoundary);
+        final GameDecisionController gameDecisionController =
+                new GameDecisionController(gameDecisionInteractor);
         gameDecisionView.setController(gameDecisionController);
         return this;
     }

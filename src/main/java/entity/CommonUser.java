@@ -190,7 +190,6 @@ public class CommonUser implements User {
         this.decisions = decisions;
     }
 
-    @Override
     public void buyStock(String stockCode, int quantity, double buyPrice) {
         assets.buyStock(stockCode, quantity, buyPrice);
     }
@@ -218,7 +217,7 @@ public class CommonUser implements User {
     }
 
     @Override
-    public double getNetWorth(HashMap<String, Double> stockPrices) {
+    public double getNetWorth(Map<String, Double> stockPrices) {
         if (assets == null && liabilities == null) {
             return 0;
         }
