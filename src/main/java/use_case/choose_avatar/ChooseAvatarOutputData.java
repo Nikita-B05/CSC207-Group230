@@ -26,9 +26,7 @@ public class ChooseAvatarOutputData {
         return avatar;
     }
 
-    public String getCharacterName() {
-        return characterName;
-    }
+    public String getCharacterName() { return characterName; }
 
     public boolean isDarkMode() {
         return darkMode;

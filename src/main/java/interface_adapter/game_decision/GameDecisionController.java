@@ -39,7 +39,8 @@ public class GameDecisionController {
     }
 
     public void switchToGameOver(String username, int age, String characterName, boolean darkMode, Question question, Assets assets, Avatar avatar, Decision decision, int happiness, double salary) {
-        final GameDecisionInputData inputData = new GameDecisionInputData(username, age, characterName, darkMode, question, assets, avatar, decision, happiness, salary);
+        final GameDecisionInputData inputData = new GameDecisionInputData(username, age, characterName, darkMode,
+                question, assets, avatar, decision, happiness, salary);
         gameDecisionInteractor.switchToGameOver(inputData);
     }
 

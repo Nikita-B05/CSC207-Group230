@@ -23,7 +23,5 @@ public class MongoDBConnection {
         return collection;
     }
 
-    public void close() {
-        mongoClient.close();
-    }
+    public void close() { mongoClient.close(); }
 }

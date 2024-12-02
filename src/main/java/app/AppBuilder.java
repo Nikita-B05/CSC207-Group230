@@ -1,9 +1,7 @@
 package app;
 
 import java.awt.CardLayout;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 import data_access.MongoDBUserDataAccessObject;
 import entity.CommonUserFactory;
@@ -22,6 +20,12 @@ import interface_adapter.dark_mode.DarkModeController;
 import interface_adapter.game_decision.GameDecisionController;
 import interface_adapter.game_decision.GameDecisionPresenter;
 import interface_adapter.game_decision.GameDecisionViewModel;
+import interface_adapter.game_over.GameOverController;
+import interface_adapter.game_over.GameOverPresenter;
+import interface_adapter.game_over.GameOverViewModel;
+import interface_adapter.decision_log.DecisionLogPresenter;
+import interface_adapter.decision_log.DecisionLogViewModel;
+import interface_adapter.decision_log.DecisionLogController;
 import interface_adapter.game_success.GameSuccesController;
 import interface_adapter.game_success.GameSuccessPresenter;
 import interface_adapter.game_success.GameSuccessViewModel;
@@ -61,6 +65,9 @@ import use_case.choose_asset.ChooseAssetOutputBoundary;
 import use_case.game_decision.GameDecisionInputBoundary;
 import use_case.game_decision.GameDecisionInteractor;
 import use_case.game_decision.GameDecisionOutputBoundary;
+import use_case.game_over.GameOverInputBoundary;
+import use_case.game_over.GameOverInteractor;
+import use_case.game_over.GameOverOutputBoundary;
 import use_case.game_success.GameSuccessInputBoundary;
 import use_case.game_success.GameSuccessInteractor;
 import use_case.game_success.GameSuccessOutputBoundary;
@@ -92,6 +99,9 @@ import use_case.signup.SignupOutputBoundary;
 import use_case.settings.SettingsInputBoundary;
 import use_case.settings.SettingsInteractor;
 import use_case.settings.SettingsOutputBoundary;
+import use_case.decision_log.DecisionLogInputBoundary;
+import use_case.decision_log.DecisionLogInteractor;
+import use_case.decision_log.DecisionLogOutputBoundary;
 import view.*;
 
 /**
@@ -131,6 +141,8 @@ public class AppBuilder {
     private ManageStockView manageStockView;
     private GameSuccessViewModel gameSuccessViewModel;
     private GameSuccessView gameSuccessView;
+    private DecisionLogViewModel decisionLogViewModel;
+    private DecisionLogView decisionLogView;
 
     // New Views and ViewModels for Choose Avatar and Input Name
     private ChooseAvatarViewModel chooseAvatarViewModel;
@@ -140,6 +152,9 @@ public class AppBuilder {
 
     private GameDecisionViewModel gameDecisionViewModel;
     private GameDecisionView gameDecisionView;
+
+    private GameOverViewModel gameOverViewModel;
+    private GameOverView gameOverView;
 
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
@@ -189,6 +204,13 @@ public class AppBuilder {
         return this;
     }
 
+    public AppBuilder addGameOverView() {
+        gameOverViewModel = new GameOverViewModel();
+        gameOverView = new GameOverView(gameOverViewModel);
+        cardPanel.add(gameOverView, gameOverView.getViewName());
+        return this;
+    }
+
     /**
      * Adds the Game Decision View to the application.
      * @return this builder
@@ -197,6 +219,17 @@ public class AppBuilder {
         gameDecisionViewModel = new GameDecisionViewModel();
         gameDecisionView = new GameDecisionView(gameDecisionViewModel);
         cardPanel.add(gameDecisionView, gameDecisionView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Decision Log Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addDecisionLogView() {
+        decisionLogViewModel = new DecisionLogViewModel();
+        decisionLogView = new DecisionLogView(decisionLogViewModel);
+        cardPanel.add(decisionLogView, decisionLogView.getViewName());
         return this;
     }
 
@@ -236,7 +269,9 @@ public class AppBuilder {
             }
         }, userDataAccessObject);
         DarkModeController darkModeController = new DarkModeController(darkModeInteractor);
-        LogoutController logoutController = new LogoutController(new LogoutInteractor(userDataAccessObject, new LogoutPresenter(viewManagerModel, settingsViewModel, loginViewModel)));
+        LogoutController logoutController =
+                new LogoutController(new LogoutInteractor(userDataAccessObject,
+                        new LogoutPresenter(viewManagerModel, settingsViewModel, loginViewModel)));
         settingsView = new SettingsView(settingsViewModel, darkModeController, logoutController);
         cardPanel.add(settingsView, settingsView.getViewName());
 
@@ -292,8 +327,10 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addSignupUseCase() {
-        final SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel, signupViewModel, loginViewModel);
-        final SignupInputBoundary userSignupInteractor = new SignupInteractor(userDataAccessObject, signupOutputBoundary, userFactory);
+        final SignupOutputBoundary signupOutputBoundary =
+                new SignupPresenter(viewManagerModel, signupViewModel, loginViewModel);
+        final SignupInputBoundary userSignupInteractor =
+                new SignupInteractor(userDataAccessObject, signupOutputBoundary, userFactory);
         final SignupController controller = new SignupController(userSignupInteractor);
         signupView.setSignupController(controller);
         return this;
@@ -321,7 +358,8 @@ public class AppBuilder {
     public AppBuilder addHomepageUseCase() {
         // Updated to include ChooseAvatarViewModel in the HomepagePresenter
         final HomepageOutputBoundary homepageOutputBoundary = new HomepagePresenter(
-                viewManagerModel, homepageViewModel, settingsViewModel, chooseAvatarViewModel, gameDecisionViewModel);
+                viewManagerModel, homepageViewModel, settingsViewModel, chooseAvatarViewModel,
+                gameDecisionViewModel, decisionLogViewModel);
         final HomepageInputBoundary homepageInteractor = new HomepageInteractor(
                 userDataAccessObject, homepageOutputBoundary, stockDataAccessObject);
 
@@ -335,8 +373,10 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addChooseAvatarUseCase() {
-        final ChooseAvatarOutputBoundary chooseAvatarOutputBoundary = new ChooseAvatarPresenter(chooseAvatarViewModel, viewManagerModel, inputNameViewModel);
-        final ChooseAvatarInputBoundary chooseAvatarInteractor = new ChooseAvatarInteractor(userDataAccessObject, chooseAvatarOutputBoundary);
+        final ChooseAvatarOutputBoundary chooseAvatarOutputBoundary =
+                new ChooseAvatarPresenter(chooseAvatarViewModel, viewManagerModel, inputNameViewModel);
+        final ChooseAvatarInputBoundary chooseAvatarInteractor =
+                new ChooseAvatarInteractor(userDataAccessObject, chooseAvatarOutputBoundary);
         final ChooseAvatarController chooseAvatarController = new ChooseAvatarController(chooseAvatarInteractor);
         chooseAvatarView.setController(chooseAvatarController);
         return this;
@@ -347,8 +387,10 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addInputNameUseCase() {
-        final InputNameOutputBoundary inputNameOutputBoundary = new InputNamePresenter(inputNameViewModel, viewManagerModel, homepageViewModel);
-        final InputNameInputBoundary inputNameInteractor = new InputNameInteractor(userDataAccessObject, inputNameOutputBoundary);
+        final InputNameOutputBoundary inputNameOutputBoundary =
+                new InputNamePresenter(inputNameViewModel, viewManagerModel, homepageViewModel);
+        final InputNameInputBoundary inputNameInteractor =
+                new InputNameInteractor(userDataAccessObject, inputNameOutputBoundary);
         final InputNameController inputNameController = new InputNameController(inputNameInteractor);
         inputNameView.setController(inputNameController);
         return this;
@@ -365,13 +407,31 @@ public class AppBuilder {
                         viewManagerModel,
                         homepageViewModel,
                         assetManagerViewModel,
-                        gameSuccessViewModel
+                        gameSuccessViewModel,
+                        assetManagerViewModel,
+                        gameOverViewModel
                 );
         final GameDecisionInputBoundary gameDecisionInteractor =
                 new GameDecisionInteractor(userDataAccessObject, gameDecisionOutputBoundary, stockDataAccessObject);
         final GameDecisionController gameDecisionController =
                 new GameDecisionController(gameDecisionInteractor);
         gameDecisionView.setController(gameDecisionController);
+        return this;
+    }
+
+    /**
+     * Adds the Game Over Use Case to the application.
+     * @return this builder
+     */
+
+    public AppBuilder addGameOverUseCase() {
+        final GameOverOutputBoundary gameOverOutputBoundary =
+                new GameOverPresenter(gameOverViewModel, viewManagerModel, homepageViewModel);
+        final GameOverInputBoundary gameOverInteractor =
+                new GameOverInteractor(userDataAccessObject, gameOverOutputBoundary);
+        final GameOverController gameOverController =
+                new GameOverController(gameOverInteractor);
+        gameOverView.setController(gameOverController);
         return this;
     }
 
@@ -395,7 +455,8 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addLogoutUseCase() {
-        final LogoutOutputBoundary logoutOutputBoundary = new LogoutPresenter(viewManagerModel, settingsViewModel, loginViewModel);
+        final LogoutOutputBoundary logoutOutputBoundary =
+                new LogoutPresenter(viewManagerModel, settingsViewModel, loginViewModel);
         final LogoutInputBoundary logoutInteractor = new LogoutInteractor(userDataAccessObject, logoutOutputBoundary);
         final LogoutController logoutController = new LogoutController(logoutInteractor);
         settingsView.setLogoutController(logoutController);
@@ -407,8 +468,11 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addSettingsUseCase() {
-        final SettingsOutputBoundary settingsOutputBoundary = new SettingsPresenter(settingsViewModel, viewManagerModel, changePasswordViewModel, homepageViewModel, loginViewModel);
-        final SettingsInputBoundary settingsInteractor = new SettingsInteractor(userDataAccessObject, settingsOutputBoundary);
+        final SettingsOutputBoundary settingsOutputBoundary =
+                new SettingsPresenter(settingsViewModel, viewManagerModel, changePasswordViewModel,
+                        homepageViewModel, loginViewModel);
+        final SettingsInputBoundary settingsInteractor =
+                new SettingsInteractor(userDataAccessObject, settingsOutputBoundary);
         final SettingsController settingsController = new SettingsController(settingsInteractor);
         settingsView.setSettingsController(settingsController);
         return this;
@@ -475,6 +539,20 @@ public class AppBuilder {
                 gameSuccessOutputBoundary, userDataAccessObject);
         final GameSuccesController gameSuccesController = new GameSuccesController(gameSuccessInputBoundary);
         gameSuccessView.setController(gameSuccesController);
+        return this;
+    }
+
+    /**
+     * Adds the Decision Log Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addDecisionLogUseCase() {
+        final DecisionLogOutputBoundary decisionLogOutputBoundary = new DecisionLogPresenter(
+                decisionLogViewModel, viewManagerModel, homepageViewModel);
+        final DecisionLogInputBoundary decisionLogInteractor = new DecisionLogInteractor(
+                userDataAccessObject, decisionLogOutputBoundary);
+        final DecisionLogController decisionLogController = new DecisionLogController(decisionLogInteractor);
+        decisionLogView.setDecisionLogController(decisionLogController);
         return this;
     }
 
