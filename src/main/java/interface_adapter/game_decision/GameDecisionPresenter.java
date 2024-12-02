@@ -62,7 +62,7 @@ public class GameDecisionPresenter implements GameDecisionOutputBoundary {
 
     @Override
     public void prepareGameSuccessView(GameDecisionOutputData outputData) {
-//        gameSuccessViewModel.getState().setDarkMode(outputData.isDarkMode());
+//        gameSuccessViewModel.getState().setDarkModeEnabled(outputData.isDarkModeEnabled());
 //        gameSuccessViewModel.getState().setName(outputData.getName());
 //        gameSuccessViewModel.getState().setUsername(outputData.getUsername());
 //        gameSuccessViewModel.getState().setAvatar(outputData.getAvatar());
@@ -85,5 +85,4 @@ public class GameDecisionPresenter implements GameDecisionOutputBoundary {
         viewManagerModel.setState(homepageViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
-
 }
