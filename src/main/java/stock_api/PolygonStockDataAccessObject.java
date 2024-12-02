@@ -108,7 +108,7 @@ public class PolygonStockDataAccessObject implements
         // Get the current date
         LocalDate currentDate = LocalDate.parse("2024-10-01", formatter);
         // Add a certain number of days
-        int daysToAdd = age - 18;
+        int daysToAdd = age - 22;
         LocalDate newDate = currentDate.plusDays(daysToAdd);
         String formattedDate = newDate.format(formatter);
         return formattedDate;

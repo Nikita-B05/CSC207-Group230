@@ -4,24 +4,28 @@
     "questionText": "What major did you just graduate from?",
     "decisions": [
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Engineering",
         "cashChange": 0,
         "happinessChange": -35,
         "salaryChange": 70000
       },
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Arts",
         "cashChange": 0,
         "happinessChange": -20,
         "salaryChange": 35000
       },
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Commerce",
         "cashChange": 0,
         "happinessChange": -15,
         "salaryChange": 55000
       },
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Biology",
         "cashChange": 0,
         "happinessChange": -25,
@@ -34,24 +38,28 @@
     "questionText": "You completed your first year on the job. How do you handle your salary?",
     "decisions": [
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Save most of your income for the future",
         "cashChange": 10000,
         "happinessChange": -15,
         "salaryChange": 0
       },
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Spend moderately and save a little",
         "cashChange": 5000,
         "happinessChange": -5,
         "salaryChange": 0
       },
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Spend a fair amount on experiences",
         "cashChange": -10000,
         "happinessChange": 10,
         "salaryChange": 0
       },
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Have an absolute blast and travel",
         "cashChange": -30000,
         "happinessChange": 30,
@@ -64,24 +72,28 @@
     "questionText": "Your new office is 40min away, you need transportation. What do you do?",
     "decisions": [
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Buy a brand-new sports car (80K)",
         "cashChange": -80000,
         "happinessChange": 20,
         "salaryChange": -9000
       },
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Buy a brand-new decent car (40K)",
         "cashChange": -40000,
         "happinessChange": 10,
         "salaryChange": -7200
       },
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Buy a fairly used car (15K)",
         "cashChange": -15000,
         "happinessChange": 5,
         "salaryChange": -6000
       },
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Take public transportation (3K)",
         "cashChange": 0,
         "happinessChange": -20,
@@ -94,24 +106,28 @@
     "questionText": "Your boss grants you a salary boost of $5000. What do you do?",
     "decisions": [
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Go on a week-long vacation (3K)",
         "cashChange": -3000,
         "happinessChange": 10,
         "salaryChange": 5000
       },
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Save the entire salary boost",
         "cashChange": 0,
         "happinessChange": -5,
         "salaryChange": 5000
       },
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Spend it all on luxury items (5K)",
         "cashChange": -5000,
         "happinessChange": 10,
         "salaryChange": 5000
       },
       {
+      "timestamp": "2024-01-01T00:00:00",
         "decisionText": "Donate half it to charity annually",
         "cashChange": 0,
         "happinessChange": 15,
@@ -124,24 +140,28 @@
       "questionText": "You want to have fun for the upcoming summers. What do you buy?",
       "decisions": [
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "A recreational boat",
           "cashChange": -80000,
           "happinessChange": 30,
           "salaryChange": -5000
         },
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "An all-terrain vehicle (ATV)",
           "cashChange": -15000,
           "happinessChange": 20,
           "salaryChange": -1000
         },
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "A personal jet ski",
           "cashChange": -10000,
           "happinessChange": 15,
           "salaryChange": -1500
         },
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "A Muskoka chair and some marshmallows",
           "cashChange": -500,
           "happinessChange": 10,
@@ -154,24 +174,28 @@
       "questionText": "You want to treat yourself on your birthday. What do you choose?",
       "decisions": [
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Host an unforgettable party with 50 guests",
           "cashChange": -20000,
           "happinessChange": 20,
           "salaryChange": 0
         },
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Book a nice trip to the Bahamas",
           "cashChange": -5000,
           "happinessChange": 15,
           "salaryChange": 0
         },
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Buy yourself a $5000 high-end watch",
           "cashChange": -5000,
           "happinessChange": 10,
           "salaryChange": 0
         },
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Have a small gathering at home",
           "cashChange": -250,
           "happinessChange": 5,
@@ -184,24 +208,28 @@
       "questionText": "You have unexpected medical expense of $5000. How do you handle it?",
       "decisions": [
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Pay out of pocket",
           "cashChange": -5000,
           "happinessChange": -10,
           "salaryChange": 0
         },
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Ask your parents for help",
           "cashChange": 0,
           "happinessChange": -15,
           "salaryChange": 0
         },
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Take out insurance",
           "cashChange": -2000,
           "happinessChange": -5,
           "salaryChange": -100
         },
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Negotiate an annual payment plan",
           "cashChange": -1000,
           "happinessChange": -5,
@@ -213,24 +241,28 @@
       "questionText": "You want to improve your lifestyle. What do you do?",
       "decisions": [
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Buy a private gym membership",
           "cashChange": 0,
           "happinessChange": 20,
           "salaryChange": -5000
         },
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Hire a nutritionist",
           "cashChange": 0,
           "happinessChange": 10,
           "salaryChange": -5000
         },
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Start going on daily runs",
           "cashChange": 0,
           "happinessChange": 5,
           "salaryChange": 0
         },
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Do nothing and maintain habits",
           "cashChange": 0,
           "happinessChange": -20,
@@ -243,24 +275,28 @@
         "questionText": "You’re feeling adventurous and want to explore a new hobby. What do you choose?",
         "decisions": [
           {
+          "timestamp": "2024-01-01T00:00:00",
             "decisionText": "Buy a photography kit (5K)",
             "cashChange": -5000,
             "happinessChange": 15,
             "salaryChange": 0
           },
           {
+          "timestamp": "2024-01-01T00:00:00",
             "decisionText": "Learn how to fly a plane (50K)",
             "cashChange": -50000,
             "happinessChange": 25,
             "salaryChange": 0
           },
           {
+          "timestamp": "2024-01-01T00:00:00",
             "decisionText": "Learn how to play the piano (1K)",
             "cashChange": -1000,
             "happinessChange": 15,
             "salaryChange": 0
           },
           {
+          "timestamp": "2024-01-01T00:00:00",
             "decisionText": "Train for Tour de France (15K)",
             "cashChange": -15000,
             "happinessChange": 5,
@@ -273,24 +309,28 @@
           "questionText": "You are planning your wedding. What do you decide?",
           "decisions": [
             {
+            "timestamp": "2024-01-01T00:00:00",
               "decisionText": "Have a luxurious wedding (40K)",
               "cashChange": -40000,
               "happinessChange": 40,
               "salaryChange": 0
             },
             {
+            "timestamp": "2024-01-01T00:00:00",
               "decisionText": "Plan a modest wedding (20K)",
               "cashChange": -20000,
               "happinessChange": 20,
               "salaryChange": 0
             },
             {
+            "timestamp": "2024-01-01T00:00:00",
               "decisionText": "Have an elopement (5K)",
               "cashChange": -5000,
               "happinessChange": 5,
               "salaryChange": 0
             },
             {
+            "timestamp": "2024-01-01T00:00:00",
               "decisionText": "Skip the wedding altogether",
               "cashChange": 0,
               "happinessChange": -30,
@@ -303,24 +343,28 @@
       "questionText": "You want to start a family. What is your plan?",
       "decisions": [
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Have children and stay in your current situation",
           "cashChange": -20000,
           "happinessChange": 30,
           "salaryChange": -20000
         },
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Postpone children to save more money",
           "cashChange": 5000,
           "happinessChange": -5,
           "salaryChange": 0
         },
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Adopt or foster children (10K)",
           "cashChange": -10000,
           "happinessChange": 30,
           "salaryChange": -10000
         },
         {
+        "timestamp": "2024-01-01T00:00:00",
           "decisionText": "Focus on your career and stay child-free",
           "cashChange": 0,
           "happinessChange": -10,

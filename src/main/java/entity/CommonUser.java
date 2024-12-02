@@ -30,7 +30,7 @@ public class CommonUser implements User {
     public CommonUser(String username, String password) {
         this.username = username;
         this.password = password;
-        this.age = 18;
+        this.age = 22;
         this.isDarkMode = false;
         this.characterName = null;
         this.avatar = new Avatar();
