@@ -56,9 +56,9 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
 
         // Initialize stats labels
         netWorthLabel = new JLabel();
-        netWorthLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        netWorthLabel.setFont(new Font("Arial", Font.BOLD, 14));
         happinessLabel = new JLabel();
-        happinessLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        happinessLabel.setFont(new Font("Arial", Font.BOLD, 14));
 
         // Initialize button
         backButton = new JButton("Return to Homepage");
@@ -68,9 +68,17 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
     private void setupLayout() {
         setLayout(new BorderLayout());
 
-        // Setup title
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0));
-        add(titleLabel, BorderLayout.NORTH);
+        // Create a panel for the title with vertical spacing
+        JPanel titlePanel = new JPanel(new BorderLayout());
+        titlePanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 30, 0)); // Add more vertical padding
+        
+        // Center the title both horizontally and vertically
+        titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        titleLabel.setVerticalAlignment(SwingConstants.CENTER);
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        
+        titlePanel.add(titleLabel, BorderLayout.CENTER);
+        add(titlePanel, BorderLayout.NORTH);
 
         // Setup table
         add(new JScrollPane(historyTable), BorderLayout.CENTER);

@@ -1,6 +1,7 @@
 package interface_adapter.decision_log;
 
 import entity.Decision;
+import view.DecisionLogView;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -11,10 +12,7 @@ import java.util.ArrayList;
 public class DecisionLogState {
 
     private String username;
-    private int age;
-    private double home;
     private List<Decision> decisions;
-    private List<Decision> responses;
     private double totalNetWorthChange;
     private int totalHappinessChange;
     private boolean isDarkMode;
@@ -22,10 +20,7 @@ public class DecisionLogState {
     // Constructor
     public DecisionLogState() {
         this.username = "";
-        this.age = 22;
         this.decisions = new ArrayList<>();
-        this.responses = new ArrayList<>();
-        this.home = 0;
         this.totalNetWorthChange = 0;
         this.totalHappinessChange = 0;
         this.isDarkMode = false;
@@ -38,39 +33,51 @@ public class DecisionLogState {
     }
 
     public List<Decision> getDecisions() {
-        return decisions;
+        return new ArrayList<>(decisions);
     }
 
-    public List<Decision> getResponses() { return responses; }
-
     public double getTotalNetWorthChange() {
+        calculateTotals();
         return totalNetWorthChange;
     }
 
     public int getTotalHappinessChange() {
+        calculateTotals();
         return totalHappinessChange;
     }
 
-    public int getAge() { return age; }
-
-    public boolean isDarkModeEnabled() {
+    public boolean isDarkMode() {
         return isDarkMode;
     }
 
-    // setters
+    // Setters
 
-    public void setUsername(String username) { this.username = username; }
-
-    public void setHome(double home) {
-        this.home = home;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setDecisions(List<Decision> decisions) {
-        this.decisions = decisions;
+        this.decisions = new ArrayList<>(decisions);
+        calculateTotals();
     }
 
     public void setDarkModeEnabled(boolean darkMode) {
         isDarkMode = darkMode;
     }
+
+    // Helper method to calculate totals directly from the decisions list
+    private void calculateTotals() {
+        this.totalNetWorthChange = 0;
+        this.totalHappinessChange = 0;
+        
+        if (decisions != null) {
+            for (Decision decision : decisions) {
+                this.totalNetWorthChange += decision.getNetWorthChange();
+                this.totalHappinessChange += decision.getHappinessChange();
+            }
+        }
+    }
+
+    public void setDarkMode(boolean darkMode) { isDarkMode = darkMode; }
 
 }
