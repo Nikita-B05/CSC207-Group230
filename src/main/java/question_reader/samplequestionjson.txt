@@ -1,0 +1,308 @@
+[
+  {
+    "age": 18,
+    "questionText": "What major do you choose in university?",
+    "decisions": [
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Engineering",
+        "cashChange": -30000,
+        "happinessChange": 10,
+        "salaryChange": 90000
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Arts",
+        "cashChange": -20000,
+        "happinessChange": 30,
+        "salaryChange": 60000
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Accounting",
+        "cashChange": -25000,
+        "happinessChange": 15,
+        "salaryChange": 80000
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Undecided/General Studies",
+        "cashChange": -20000,
+        "happinessChange": 50,
+        "salaryChange": 40000
+      }
+    ]
+  },
+  {
+    "age": 19,
+    "questionText": "You get an opportunity for a part-time job during university. What do you do?",
+    "decisions": [
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Take the job",
+        "cashChange": 5000,
+        "happinessChange": -5,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Focus on academics",
+        "cashChange": 0,
+        "happinessChange": 10,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Start a side hustle",
+        "cashChange": 3000,
+        "happinessChange": 5,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Volunteer for experience",
+        "cashChange": -250,
+        "happinessChange": 15,
+        "salaryChange": 0
+      }
+    ]
+  },
+  {
+    "age": 20,
+    "questionText": "Your peers are taking study-abroad programs. What is your decision?",
+    "decisions": [
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Join a study-abroad program",
+        "cashChange": -15000,
+        "happinessChange": 20,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Stay and save money",
+        "cashChange": 0,
+        "happinessChange": -5,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Intern locally instead",
+        "cashChange": 0,
+        "happinessChange": 10,
+        "salaryChange": 2000
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Take online courses for extra credits",
+        "cashChange": -2000,
+        "happinessChange": 5,
+        "salaryChange": 1000
+      }
+    ]
+  },
+  {
+    "age": 21,
+    "questionText": "You are offered a high-interest credit card. What do you do?",
+    "decisions": [
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Accept and use it responsibly",
+        "cashChange": 0,
+        "happinessChange": 5,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Decline the offer",
+        "cashChange": 0,
+        "happinessChange": 0,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Accept and overspend",
+        "cashChange": -5000,
+        "happinessChange": 10,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Use it to build credit score",
+        "cashChange": 0,
+        "happinessChange": 5,
+        "salaryChange": 0
+      }
+    ]
+  },
+  {
+    "age": 22,
+    "questionText": "You graduate university. What is your next step?",
+    "decisions": [
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Start a corporate job",
+        "cashChange": 0,
+        "happinessChange": 5,
+        "salaryChange": 30000
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Pursue a master's degree",
+        "cashChange": -30000,
+        "happinessChange": 10,
+        "salaryChange": 5000
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Start your own business",
+        "cashChange": -20000,
+        "happinessChange": 15,
+        "salaryChange": 20000
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Travel before deciding",
+        "cashChange": -10000,
+        "happinessChange": 30,
+        "salaryChange": 0
+      }
+    ]
+  },
+  {
+    "age": 23,
+    "questionText": "You are considering renting an apartment. What kind do you choose?",
+    "decisions": [
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Luxury apartment",
+        "cashChange": -20000,
+        "happinessChange": 20,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Moderate apartment",
+        "cashChange": -15000,
+        "happinessChange": 10,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Share an apartment",
+        "cashChange": -8000,
+        "happinessChange": 5,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Live with family",
+        "cashChange": 0,
+        "happinessChange": -10,
+        "salaryChange": 0
+      }
+    ]
+  },
+  {
+    "age": 24,
+    "questionText": "You are thinking of buying a car. What do you choose?",
+    "decisions": [
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "New luxury car",
+        "cashChange": -40000,
+        "happinessChange": 15,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "New economy car",
+        "cashChange": -20000,
+        "happinessChange": 10,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Used car",
+        "cashChange": -10000,
+        "happinessChange": 5,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "No car",
+        "cashChange": 0,
+        "happinessChange": -5,
+        "salaryChange": 0
+      }
+    ]
+  },
+  {
+    "age": 25,
+    "questionText": "You get a job offer in another state. What do you do?",
+    "decisions": [
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Accept the offer and relocate",
+        "cashChange": -10000,
+        "happinessChange": 10,
+        "salaryChange": 15000
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Negotiate for remote work",
+        "cashChange": 0,
+        "happinessChange": 5,
+        "salaryChange": 10000
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Stay with your current job",
+        "cashChange": 0,
+        "happinessChange": 0,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Decline and search locally",
+        "cashChange": 0,
+        "happinessChange": -5,
+        "salaryChange": 0
+      }
+    ]
+  },
+  {
+    "age": 28,
+    "questionText": "You are planning your wedding. How much do you spend?",
+    "decisions": [
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Extravagant wedding",
+        "cashChange": -50000,
+        "happinessChange": 30,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Moderate wedding",
+        "cashChange": -25000,
+        "happinessChange": 20,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Simple wedding",
+        "cashChange": -10000,
+        "happinessChange": 10,
+        "salaryChange": 0
+      },
+      {
+        "timestamp": "2024-01-01T00:00:00",
+        "decisionText": "Elope",
+        "cashChange": -2000,
+        "happinessChange": 50,
+        "salaryChange": 0
+      }
+    ]
+  }
+]

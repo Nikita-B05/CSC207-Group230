@@ -19,6 +19,9 @@ import interface_adapter.choose_avatar.ChooseAvatarController;
 import interface_adapter.choose_avatar.ChooseAvatarPresenter;
 import interface_adapter.choose_avatar.ChooseAvatarViewModel;
 import interface_adapter.dark_mode.DarkModeController;
+import interface_adapter.game_decision.GameDecisionController;
+import interface_adapter.game_decision.GameDecisionPresenter;
+import interface_adapter.game_decision.GameDecisionViewModel;
 import interface_adapter.homepage.HomepageController;
 import interface_adapter.homepage.HomepagePresenter;
 import interface_adapter.homepage.HomepageViewModel;
@@ -36,12 +39,16 @@ import interface_adapter.settings.SettingsViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import stock_api.PolygonStockDataAccessObject;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
 import use_case.choose_avatar.ChooseAvatarInputBoundary;
 import use_case.choose_avatar.ChooseAvatarInteractor;
 import use_case.choose_avatar.ChooseAvatarOutputBoundary;
+import use_case.game_decision.GameDecisionInputBoundary;
+import use_case.game_decision.GameDecisionInteractor;
+import use_case.game_decision.GameDecisionOutputBoundary;
 import use_case.homepage.HomepageInputBoundary;
 import use_case.homepage.HomepageInteractor;
 import use_case.homepage.HomepageOutputBoundary;
@@ -80,7 +87,10 @@ public class AppBuilder {
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
-    private final MongoDBUserDataAccessObject userDataAccessObject = new MongoDBUserDataAccessObject(new CommonUserFactory());
+    private final MongoDBUserDataAccessObject userDataAccessObject
+            = new MongoDBUserDataAccessObject(new CommonUserFactory());
+    private final PolygonStockDataAccessObject stockDataAccessObject =
+            new PolygonStockDataAccessObject();
 
     // Existing Views and ViewModels
     private SignupView signupView;
@@ -100,6 +110,9 @@ public class AppBuilder {
     private InputNameViewModel inputNameViewModel;
     private InputNameView inputNameView;
 
+    private GameDecisionViewModel gameDecisionViewModel;
+    private GameDecisionView gameDecisionView;
+
     public AppBuilder() {
         cardPanel.setLayout(cardLayout);
     }
@@ -110,7 +123,6 @@ public class AppBuilder {
      */
     public AppBuilder addSignupView() {
         signupViewModel = new SignupViewModel();
-        userDataAccessObject.save(new CommonUser("testUser"));
         signupView = new SignupView(signupViewModel);
         cardPanel.add(signupView, signupView.getViewName());
         return this;
@@ -146,6 +158,17 @@ public class AppBuilder {
         chooseAvatarViewModel = new ChooseAvatarViewModel();
         chooseAvatarView = new ChooseAvatarView(chooseAvatarViewModel);
         cardPanel.add(chooseAvatarView, chooseAvatarView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Game Decision View to the application.
+     * @return this builder
+     */
+    public AppBuilder addGameDecisionView() {
+        gameDecisionViewModel = new GameDecisionViewModel();
+        gameDecisionView = new GameDecisionView(gameDecisionViewModel);
+        cardPanel.add(gameDecisionView, gameDecisionView.getViewName());
         return this;
     }
 
@@ -226,9 +249,9 @@ public class AppBuilder {
     public AppBuilder addHomepageUseCase() {
         // Updated to include ChooseAvatarViewModel in the HomepagePresenter
         final HomepageOutputBoundary homepageOutputBoundary = new HomepagePresenter(
-                viewManagerModel, homepageViewModel, settingsViewModel, chooseAvatarViewModel);
+                viewManagerModel, homepageViewModel, settingsViewModel, chooseAvatarViewModel, gameDecisionViewModel);
         final HomepageInputBoundary homepageInteractor = new HomepageInteractor(
-                userDataAccessObject, homepageOutputBoundary);
+                userDataAccessObject, homepageOutputBoundary, stockDataAccessObject);
 
         final HomepageController homepageController = new HomepageController(homepageInteractor);
         homepageView.setHomepageController(homepageController);
@@ -256,6 +279,18 @@ public class AppBuilder {
         final InputNameInputBoundary inputNameInteractor = new InputNameInteractor(userDataAccessObject, inputNameOutputBoundary);
         final InputNameController inputNameController = new InputNameController(inputNameInteractor);
         inputNameView.setController(inputNameController);
+        return this;
+    }
+
+    /**
+     * Adds the Game Decision Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addGameDecisionUseCase() {
+        final GameDecisionOutputBoundary gameDecisionOutputBoundary = new GameDecisionPresenter(gameDecisionViewModel, viewManagerModel, homepageViewModel);
+        final GameDecisionInputBoundary gameDecisionInteractor = new GameDecisionInteractor(userDataAccessObject, gameDecisionOutputBoundary);
+        final GameDecisionController gameDecisionController = new GameDecisionController(gameDecisionInteractor);
+        gameDecisionView.setController(gameDecisionController);
         return this;
     }
 
@@ -291,7 +326,7 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addSettingsUseCase() {
-        final SettingsOutputBoundary settingsOutputBoundary = new SettingsPresenter(settingsViewModel, viewManagerModel, changePasswordViewModel, homepageViewModel);
+        final SettingsOutputBoundary settingsOutputBoundary = new SettingsPresenter(settingsViewModel, viewManagerModel, changePasswordViewModel, homepageViewModel, loginViewModel);
         final SettingsInputBoundary settingsInteractor = new SettingsInteractor(userDataAccessObject, settingsOutputBoundary);
         final SettingsController settingsController = new SettingsController(settingsInteractor);
         settingsView.setSettingsController(settingsController);
