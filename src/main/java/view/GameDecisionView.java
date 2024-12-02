@@ -21,6 +21,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
 
     private JLabel questionLabel;
     private JLabel avatarLabel;
+    private JLabel statsTitleLabel;
     private JLabel netWorthLabel;
     private JLabel happinessLabel;
     private JLabel salaryLabel;
@@ -47,6 +48,10 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
         avatarLabel.setHorizontalAlignment(SwingConstants.CENTER);
         avatarLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
+        statsTitleLabel = new JLabel();
+        statsTitleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        statsTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
         netWorthLabel = new JLabel("Net Worth: $happiness is true wealth");
         netWorthLabel.setFont(new Font("Arial", Font.PLAIN, 14));
 
@@ -61,7 +66,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
             decisionButtons[i] = new JButton("Option " + (i + 1));
             decisionButtons[i].addActionListener(this);
             decisionButtons[i].setFont(new Font("Arial", Font.PLAIN, 14));
-            decisionButtons[i].setPreferredSize(new Dimension(150, 50)); // Make the buttons vertically taller
+            decisionButtons[i].setPreferredSize(new Dimension(150, 50));
         }
 
         confirmButton = new JButton("Submit");
@@ -74,6 +79,10 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
     private void setupLayout() {
         setLayout(new BorderLayout(20, 20));
 
+        JPanel spacerPanel = new JPanel();
+        spacerPanel.setPreferredSize(new Dimension(10, 30));
+        add(spacerPanel, BorderLayout.NORTH);
+
         JPanel questionPanel = new JPanel(new BorderLayout());
         questionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         questionLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -81,34 +90,29 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
         add(questionPanel, BorderLayout.NORTH);
 
         JPanel bottomPanel = new JPanel();
-        bottomPanel.setLayout(new GridBagLayout()); // Use GridBagLayout for better control over positioning
+        bottomPanel.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Add some space between components
+        gbc.insets = new Insets(10, 10, 10, 10);
 
-        // Avatar panel
         JPanel avatarPanel = new JPanel();
         avatarPanel.setLayout(new BorderLayout());
         avatarLabel.setHorizontalAlignment(SwingConstants.CENTER);
         avatarPanel.add(avatarLabel, BorderLayout.CENTER);
         gbc.gridx = 0;
-        gbc.gridy = 0; // Place avatar at (0, 0)
+        gbc.gridy = 0;
         bottomPanel.add(avatarPanel, gbc);
 
-        // Stats panel (aligned vertically with avatar)
         JPanel statsPanel = new JPanel();
-        statsPanel.setLayout(new BoxLayout(statsPanel, BoxLayout.Y_AXIS)); // Stack vertically
-        statsPanel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the stats horizontally
+        statsPanel.setLayout(new BoxLayout(statsPanel, BoxLayout.Y_AXIS));
+        statsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        netWorthLabel.setHorizontalAlignment(SwingConstants.CENTER); // Centered text
+        statsPanel.add(statsTitleLabel);
+        statsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
         statsPanel.add(netWorthLabel);
-
-        happinessLabel.setHorizontalAlignment(SwingConstants.CENTER); // Centered text
         statsPanel.add(happinessLabel);
-
-        salaryLabel.setHorizontalAlignment(SwingConstants.CENTER); // Centered text
         statsPanel.add(salaryLabel);
 
-        gbc.gridx = 1; // Place stats panel next to avatar (at (1, 0))
+        gbc.gridx = 1;
         bottomPanel.add(statsPanel, gbc);
 
         add(bottomPanel, BorderLayout.CENTER);
@@ -139,15 +143,15 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
 
         // Remove highlighting from previously selected button
         if (selectedDecisionIndex != -1) {
-            decisionButtons[selectedDecisionIndex].setBackground(null); // Reset background color
+            decisionButtons[selectedDecisionIndex].setBackground(null);
         }
 
         // Check for selected decision
         for (int i = 0; i < decisionButtons.length; i++) {
             if (e.getSource() == decisionButtons[i]) {
-                // Highlight the selected button by changing its background to yellow
-                decisionButtons[i].setBackground(Color.YELLOW);
-                selectedDecisionIndex = i; // Store the index of the selected button
+                // Highlight the selected button by changing its background to dark blue
+                decisionButtons[i].setBackground(new Color(0, 0, 139));
+                selectedDecisionIndex = i;
 
                 if (i < state.getQuestion().getDecisions().size()) {
                     Decision decision = state.getQuestion().getDecisions().get(i);
@@ -157,17 +161,54 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
             }
         }
 
+        // Handle Submit button logic
         if (e.getSource() == confirmButton && selectedDecisionIndex != -1) {
+            int age = state.getAge();
+            int happiness = state.getHappiness();
+            double netWorth = state.getAssets().getNetWorth();
+
+            if ((age >= 22 && (happiness <= 0 || netWorth <= 0))) {
+                gameDecisionController.switchToGameOver(
+                        state.getUsername(),
+                        age,
+                        state.getCharacterName(),
+                        state.isDarkModeEnabled(),
+                        state.getQuestion(),
+                        state.getAssets(),
+                        state.getAvatar(),
+                        state.getDecisionPicked(),
+                        happiness,
+                        state.getSalary()
+                );
+                return;
+            }
+
+            if (age >= 28) {
+                gameDecisionController.switchToGameSuccess(
+                        state.getUsername(),
+                        age,
+                        state.getCharacterName(),
+                        state.isDarkModeEnabled(),
+                        state.getQuestion(),
+                        state.getAssets(),
+                        state.getAvatar(),
+                        state.getDecisionPicked(),
+                        happiness,
+                        state.getSalary()
+                );
+                return;
+            }
+
             gameDecisionController.pickDecision(
                     state.getUsername(),
-                    state.getAge(),
+                    age,
                     state.getCharacterName(),
                     state.isDarkModeEnabled(),
                     state.getQuestion(),
                     state.getAssets(),
                     state.getAvatar(),
                     state.getDecisionPicked(),
-                    state.getHappiness(),
+                    happiness,
                     state.getSalary()
             );
         }
@@ -188,6 +229,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
         }
     }
 
+
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         GameDecisionState state = gameDecisionViewModel.getState();
@@ -202,31 +244,29 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
             avatarLabel.setText("No Avatar Available");
         }
 
-        netWorthLabel.setText("Net Worth: $" + "happiness is true wealth");
+        statsTitleLabel.setText(state.getCharacterName() + "'s Stats");
+        netWorthLabel.setText("Net Worth: $happiness is true wealth");
         happinessLabel.setText(String.format("Happiness: %d", state.getHappiness()));
         salaryLabel.setText(String.format("Salary: $%.2f", state.getSalary()));
 
-        // Update decision buttons
         List<Decision> decisions = state.getQuestion() != null ? state.getQuestion().getDecisions() : List.of();
         for (int i = 0; i < decisionButtons.length; i++) {
             if (i < decisions.size()) {
                 decisionButtons[i].setEnabled(true);
-                decisionButtons[i].setText(decisions.get(i).getDecisionText()); // Set decision text on the button
-                decisionButtons[i].setBackground(null); // Reset background color when decisions are updated
+                decisionButtons[i].setText(decisions.get(i).getDecisionText());
+                decisionButtons[i].setBackground(null);
             } else {
                 decisionButtons[i].setEnabled(false);
                 decisionButtons[i].setText("");
             }
         }
 
-        // Apply light or dark mode
         if (state.isDarkModeEnabled()) {
             ColorTheme.applyDarkMode(this);
         } else {
             ColorTheme.applyLightMode(this);
         }
 
-        // Display error if any
         if (state.getDecisionError() != null) {
             JOptionPane.showMessageDialog(this, state.getDecisionError(), "Error", JOptionPane.ERROR_MESSAGE);
         }
