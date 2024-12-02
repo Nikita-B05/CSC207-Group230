@@ -150,7 +150,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
         for (int i = 0; i < decisionButtons.length; i++) {
             if (e.getSource() == decisionButtons[i]) {
                 // Highlight the selected button by changing its background to dark blue
-                decisionButtons[i].setBackground(new Color(0, 0, 139));
+                decisionButtons[i].setBackground(new Color(80, 110, 250));
                 selectedDecisionIndex = i;
 
                 if (i < state.getQuestion().getDecisions().size()) {
