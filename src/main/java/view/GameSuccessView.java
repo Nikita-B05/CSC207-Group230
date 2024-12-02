@@ -1,131 +1,140 @@
 package view;
 
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
-import java.awt.*;
+import entity.Avatar;
+import interface_adapter.ViewManagerModel;
+import interface_adapter.game_success.GameSuccesController;
+import interface_adapter.game_success.GameSuccessState;
+import interface_adapter.game_success.GameSuccessViewModel;
+import use_case.game_success.GameSuccessInteractor;
 
-public class GameSuccessView extends JPanel {
-    public GameSuccessView(Object[][] leaderboardData, Object[] currentUserData) {
-        setLayout(new BorderLayout());
+import javax.swing.*;
+import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+public class GameSuccessView extends JPanel implements PropertyChangeListener {
+    private final String viewName = "gameSuccess";
+
+    private GameSuccessViewModel viewModel;
+    private GameSuccesController controller;
+
+    private JLabel successLabel;
+    private JLabel avatarLabel;
+    private JLabel happinessLabel;
+    private JLabel netWorthLabel;
+
+    public GameSuccessView(GameSuccessViewModel viewModel) {
+        this.viewModel = viewModel;
+        this.viewModel.addPropertyChangeListener(this);
+        final GameSuccessState state = viewModel.getState();
 
         // Header Label
-        JLabel successLabel = new JLabel("Game Success!");
+        successLabel = new JLabel("Congratulations " + state.getCharacterName() + "!");
         successLabel.setFont(new Font("Arial", Font.BOLD, 24));
         successLabel.setHorizontalAlignment(SwingConstants.CENTER);
         successLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        add(successLabel, BorderLayout.NORTH);
+        successLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Table Panel
-        JPanel tablePanel = new JPanel(new BorderLayout());
-        tablePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        // Table Headers and Data
-        String[] headers = {"Place", "Avatar", "Username", "Wealth", "Happiness"};
-        JTable leaderboardTable = new JTable(new DefaultTableModel(leaderboardData, headers)) {
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                // Return the type for the avatar column as ImageIcon
-                if (columnIndex == 1) {
-                    return ImageIcon.class;
-                }
-                return super.getColumnClass(columnIndex);
-            }
-        };
-
-        // Set up custom cell renderer for the avatar column
-        leaderboardTable.getColumnModel().getColumn(1).setCellRenderer(new AvatarCellRenderer());
-
-        leaderboardTable.setEnabled(false); // Make the table read-only
-        leaderboardTable.setFillsViewportHeight(true);
-
-        // Table Styling
-        leaderboardTable.setRowHeight(30);
-        leaderboardTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
-        leaderboardTable.setFont(new Font("Arial", Font.PLAIN, 14));
-
-        // Add table to scroll pane
-        JScrollPane scrollPane = new JScrollPane(leaderboardTable);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        scrollPane.setPreferredSize(new Dimension(600, 250));
-        tablePanel.add(scrollPane, BorderLayout.CENTER);
-
-        // Add table panel to main panel
-        add(tablePanel, BorderLayout.CENTER);
+        // Avatar Image (replace with your actual file path)
+        avatarLabel = new JLabel(state.getAvatar().getIcon());
+        avatarLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        avatarLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center avatar
 
         // Current User Info Panel
         JPanel userInfoPanel = new JPanel();
         userInfoPanel.setLayout(new BoxLayout(userInfoPanel, BoxLayout.Y_AXIS));
-        userInfoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        userInfoPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        userInfoPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+        happinessLabel = new JLabel("Happiness: " + state.getHappiness());
+        happinessLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        happinessLabel.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5));
+        userInfoPanel.add(happinessLabel);
+        netWorthLabel = new JLabel(String.format("Net Worth: $%,.2f", state.getNetWorth()));
+        netWorthLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        userInfoPanel.add(netWorthLabel);
 
-        // Avatar Image (replace with your actual file path)
-        ImageIcon avatarIcon = new ImageIcon("path/to/currentUserAvatar.jpg");
-        JLabel avatarLabel = new JLabel(avatarIcon);
-        avatarLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center avatar
-
-        userInfoPanel.add(avatarLabel); // Add avatar to the user info panel
-
-        // User Info Label
-        JLabel userInfoLabel = new JLabel(
-                String.format("You are ranked #%d with %d wealth and %d happiness!",
-                        currentUserData[0], currentUserData[2], currentUserData[3]));
-        userInfoLabel.setFont(new Font("Arial", Font.PLAIN, 16));
-        userInfoLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        userInfoPanel.add(userInfoLabel);
-
-        // Button Panel
-        JPanel buttonPanel = new JPanel();
+        // Return button
         JButton returnButton = new JButton("Return to Homepage");
-        returnButton.addActionListener(e -> System.out.println("Returning to homepage..."));
-        buttonPanel.add(returnButton);
+        returnButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+        returnButton.addActionListener(e -> controller.switchToHomepageView());
+        returnButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        userInfoPanel.add(Box.createRigidArea(new Dimension(0, 20)));
-        // Padding between label and button
-        userInfoPanel.add(buttonPanel);
+        // Set the layout to BoxLayout and add padding
+        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        this.setAlignmentX(Component.CENTER_ALIGNMENT);
+        this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        add(userInfoPanel, BorderLayout.SOUTH);
-    }
+        this.add(Box.createVerticalGlue());
+        this.add(successLabel);
+        this.add(avatarLabel);
+        this.add(userInfoPanel);
+        this.add(returnButton);
+        this.add(Box.createVerticalGlue());
 
-    // Custom cell renderer for the Avatar column
-    private class AvatarCellRenderer extends JLabel implements TableCellRenderer {
-        @Override
-        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
-                                                       boolean hasFocus, int row, int column) {
-            if (value instanceof ImageIcon) {
-                setIcon((ImageIcon) value);
-            } else {
-                setIcon(null);
-            }
-            setHorizontalAlignment(SwingConstants.CENTER);
-            setVerticalAlignment(SwingConstants.CENTER);
-            return this;
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
+            updateTheme(state.isDarkMode());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    public static void main(String[] args) {
-        // Fetch leaderboard data from database
-        Object[][] leaderboardData =
-                new GameSuccessView(null, null).fetchLeaderboardDataFromDatabase();
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        final GameSuccessState state = (GameSuccessState) evt.getNewValue();
+        updateTheme(state.isDarkMode());
 
-        // Example Current User Data
-        Object[] currentUserData = {10, "You", 20000, 70};
-
-        // Create Frame
-        JFrame frame = new JFrame("Game Success");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 400);
-        frame.add(new GameSuccessView(leaderboardData, currentUserData));
-        frame.setVisible(true);
+        happinessLabel.setText("Happiness: " + state.getHappiness());
+        netWorthLabel.setText(String.format("Net Worth: $%,.2f", state.getNetWorth()));
+        avatarLabel.setIcon(state.getAvatar().getIcon());
+        successLabel.setText("Congratulations " + state.getCharacterName() + "!");
     }
 
-    private Object[][] fetchLeaderboardDataFromDatabase() {
-        // Fetch leaderboard data from database
-        return new Object[][]{
-                {1, new ImageIcon("path/to/avatar1.jpg"), "User1", 50000, 80},
-                {2, new ImageIcon("path/to/avatar2.jpg"), "User2", 40000, 75},
-                {3, new ImageIcon("path/to/avatar3.jpg"), "User3", 30000, 70},
-                {4, new ImageIcon("path/to/avatar4.jpg"), "User4", 20000, 65},
-                {5, new ImageIcon("path/to/avatar5.jpg"), "User5", 10000, 60},
-        };
+    private void updateTheme(boolean isDarkMode) {
+        if (isDarkMode) {
+            ColorTheme.applyDarkMode(this);
+        } else {
+            ColorTheme.applyLightMode(this);
+        }
+        SwingUtilities.updateComponentTreeUI(this);
+    }
+
+    public String getViewName() {
+        return viewName;
+    }
+
+    public void setController(GameSuccesController controller) {
+        this.controller = controller;
+    }
+
+    public static void main(String[] args) {
+        final JFrame frame = new JFrame("Game Success Example");
+        frame.setSize(500, 600);  // Set frame size to 500x600px
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        // Just to see the view
+        final JPanel cardPanel = new JPanel();
+        final CardLayout cardLayout = new CardLayout();
+        cardPanel.setLayout(cardLayout);
+        final ViewManagerModel viewManagerModel = new ViewManagerModel();
+
+        final GameSuccessViewModel viewModel = new GameSuccessViewModel();
+        final GameSuccessState state = viewModel.getState();
+        state.setCharacterName("Example UserName");
+        state.setAvatar(new Avatar());
+        state.setHappiness(100);
+        state.setNetWorth(1000.123);
+        state.setDarkMode(false);
+        final GameSuccessView view = new GameSuccessView(viewModel);
+        cardPanel.add(view, view.getViewName());
+        cardPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        frame.add(cardPanel);
+
+        viewManagerModel.setState(viewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
+
+        frame.pack();
+        frame.setVisible(true);
     }
 }

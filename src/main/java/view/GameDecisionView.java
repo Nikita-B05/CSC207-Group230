@@ -195,7 +195,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
                 return;
             }
 
-            if (age >= 33) {
+            if (age >= 32) {
                 gameDecisionController.switchToGameSuccess(
                         state.getUsername(),
                         age,
@@ -257,10 +257,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
             avatarLabel.setIcon(null);
             avatarLabel.setText("No Avatar Available");
         }
-
-        String characterName = state.getCharacterName() != null && !state.getCharacterName().isEmpty()
-                ? state.getCharacterName()
-                : state.getUsername();
+        String characterName = state.getCharacterName() != null ? state.getCharacterName() : state.getUsername();
 
         statsTitleLabel.setText(characterName + "'s Stats");
         netWorthLabel.setText("Net Worth: $" + state.getNetWorth(state.getStockPrices()));

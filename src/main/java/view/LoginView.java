@@ -19,6 +19,8 @@ import interface_adapter.login.LoginViewModel;
  */
 public class LoginView extends JPanel implements ActionListener, PropertyChangeListener {
 
+    public static final int WIDTH = 1000;
+    public static final int HEIGHT = 120;
     private final String viewName = "log in";
     private final LoginViewModel loginViewModel;
 
@@ -47,7 +49,7 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
         final JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
         inputPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        inputPanel.setMaximumSize(new Dimension(1000, 120));
+        inputPanel.setMaximumSize(new Dimension(WIDTH, HEIGHT));
 
         inputPanel.add(usernameInfo);
         inputPanel.add(usernameErrorField);
@@ -74,11 +76,10 @@ public class LoginView extends JPanel implements ActionListener, PropertyChangeL
                 }
         );
 
-        cancel.addActionListener(
-                new ActionListener() {
-                    public void actionPerformed(ActionEvent evt) {
-                        loginController.switchToSignUpView();
-                    }
+        cancel.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                loginController.switchToSignUpView();
+            }
         });
 
         usernameInputField.getDocument().addDocumentListener(new DocumentListener() {

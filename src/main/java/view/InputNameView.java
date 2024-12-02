@@ -1,20 +1,19 @@
 package view;
 
-import data_access.config.ConfigLoader; // Import ConfigLoader to load API key
-import interface_adapter.input_name.InputNameController;
-import interface_adapter.input_name.InputNameState;
-import interface_adapter.input_name.InputNameViewModel;
-import name_api.NameApiClient; // Ensure you import the NameApiClient
-
-import com.google.gson.JsonObject;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.swing.*;
+
+import com.google.gson.JsonObject;
+import data_access.config.ConfigLoader;
+import interface_adapter.input_name.InputNameController;
+import interface_adapter.input_name.InputNameState;
+import interface_adapter.input_name.InputNameViewModel;
+import name_api.NameApiClient;
 
 /**
  * The View for the Input Name Use Case.
@@ -35,13 +34,11 @@ public class InputNameView extends JPanel implements ActionListener, PropertyCha
         this.viewModel = viewModel;
         this.viewModel.addPropertyChangeListener(this);
 
-        // Load API key from config.properties using ConfigLoader
-        String apiKey = ConfigLoader.getProperty("nameapi.key");
+        final String apiKey = ConfigLoader.getProperty("nameapi.key");
         if (apiKey == null || apiKey.isEmpty()) {
             throw new RuntimeException("API key for NameAPI is not configured. Please check config.properties.");
         }
 
-        // Initialize the NameApiClient with the loaded API key
         this.nameApiClient = new NameApiClient(apiKey);
 
         // Set layout

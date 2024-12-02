@@ -31,7 +31,7 @@ public class Decision {
         int happinessChange = ((Number) json.get("happinessChange")).intValue();
         double salaryChange = ((Number) json.get("salaryChange")).doubleValue();
 
-        return new Decision(age, decisionText, response, happinessChange, happinessChange, salaryChange);
+        return new Decision(age, decisionText, response, netWorthChange, happinessChange, salaryChange);
     }
 
     public static Map<String, Double> calculateTotalStats(List<Decision> decisions) {

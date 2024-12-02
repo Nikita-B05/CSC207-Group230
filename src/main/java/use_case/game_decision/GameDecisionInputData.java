@@ -5,6 +5,8 @@ import entity.Avatar;
 import entity.Decision;
 import entity.Question;
 
+import java.util.Map;
+
 /**
  * Input Data for the Game Decision use case.
  */

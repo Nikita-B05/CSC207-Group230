@@ -26,12 +26,15 @@ public class Main {
                 .addSettingsView()
                 .addGameDecisionView()
                 .addDecisionLogView()
+                .addGameOverView()
+                .addGameSuccessView()
                 .addSignupUseCase()
                 .addDecisionLogUseCase()
                 .addLoginUseCase()
                 .addHomepageUseCase()
                 .addChooseAvatarUseCase()
                 .addInputNameUseCase()
+                .addGameOverUseCase()
                 .addChangePasswordUseCase()
                 .addLogoutUseCase()
                 .addSettingsUseCase()
@@ -40,6 +43,7 @@ public class Main {
                 .addChooseAssetUseCase()
                 .addManageHomeUseCase()
                 .addManageStockUseCase()
+                .addGameSuccessUseCase()
                 .build();
 
         application.pack();

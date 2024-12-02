@@ -1,8 +1,11 @@
 package use_case.game_over;
 
+import use_case.game_decision.GameDecisionInputData;
+
+/**
+ * Input Boundary for the Game Over use case.
+ */
+
 public interface GameOverInputBoundary {
-    void execute(GameOverInputData inputData);
-
-    void cleanupPlayerData(String username);
+    void switchToHomeview(GameOverInputData gameOverInputData);
 }
-

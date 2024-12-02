@@ -7,19 +7,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-import interface_adapter.settings.SettingsController;
-import interface_adapter.settings.SettingsViewModel;
 import interface_adapter.dark_mode.DarkModeController;
 import interface_adapter.logout.LogoutController;
+import interface_adapter.settings.SettingsController;
+import interface_adapter.settings.SettingsViewModel;
 
 /**
  * The View for the Settings screen.
  */
 public class SettingsView extends JPanel implements ActionListener, PropertyChangeListener {
 
+    public static final int TEXT_SIZE = 24;
+    public static final int TWENTY = 20;
+    public static final int FIFTEEN = 15;
     private final String viewName = "settings";
     private final SettingsViewModel settingsViewModel;
     private final DarkModeController darkModeController;
@@ -42,7 +46,7 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
 
         final JLabel title = new JLabel("Settings");
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        title.setFont(new Font("Arial", Font.BOLD, 24));
+        title.setFont(new Font("Arial", Font.BOLD, TEXT_SIZE));
 
         darkModeCheckBox = new JCheckBox("Enable Dark Mode");
         darkModeCheckBox.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -61,23 +65,24 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
         cancelButton.addActionListener(this);
 
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setBorder(new EmptyBorder(20, 20, 20, 20));
+        this.setBorder(new EmptyBorder(TWENTY, TWENTY, TWENTY, TWENTY));
 
         this.add(title);
-        this.add(Box.createRigidArea(new Dimension(0, 20)));
+        this.add(Box.createRigidArea(new Dimension(0, TWENTY)));
         this.add(darkModeCheckBox);
-        this.add(Box.createRigidArea(new Dimension(0, 15)));
+        this.add(Box.createRigidArea(new Dimension(0, FIFTEEN)));
         this.add(changePasswordButton);
-        this.add(Box.createRigidArea(new Dimension(0, 15)));
+        this.add(Box.createRigidArea(new Dimension(0, FIFTEEN)));
         this.add(logOutButton);
-        this.add(Box.createRigidArea(new Dimension(0, 15)));
+        this.add(Box.createRigidArea(new Dimension(0, FIFTEEN)));
         this.add(cancelButton);
 
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             updateTheme(settingsViewModel.getState().isDarkModeEnabled());
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+        catch (Exception exp) {
+            exp.printStackTrace();
         }
     }
 
@@ -94,7 +99,8 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
 
         if (isDarkMode) {
             ColorTheme.applyDarkMode(this);
-        } else {
+        }
+        else {
             ColorTheme.applyLightMode(this);
         }
 
@@ -104,25 +110,28 @@ public class SettingsView extends JPanel implements ActionListener, PropertyChan
     @Override
     public void actionPerformed(ActionEvent evt) {
         if (evt.getSource().equals(darkModeCheckBox)) {
-            boolean darkModeEnabled = darkModeCheckBox.isSelected();
+            final boolean darkModeEnabled = darkModeCheckBox.isSelected();
             darkModeController.toggleDarkMode(darkModeEnabled);
-        } else if (evt.getSource().equals(changePasswordButton)) {
+        }
+        else if (evt.getSource().equals(changePasswordButton)) {
             if (settingsController != null) {
-                String username = settingsViewModel.getState().getUsername();
+                final String username = settingsViewModel.getState().getUsername();
                 settingsController.changePassword(username, darkModeCheckBox.isSelected());
             }
-        } else if (evt.getSource().equals(logOutButton)) {
-            String username = settingsViewModel.getState().getUsername();
+        }
+        else if (evt.getSource().equals(logOutButton)) {
+            final String username = settingsViewModel.getState().getUsername();
             logoutController.execute(username);
-        } else if (evt.getSource().equals(cancelButton)) {
-            String username = settingsViewModel.getState().getUsername();
+        }
+        else if (evt.getSource().equals(cancelButton)) {
+            final String username = settingsViewModel.getState().getUsername();
             settingsController.changeToHomePage(username, darkModeCheckBox.isSelected());
         }
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        boolean darkModeEnabled = settingsViewModel.getState().isDarkModeEnabled();
+        final boolean darkModeEnabled = settingsViewModel.getState().isDarkModeEnabled();
         darkModeCheckBox.setSelected(darkModeEnabled);
         updateTheme(darkModeEnabled);
     }
