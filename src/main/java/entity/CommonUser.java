@@ -77,7 +77,8 @@ public class CommonUser implements User {
         this.assets = null;
         this.liabilities = null;
         this.decisions = new ArrayList<>();
-        this.questionBank = QuestionReader.parseQuestions("src/main/java/question_reader/samplequestionjson.txt");
+        this.questionBank = QuestionReader.parseQuestions(
+                "src/main/java/question_reader/samplequestionjson.txt");
     }
 
     @Override

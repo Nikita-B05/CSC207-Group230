@@ -23,7 +23,8 @@ public class QuestionReader {
         String jsonString;
         try {
             jsonString = Files.readString(Path.of(filePath));
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException(e);
         }
 
@@ -32,7 +33,8 @@ public class QuestionReader {
 
         try {
             jsonQuestions = objectMapper.readValue(jsonString, new TypeReference<>() {});
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
