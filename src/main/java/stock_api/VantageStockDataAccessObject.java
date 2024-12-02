@@ -117,7 +117,6 @@ public class VantageStockDataAccessObject implements
 
     private double fetchData(String ticker) throws IOException {
         String url = BASE_URL + "&symbol=" + ticker + "&apikey=" + apiKey;
-        System.out.println(url);
 
         Request request = new Request.Builder()
                 .url(url)

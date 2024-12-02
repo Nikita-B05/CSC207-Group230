@@ -7,7 +7,6 @@ import javax.swing.*;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordState;
 import interface_adapter.change_password.ChangePasswordViewModel;
-import use_case.settings.SettingsOutputData;
 
 /**
  * The View for the Change Password screen.
