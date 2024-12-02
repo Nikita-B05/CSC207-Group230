@@ -21,11 +21,11 @@ _Principles of Universal Design_
    Users can interact with the program using simple clicks or taps, minimizing physical strain. Since the game does not require rapid or repetitive actions, it accommodates users with limited physical dexterity. A future improvement might include voice command functionality for hands-free operation.
 
 7. Size and Space for Approach and Use:
-   The interface is designed with large buttons and a layout that avoids overcrowding, making it accessible to users on various screen sizes. To better adhere to this principle, we could implement responsive design features to optimize the layout for all sorts of display sizes.
+   The interface is designed with layout that avoids overcrowding, making it accessible to users on various screen sizes. To better adhere to this principle, we could implement responsive design features to optimize the layout for all sorts of display sizes and we could make bigger buttons.
 
 _Target Market_
 
-If we were to market our game, we would mostly target high school students who are interested in learning more about personal finance with a drive to learn more about the real world. 
+If we were to market our game we could target everyone but we would mostly go for highschool students who are interested in learning more about personal finance with a drive to learn more about the real world. 
 Students interested in personal finance or life simulation games might find our program particularly appealing due to its inclusion of financial and happiness tracking mechanics.
 Especially because the content of the game is geared to be educational, we wouldn't have success marketing to senior citizens or older adults who may already feel that they already understand personal finance.
 By targeting students, we would be able to promise an gamification aspect to learning, who would most appreciate this experience.
