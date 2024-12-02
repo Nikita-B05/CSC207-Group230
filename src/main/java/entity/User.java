@@ -133,4 +133,8 @@ public interface User {
      * @return if the user can sell the stock.
      */
     public boolean isValidSell(String stockCode, int quantity);
+
+    void setSalary(int i);
+
+    void setHappiness(int i);
 }

@@ -1,12 +1,6 @@
-package interface_adapter.game_end;
+package interface_adapter.game_over;
 
-import view.GameSuccessView;
-import view.GameOverView;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-
-public class GameEndController {
+public class GameOverController {
 /*
     private final JFrame frame;
     private final GameEndState gameEndState; // GameState to hold game outcome info

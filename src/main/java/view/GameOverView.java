@@ -2,8 +2,11 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.logging.Logger;
 
 public class GameOverView extends JPanel {
+    private static final Logger LOGGER = Logger.getLogger(GameOverView.class.getName());
+
     public GameOverView(String reason) {
         setLayout(new BorderLayout());
 
@@ -37,7 +40,7 @@ public class GameOverView extends JPanel {
         JButton restartButton = new JButton("Return to Homepage");
         buttonPanel.add(restartButton);
 
-        restartButton.addActionListener(e -> System.out.println("Returning to homepage..."));
+        restartButton.addActionListener(e -> LOGGER.info("Returning to homepage..."));
 
         add(centerPanel, BorderLayout.CENTER);
         add(buttonPanel, BorderLayout.SOUTH);
@@ -46,7 +49,7 @@ public class GameOverView extends JPanel {
     public static void main(String[] args) {
         // Example for testing
         JFrame frame = new JFrame("Game Over");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setSize(400, 300);
 
         // Test with different reasons
