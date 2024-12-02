@@ -2,7 +2,6 @@ package entity;
 
 import question_reader.QuestionReader;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -12,10 +11,10 @@ import java.util.Map;
  */
 public class CommonUser implements User {
 
+    public static final int AGE = 22;
     private String username;
     private String password;
     private boolean isDarkMode;
-
 
     private String characterName;
     private int age;
@@ -30,7 +29,7 @@ public class CommonUser implements User {
     public CommonUser(String username, String password) {
         this.username = username;
         this.password = password;
-        this.age = 18;
+        this.age = AGE;
         this.isDarkMode = false;
         this.characterName = null;
         this.avatar = new Avatar();
@@ -157,8 +156,13 @@ public class CommonUser implements User {
     }
 
     @Override
-    public void changeHappiness(double happiness) {
-        this.happiness += happiness;
+    public void changeHappiness(int happiness) {
+        if (this.happiness + happiness <= 100) {
+            this.happiness = 100;
+        }
+        else {
+            this.happiness += happiness;
+        }
     }
 
     @Override
@@ -193,8 +197,6 @@ public class CommonUser implements User {
     public void setDecisions(ArrayList<Decision> decisions) {
         this.decisions = decisions;
     }
-
-
 
     @Override
     public void buyStock(String stockCode, int quantity, double buyPrice) {

@@ -1,20 +1,28 @@
 package view;
 
+import java.awt.*;
+import java.beans.PropertyChangeEvent;
+
+import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import data_access.config.ConfigLoader;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupState;
 import interface_adapter.signup.SignupViewModel;
 import name_api.NameApiClient;
 
-import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeEvent;
+/**
+ * The view for signing up in the application.
+ * Displays a question with options and allows the user to make decisions.
+ *
+ * <p>Some methods and parameters may accept or return <code>null</code> values.</p>
+ */
 
 public class SignupView extends JPanel {
+    public static final int WIDTH = 1000;
+    public static final int HEIGHT = 120;
     private final String viewName = "sign up";
 
     private final SignupViewModel signupViewModel;
@@ -34,7 +42,7 @@ public class SignupView extends JPanel {
         this.signupViewModel.addPropertyChangeListener(evt -> handlePropertyChange(evt));
 
         // Initialize NameApiClient
-        String apiKey = ConfigLoader.getProperty("nameapi.key");
+        final String apiKey = ConfigLoader.getProperty("nameapi.key");
         this.nameApiClient = new NameApiClient(apiKey);
 
         final JLabel title = new JLabel(SignupViewModel.TITLE_LABEL);
@@ -50,7 +58,7 @@ public class SignupView extends JPanel {
         final JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new BoxLayout(inputPanel, BoxLayout.Y_AXIS));
         inputPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        inputPanel.setMaximumSize(new Dimension(1000, 120));
+        inputPanel.setMaximumSize(new Dimension(WIDTH, HEIGHT));
 
         inputPanel.add(usernameInfo);
         inputPanel.add(passwordInfo);
@@ -82,7 +90,7 @@ public class SignupView extends JPanel {
     private void addUsernameListener() {
         usernameInputField.getDocument().addDocumentListener(new DocumentListener() {
             private void documentListenerHelper() {
-                SignupState currentState = signupViewModel.getState();
+                final SignupState currentState = signupViewModel.getState();
                 currentState.setUsername(usernameInputField.getText());
                 signupViewModel.setState(currentState);
             }
@@ -107,7 +115,7 @@ public class SignupView extends JPanel {
     private void addPasswordListener() {
         passwordInputField.getDocument().addDocumentListener(new DocumentListener() {
             private void documentListenerHelper() {
-                SignupState currentState = signupViewModel.getState();
+                final SignupState currentState = signupViewModel.getState();
                 currentState.setPassword(new String(passwordInputField.getPassword()));
                 signupViewModel.setState(currentState);
             }
@@ -132,7 +140,7 @@ public class SignupView extends JPanel {
     private void addRepeatPasswordListener() {
         repeatPasswordInputField.getDocument().addDocumentListener(new DocumentListener() {
             private void documentListenerHelper() {
-                SignupState currentState = signupViewModel.getState();
+                final SignupState currentState = signupViewModel.getState();
                 currentState.setRepeatPassword(new String(repeatPasswordInputField.getPassword()));
                 signupViewModel.setState(currentState);
             }
@@ -155,22 +163,25 @@ public class SignupView extends JPanel {
     }
 
     private void handleSignup() {
-        SignupState currentState = signupViewModel.getState();
-        String username = currentState.getUsername();
+        final SignupState currentState = signupViewModel.getState();
+        final String username = currentState.getUsername();
         try {
             if (nameApiClient.validateName(username).get("score").getAsDouble() > 0) {
-                JOptionPane.showMessageDialog(this, "The username is invalid. Please try again.", "Validation Error", JOptionPane.WARNING_MESSAGE);
-                return;
+                JOptionPane.showMessageDialog(this,
+                        "The username is invalid. Please try again.", "Validation Error",
+                        JOptionPane.WARNING_MESSAGE);
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error validating username: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-            return;
         }
-        signupController.execute(currentState.getUsername(), currentState.getPassword(), currentState.getRepeatPassword());
+        catch (Exception exp) {
+            JOptionPane.showMessageDialog(this, "Error validating username: " + exp.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        signupController.execute(currentState.getUsername(), currentState.getPassword(),
+                currentState.getRepeatPassword());
     }
 
     private void handlePropertyChange(PropertyChangeEvent evt) {
-        SignupState state = (SignupState) evt.getNewValue();
+        final SignupState state = (SignupState) evt.getNewValue();
         if (state.getUsernameError() != null) {
             JOptionPane.showMessageDialog(this, state.getUsernameError());
         }

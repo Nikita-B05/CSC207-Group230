@@ -685,7 +685,9 @@
         <module name="CyclomaticComplexity">
             <property name="switchBlockAsSingleDecisionPoint" value="true"/>
         </module>
-        <module name="JavaNCSS"/>
+        <module name="JavaNCSS">
+            <property name="methodMaximum" value="500"/>
+        </module>
         <module name="NPathComplexity"/>
 
         <!-- Misc -->

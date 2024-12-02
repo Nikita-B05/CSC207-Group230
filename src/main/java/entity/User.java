@@ -133,7 +133,7 @@ public interface User {
 
     public void setAge(int Age);
 
-    public void changeHappiness(double happiness);
+    public void changeHappiness(int happiness);
 
     public void addDecision(Decision decision);
 

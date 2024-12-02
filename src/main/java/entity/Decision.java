@@ -45,7 +45,7 @@ public class Decision {
         return cashChange;
     }
 
-    public double getHappinessChange() {
+    public int getHappinessChange() {
         return happinessChange;
     }
 
