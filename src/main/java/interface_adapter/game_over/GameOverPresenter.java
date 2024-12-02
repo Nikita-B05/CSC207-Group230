@@ -1,26 +1,25 @@
 package interface_adapter.game_over;
 
-import interface_adapter.ViewManager;
-import interface_adapter.game_over.GameOverOutputBoundary;
-import interface_adapter.game_over.GameOverOutputData;
-import interface_adapter.game_over.GameOverView;
-import javax.swing.*;
+import interface_adapter.ViewManagerModel;
+import interface_adapter.homepage.HomepageViewModel;
+import use_case.game_over.GameOverOutputBoundary;
+import use_case.settings.SettingsOutputData;
 
 public class GameOverPresenter implements GameOverOutputBoundary {
-    private final ViewManager viewManager;
+    private final ViewManagerModel viewManagerModel; // Represents the application's view manager
+    private final HomepageViewModel homepageViewModel; // Represents the homepage data model
 
-    public GameOverPresenter(ViewManager viewManager) {
-        this.viewManager = viewManager;
+    public GameOverPresenter(ViewManagerModel viewManagerModel, HomepageViewModel homepageViewModel) {
+        this.viewManagerModel = viewManagerModel; // Correctly assign the constructor parameter
+        this.homepageViewModel = homepageViewModel; // Initialize the homepageViewModel
     }
 
     @Override
-    public void prepareSuccessView(GameOverOutputData outputData) {
-        GameOverView gameOverView = new GameOverView(outputData);
-        viewManager.switchToView(gameOverView);
-    }
-
-    @Override
-    public void prepareFailView(String error) {
-        JOptionPane.showMessageDialog(null, error, "Error", JOptionPane.ERROR_MESSAGE);
+    public void switchToHomepageView(SettingsOutputData outputData) {
+        homepageViewModel.getState().setUsername(outputData.getUsername());
+        homepageViewModel.getState().setDarkMode(outputData.isDarkMode());
+        homepageViewModel.getState().setAvatar(outputData.getAvatar());
+        homepageViewModel.getState().setName(outputData.getName());
+        homepageViewModel.firePropertyChanged();
     }
 }

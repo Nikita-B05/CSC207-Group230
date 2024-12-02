@@ -147,9 +147,9 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
     public static void main(String[] args) {
         // Create sample decisions for testing
         List<Decision> decisions = new ArrayList<>();
-        decisions.add(new Decision(LocalDateTime.now(), "Invest in stocks", "Yes", 500, 20));
-        decisions.add(new Decision(LocalDateTime.now(), "Buy a car", "No", -10000, -5));
-        decisions.add(new Decision(LocalDateTime.now(), "Start a business", "Yes", 20000, 50));
+        decisions.add(new Decision(LocalDateTime.now(), "Invest in stocks", -10, 500, 20, 10, "yes"));
+        decisions.add(new Decision(LocalDateTime.now(), "Buy a car", -10000, -10000, -5, 10, "yes"));
+        decisions.add(new Decision(LocalDateTime.now(), "Start a business", -100, 20000, 50, 10, "yes"));
 
         // Create a DecisionLogViewModel and populate it with sample data
         DecisionLogViewModel decisionLogViewModel = new DecisionLogViewModel();

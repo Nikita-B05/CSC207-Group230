@@ -257,7 +257,8 @@ public class EntityConverter implements EntityConverterInterface {
         final int happinessChange = object.getInt(HAPPINESS_CHANGE);
         final int salaryChange = object.getInt(SALARY_CHANGE);
 
-        return new Decision(timestamp, decisionText, netWorthChange, happinessChange, salaryChange);
+
+        return new Decision(timestamp, cashChange, happinessChange, happinessChange, salaryChange);
     }
 
     private JSONObject toJSONObject(Decision decision) {

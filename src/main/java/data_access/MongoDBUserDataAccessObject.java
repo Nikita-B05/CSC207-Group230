@@ -29,7 +29,8 @@ import use_case.input_name.InputNameUserDataAccessInterface;
 /**
  * The DAO for user data, now using MongoDB.
  */
-public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterface,
+public class MongoDBUserDataAccessObject implements
+        SignupUserDataAccessInterface,
         LoginUserDataAccessInterface,
         ChangePasswordUserDataAccessInterface,
         ChooseAvatarUserDataAccessInterface,
@@ -37,7 +38,7 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
         LogoutUserDataAccessInterface,
         HomepageUserDataAccessInterface,
         SettingsUserDataAccessInterface,
-        GameDecisionUserDataAccessInterface {
+        GameDecisionUserDataAccessInterface,
         DecisionLogUserDataAccessInterface {
 
     private static final String USERNAME = "username";

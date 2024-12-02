@@ -10,13 +10,18 @@ public class Decision {
     private final double cashChange;
     private final double happinessChange;
     private final double salaryChange;
+    private final double netWorthChange;
+    private final Object decisionResponse;
 
-    public Decision(LocalDateTime timestamp, String decisionText, double cashChange, double happinessChange, double salaryChange) {
+    public Decision(LocalDateTime timestamp, String decisionText, double cashChange, double happinessChange,
+                    double salaryChange, double netWorthChange, Object decisionResponse) {
         this.timestamp = timestamp;
         this.decisionText = decisionText;
         this.cashChange = cashChange;
         this.happinessChange = happinessChange;
         this.salaryChange = salaryChange;
+        this.decisionResponse = decisionResponse;
+        this.netWorthChange = netWorthChange;
     }
 
     public static Decision fromJson(Map<String, Object> json) {
@@ -27,7 +32,7 @@ public class Decision {
         double happinessChange = ((Number) json.get("happinessChange")).doubleValue();
         double salaryChange = ((Number) json.get("salaryChange")).doubleValue();
 
-        return new Decision(timestamp, decisionText, cashChange, happinessChange, salaryChange);
+        return new Decision(timestamp, decisionText, cashChange, happinessChange, salaryChange, 0, null);
     }
 
 
@@ -51,5 +56,11 @@ public class Decision {
 
     public double getSalaryChange() {
         return salaryChange;
+    }
+
+    public double getNetWorthChange() { return netWorthChange;
+    }
+
+    public Object getDecisionResponse() {  return decisionResponse;
     }
 }

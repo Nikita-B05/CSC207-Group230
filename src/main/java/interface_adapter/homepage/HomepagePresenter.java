@@ -17,9 +17,8 @@ public class HomepagePresenter implements HomepageOutputBoundary {
     private final DecisionLogViewModel decisionLogViewModel;
 //    private final ChooseAvatarViewModel chooseAvatarViewModel;
 //    private final PlayGameViewModel playGameViewModel;
-private ChooseAvatarViewModel chooseAvatarViewModel = new ChooseAvatarViewModel();
-//    private final DecisionLogViewModel decisionLogViewModel;
     private ChooseAvatarViewModel chooseAvatarViewModel = new ChooseAvatarViewModel();
+//    private final DecisionLogViewModel decisionLogViewModel;
     private final SettingsViewModel settingsViewModel;
     private final ViewManagerModel viewManagerModel;
     private final GameDecisionViewModel gameDecisionViewModel;
@@ -29,7 +28,7 @@ private ChooseAvatarViewModel chooseAvatarViewModel = new ChooseAvatarViewModel(
         HomepageViewModel homepageViewModel,
         SettingsViewModel settingsViewModel,
         ChooseAvatarViewModel chooseAvatarViewModel,
-        GameDecisionViewModel gameDecisionViewModel
+        GameDecisionViewModel gameDecisionViewModel,
         DecisionLogViewModel decisionLogViewModel
         ) {
         this.viewManagerModel = viewManagerModel;
