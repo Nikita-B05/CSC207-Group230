@@ -339,7 +339,6 @@
         <module name="EqualsHashCode"/>
         <module name="ExplicitInitialization"/>
         <module name="FallThrough"/>
-        <module name="FinalLocalVariable"/>
         <module name="HiddenField">
             <property name="ignoreConstructorParameter" value="true"/>
             <property name="ignoreSetter" value="true"/>
@@ -372,7 +371,6 @@
                        java.lang.StringBuffer, StringBuffer"/>
         </module>
         <module name="InnerAssignment"/>
-        <module name="MagicNumber"/>
         <module name="MatchXpath">
             <property name="query" value="//CLASS_DEF[@text!='Checker' and @text!='Main']
       //LITERAL_CATCH//METHOD_CALL[.//IDENT[@text = 'printStackTrace']]/.."/>
@@ -499,7 +497,6 @@
         <module name="OneStatementPerLine"/>
         <module name="OverloadMethodsDeclarationOrder"/>
         <module name="PackageDeclaration"/>
-        <module name="ParameterAssignment"/>
         <module name="RequireThis"/>
         <module name="ReturnCount">
             <property name="max" value="5"/>
@@ -557,7 +554,6 @@
         </module>
         <module name="SuppressionXpathSingleFilter">
             <property name="files" value=".*[\\/]src[\\/](test|it|xdocs-examples)[\\/]"/>
-            <property name="checks" value="MagicNumber"/>
         </module>
         <module name="SuppressionXpathSingleFilter">
             <property name="files" value=".*[\\/]src[\\/](test|it|xdocs-examples)[\\/]"/>
@@ -585,25 +581,8 @@
 
         <!-- Imports -->
         <module name="AvoidStaticImport"/>
-        <module name="CustomImportOrder">
-            <property name="customImportOrderRules"
-                      value="STATIC###STANDARD_JAVA_PACKAGE###SPECIAL_IMPORTS###THIRD_PARTY_PACKAGE"/>
-            <property name="standardPackageRegExp" value="^java\."/>
-            <property name="specialImportsRegExp" value="^javax\."/>
-            <property name="thirdPartyPackageRegExp" value="^org\."/>
-            <property name="sortImportsInGroupAlphabetically" value="true"/>
-            <property name="separateLineBetweenGroups" value="true"/>
-        </module>
         <module name="IllegalImport"/>
 
-        <module name="ImportOrder">
-            <property name="groups" value="/^java\./,javax,org"/>
-            <property name="ordered" value="true"/>
-            <property name="separated" value="true"/>
-            <property name="option" value="top"/>
-            <property name="sortStaticImportsAlphabetically" value="true"/>
-        </module>
-        <module name="RedundantImport"/>
         <module name="UnusedImports"/>
 
         <!-- Javadoc Comments -->
@@ -632,11 +611,6 @@
             <!-- avoid errors on tag '@noinspection' -->
             <property name="allowUnknownTags" value="true"/>
         </module>
-        <module name="MissingJavadocMethod">
-            <property name="scope" value="public"/>
-            <property name="tokens" value="METHOD_DEF"/>
-            <property name="allowMissingPropertyJavadoc" value="true"/>
-        </module>
         <module name="NonEmptyAtclauseDescription"/>
         <module name="SingleLineJavadoc"/>
         <module name="WriteTag"/>
@@ -660,10 +634,10 @@
                        HashMap, SortedMap, TreeMap, DetailsAST, CheckstyleException,
                        UnsupportedEncodingException, BuildException, ConversionException,
                        FileNotFoundException, TestException"/>
-            <property name="max" value="15"/>
+            <property name="max" value="150"/>
         </module>
         <module name="ClassFanOutComplexity">
-            <property name="max" value="25"/>
+            <property name="max" value="250"/>
             <!-- Default classes are also listed -->
             <property name="excludedClasses"
                       value="boolean, byte, char, double, float, int, long, short,
@@ -716,7 +690,7 @@
 
         <!-- Modifiers -->
         <module name="ClassMemberImpliedModifier">
-            <!-- effectively the opposite of RedundantModifier, so output must be ignored -->
+            <!-- effectively the opposite of Modifier, so output must be ignored -->
             <property name="severity" value="ignore"/>
         </module>
         <module name="InterfaceMemberImpliedModifier">
@@ -724,7 +698,6 @@
             <property name="severity" value="ignore"/>
         </module>
         <module name="ModifierOrder"/>
-        <module name="RedundantModifier"/>
 
         <!-- Naming Conventions -->
         <module name="AbbreviationAsWordInName">

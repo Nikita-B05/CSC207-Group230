@@ -2,9 +2,6 @@ package use_case.decision_log;
 
 import entity.Decision;
 import entity.User;
-import use_case.decision_log.*;
-import use_case.signup.SignupInputData;
-import use_case.signup.SignupOutputData;
 
 import java.util.List;
 

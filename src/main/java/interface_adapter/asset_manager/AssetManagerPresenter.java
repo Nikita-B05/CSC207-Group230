@@ -33,7 +33,7 @@ public class AssetManagerPresenter implements ChooseAssetOutputBoundary {
 
     @Override
     public void switchToManageHomeView(ChooseAssetOutputData chooseAssetOutputData) {
-        ManageHomeState state = manageHomeViewModel.getState();
+        final ManageHomeState state = manageHomeViewModel.getState();
         state.setHome(chooseAssetOutputData.getHome());
         state.setDarkMode(chooseAssetOutputData.isDarkMode());
         state.setAvailableCash(chooseAssetOutputData.getCash());
@@ -46,7 +46,7 @@ public class AssetManagerPresenter implements ChooseAssetOutputBoundary {
 
     @Override
     public void switchToManageStockView(ChooseAssetOutputData chooseAssetOutputData) {
-        ManageStockState state = manageStockViewModel.getState();
+        final ManageStockState state = manageStockViewModel.getState();
         state.setQuantity(null);
         state.setDarkMode(chooseAssetOutputData.isDarkMode());
         state.setNameToCode(chooseAssetOutputData.getNameToCode());
