@@ -6,8 +6,8 @@ import view.GameOverView;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class GameController {
-
+public class GameEndController {
+/*
     private final JFrame frame;
     private final GameEndState gameEndState; // GameState to hold game outcome info
     private final Object[][] leaderboardData; // Your leaderboard data
@@ -20,7 +20,6 @@ public class GameController {
         this.leaderboardData = leaderboardData;
         this.currentUserData = currentUserData;
     }
-
     // Method to start/end the game based on its state
     public void endGame() {
         // Check if game is successful or over
@@ -60,4 +59,6 @@ public class GameController {
         frame.revalidate();
         frame.repaint();
     }
+
+ */
 }
