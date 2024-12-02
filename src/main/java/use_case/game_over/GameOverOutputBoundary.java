@@ -1,11 +1,15 @@
 package use_case.game_over;
 
-import use_case.settings.SettingsOutputData;
+import use_case.game_decision.GameDecisionOutputData;
 
+/**
+ * The output boundary for the Game Decision Use Case.
+ */
 public interface GameOverOutputBoundary {
-    void prepareSuccessView(GameOverOutputData outputData);
-    void prepareFailView(String error);
-
-    void switchToHomepageView(SettingsOutputData outputData);
+    /**
+     * Prepares the failure view for the Change Password Use Case.
+     * @param errorMessage the explanation of the failure
+     */
+    void prepareFailView(String errorMessage);
+    void prepareHomepageView(GameOverOutputData outputData);
 }
-

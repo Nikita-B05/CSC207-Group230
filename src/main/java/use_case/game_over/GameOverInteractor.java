@@ -1,69 +1,37 @@
 package use_case.game_over;
 
-import data_access.MongoDBUserDataAccessObject;
 import entity.User;
-import java.util.HashMap;
+import entity.Assets;
+
+import java.util.ArrayList;
 
 public class GameOverInteractor implements GameOverInputBoundary {
-    private final GameOverOutputBoundary presenter;
-    private final MongoDBUserDataAccessObject userDataAccessObject;
 
-    public GameOverInteractor(GameOverOutputBoundary presenter, MongoDBUserDataAccessObject userDataAccessObject) {
-        this.presenter = presenter;
-        this.userDataAccessObject = userDataAccessObject; 
+    private GameOverUserDataAccessInterface userDataAccess;
+    private GameOverOutputBoundary outputBoundary;
+
+    public GameOverInteractor(GameOverUserDataAccessInterface userDataAccess,
+                              GameOverOutputBoundary outputBoundary) {
+        this.userDataAccess = userDataAccess;
+        this.outputBoundary = outputBoundary;
     }
 
     @Override
-    public void execute(GameOverInputData inputData) {
-        try {
-            User user = userDataAccessObject.get(inputData.getUsername());
-
-            if (user == null) {
-                presenter.prepareFailView("Player not found");
-                return;
-            }
-
-            HashMap<String, Double> emptyStockPrices = new HashMap<>();
-            double wealth = user.getNetWorth(emptyStockPrices);
-            double happiness = user.getHappiness();
-            String username = user.getUsername();
-
-            String message;
-            boolean isWealthDepleted = wealth <= 0;
-            boolean isHappinessDepleted = happiness <= 0;
-
-            if (isWealthDepleted) {
-                message = "You're dead broke!";
-            } else if (isHappinessDepleted) {
-                message = "You have crippling depression!";
-            } else {
-                message = "Something went wrong!";
-            }
-
-            GameOverOutputData outputData = new GameOverOutputData(
-                message, username, isWealthDepleted, isHappinessDepleted
-            );
-
-            presenter.prepareSuccessView(outputData);
-        } catch (RuntimeException e) {
-            presenter.prepareFailView("Error accessing player data");
-        }
-    }
-
-    public void cleanupPlayerData(String username) {
-        try {
-            User user = userDataAccessObject.get(username);
-            
-            // Reset relevant fields to initial values
-            user.setSalary(0); // Assuming salary represents wealth
-            user.setHappiness(0);
-            // Reset other fields as necessary
-
-            // Save the updated user data
-            userDataAccessObject.save(user);
-        } catch (RuntimeException e) {
-            presenter.prepareFailView("Failed to reset player data");
-        }
+    public void switchToHomeview(GameOverInputData inputData) {
+        GameOverOutputData outputData = new GameOverOutputData(inputData.getUsername(), inputData.getCharacterName(),
+                inputData.isDarkMode(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge(),
+                inputData.getHappiness());
+        outputBoundary.prepareHomepageView(outputData);
+        User user = userDataAccess.getCurrentUser();
+        user.setAge(22);
+        user.setHappiness(100);
+        user.setAssets(new Assets());
+        user.setSalary(0);
+        user.setDecisions(new ArrayList<>());
+        userDataAccess.updateAge(user);
+        userDataAccess.updateSalary(user);
+        userDataAccess.updateAssets(user);
+        userDataAccess.updateHappiness(user);
+        userDataAccess.updateDecisions(user);
     }
 }
-

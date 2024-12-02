@@ -1,23 +1,53 @@
 package use_case.game_over;
 
-public class GameOverOutputData {
-    private final String message;
-    private final String username;
-    private final boolean isWealthDepleted;
-    private final boolean isHappinessDepleted; 
+import entity.Assets;
+import entity.Avatar;
 
-    public GameOverOutputData(String message, String username, boolean isWealthDepleted, 
-                            boolean isHappinessDepleted) {
-        this.message = message;
+public class GameOverOutputData {
+    private final String username;
+    private final String characterName;
+    private boolean isDarkMode;
+    private final Assets assets;
+    private final Avatar avatar;
+    private final int age;
+
+    private final int happiness;
+
+    public GameOverOutputData(String username, String characterName, boolean isDarkMode, Assets assets, Avatar avatar, int age, int happiness) {
         this.username = username;
-        this.isWealthDepleted = isWealthDepleted;
-        this.isHappinessDepleted = isHappinessDepleted;
+        this.characterName = characterName;
+        this.isDarkMode = isDarkMode;
+        this.assets = assets;
+        this.avatar = avatar;
+        this.age = age;
+        this.happiness = happiness;
     }
 
-    // Getters
-    public String getMessage() { return message; }
-    public String getUsername() { return username; }
-    public boolean isWealthDepleted() { return isWealthDepleted; }
-    public boolean isHappinessDepleted() { return isHappinessDepleted; }
-}
+    public String getUsername() {
+        return username;
+    }
 
+    public String getCharacterName() {
+        return characterName;
+    }
+
+    public boolean isDarkMode() {
+        return isDarkMode;
+    }
+
+    public Assets getAssets() {
+        return assets;
+    }
+
+    public Avatar getAvatar() {
+        return avatar;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public int getHappiness() {
+        return happiness;
+    }
+}

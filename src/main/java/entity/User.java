@@ -144,6 +144,10 @@ public interface User {
 
     public Map<Integer, Question> getQuestion();
 
+    void setAssets(Assets assets);
+
+    void setDecisions(ArrayList<Decision> decisions);
+
     /**
      * Set the user's new salary.
      * @param salary the user's new salary.

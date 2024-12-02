@@ -1,23 +1,21 @@
 package interface_adapter.game_over;
 
-import use_case.game_over.GameOverInputBoundary;
+import entity.*;
 import use_case.game_over.GameOverInputData;
-
-import javax.swing.*;
+import use_case.game_over.GameOverInputBoundary;
 
 public class GameOverController {
+
     private final GameOverInputBoundary gameOverInteractor;
+
 
     public GameOverController(GameOverInputBoundary gameOverInteractor) {
         this.gameOverInteractor = gameOverInteractor;
     }
 
-    public void execute(String username) {
-        GameOverInputData inputData = new GameOverInputData(false, username);
-        gameOverInteractor.execute(inputData);
+    public void switchToHomepage(Assets assets, int happiness, Avatar avatar, boolean darkMode, int age, String characterName, String username) {
+        final GameOverInputData inputData = new GameOverInputData(assets, happiness, avatar, darkMode, age, characterName, username);
+        gameOverInteractor.switchToHomeview(inputData);
     }
 
-    public void cleanupPlayerData(String username) {
-        gameOverInteractor.cleanupPlayerData(username);
-    }
 }
