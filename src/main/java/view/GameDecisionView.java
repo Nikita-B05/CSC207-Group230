@@ -179,7 +179,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
             int happiness = state.getHappiness();
             double netWorth = state.getAssets().getTotal(state.getStockPrices());
 
-            if ((age >= 22 && (happiness < 0 || netWorth < 0))) {
+            if ((age >= 22 && (happiness <= 0 || netWorth < 0))) {
                 gameDecisionController.switchToGameOver(
                         state.getUsername(),
                         age,
@@ -195,7 +195,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
                 return;
             }
 
-            if (age >= 28) {
+            if (age >= 33) {
                 gameDecisionController.switchToGameSuccess(
                         state.getUsername(),
                         age,
@@ -263,9 +263,9 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
                 : state.getUsername();
 
         statsTitleLabel.setText(characterName + "'s Stats");
-        netWorthLabel.setText("Net Worth:" + state.getNetWorth());
+        netWorthLabel.setText("Net Worth: $" + state.getNetWorth(state.getStockPrices()));
         happinessLabel.setText(String.format("Happiness: %d", state.getHappiness()));
-        salaryLabel.setText(String.format("Salary: $%.2f", state.getSalary()));
+        salaryLabel.setText(String.format("Salary: $%,.2f", state.getSalary()));
 
         List<Decision> decisions = state.getQuestion() != null ? state.getQuestion().getDecisions() : List.of();
         for (int i = 0; i < decisionButtons.length; i++) {

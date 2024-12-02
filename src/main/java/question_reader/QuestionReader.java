@@ -37,7 +37,7 @@ public class QuestionReader {
         }
 
         Map<Integer, Question> questionMap = new LinkedHashMap<>();
-        int number = 18;
+        int number = 22;
 
         for (Map<String, Object> jsonQuestion : jsonQuestions) {
             Question question = Question.fromJson(jsonQuestion);
