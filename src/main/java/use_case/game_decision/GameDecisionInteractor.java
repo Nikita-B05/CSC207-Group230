@@ -49,6 +49,7 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
         userDataAccess.updateHappiness(user);
         userDataAccess.incrementAge();
         userDataAccess.addSalary();
+        userDataAccess.appreciateHome();
     }
 
     @Override

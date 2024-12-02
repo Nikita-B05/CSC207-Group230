@@ -19,4 +19,9 @@ public interface GameDecisionUserDataAccessInterface {
      * Add the user's salary to cash.
      */
     void addSalary();
+
+    /**
+     * Appreciate the user's home.
+     */
+    void appreciateHome();
 }

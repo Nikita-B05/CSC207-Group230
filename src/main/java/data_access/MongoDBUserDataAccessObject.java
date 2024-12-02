@@ -220,6 +220,19 @@ public class MongoDBUserDataAccessObject implements
     }
 
     @Override
+    public void appreciateHome() {
+        User user = getCurrentUser();
+        Assets assets = user.getAssets();
+        Assets newAssets = new Assets(
+                assets.getHome() * 1.05,
+                assets.getStocks(),
+                assets.getCash(),
+                assets.getCar()
+        );
+        updateUser(user, ASSETS, newAssets);
+    }
+
+    @Override
     public void save(User user) {
         MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
 

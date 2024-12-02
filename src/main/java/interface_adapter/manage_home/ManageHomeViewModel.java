@@ -17,11 +17,11 @@ public class ManageHomeViewModel extends ViewModel<ManageHomeState> {
     public final static String SELL_LABEL = "Sell";
 
     public final static String[] HOME_DESCRIPTIONS = {
-            "Luxurious 5 bed/3 bath house with a pool for 1.1 million.",
-            "Small 2 bed/1 bath apartment for 500k."
+        "Luxurious 3 bed/3 bath house with a pool for 500k.",
+        "Small 2 bed/1 bath apartment for 300k.",
     };
 
-    public final static double[] HOME_PRICES = {1_100_000, 500_000};
+    public final static double[] HOME_PRICES = {500_000, 300_000};
 
     public ManageHomeViewModel() {
         super("manageHome");

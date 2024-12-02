@@ -54,7 +54,8 @@ public class PolygonStockDataAccessObject implements
             }
             properties.load(input);
             return properties.getProperty("polygonApi.key");
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new RuntimeException("Failed to load API key from properties file", e);
         }
     }
