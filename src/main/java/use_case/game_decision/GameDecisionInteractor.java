@@ -38,11 +38,21 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
     public void pickDecision(GameDecisionInputData inputData) {
         User user = userDataAccess.getCurrentUser();
         Question question = inputData.getQuestion();
-        question.setSelectedDecision(inputData.getDecisionQuestion());
         Decision decision = inputData.getDecisionQuestion();
-        user.addDecision(decision);
+        
+        // Create new decision with proper order of text and response
+        Decision newDecision = new Decision(
+            user.getAge(),
+            question.getQuestionText(),
+            decision.getDecisionText(),
+            decision.getNetWorthChange(),
+            decision.getHappinessChange(),
+            decision.getSalaryChange()
+        );
+        
+        user.addDecision(newDecision);
         user.modifySalary(decision.getSalaryChange());
-        user.getAssets().changeCash(decision.getCashChange());
+        user.getAssets().changeCash(decision.getNetWorthChange());
         user.changeHappiness(decision.getHappinessChange());
         userDataAccess.updateSalary(user);
         userDataAccess.updateDecision(user);

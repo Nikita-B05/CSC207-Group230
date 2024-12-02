@@ -80,7 +80,8 @@ public class CommonUser implements User {
         this.assets = null;
         this.liabilities = null;
         this.decisions = new ArrayList<>();
-        this.questionBank = QuestionReader.parseQuestions("src/main/java/question_reader/samplequestionjson.txt");
+        this.questionBank = QuestionReader.parseQuestions(
+                "src/main/java/question_reader/samplequestionjson.txt");
     }
 
     @Override
@@ -189,14 +190,6 @@ public class CommonUser implements User {
         this.happiness = happiness;
     }
 
-    public void setSalary(double salary) {
-        this.salary = salary;
-    }
-
-    public void setSalary(int salary) {
-        this.salary = salary;
-    }
-
     public void setAssets(Assets assets) {
         this.assets = assets;
     }
@@ -235,6 +228,11 @@ public class CommonUser implements User {
     @Override
     public Map<Integer, Question> getQuestion() {
         return this.questionBank;
+    }
+
+    @Override
+    public void setSalary(double salary) {
+        this.salary = salary;
     }
 
     @Override

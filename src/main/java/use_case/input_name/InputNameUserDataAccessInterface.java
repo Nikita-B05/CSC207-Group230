@@ -16,6 +16,7 @@ public interface InputNameUserDataAccessInterface {
     User get(String username);
 
     User getCurrentUser();
+
     void updateCharacterName(String characterName);
 
     void updateAvatar(Avatar avatar);

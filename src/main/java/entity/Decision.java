@@ -1,55 +1,59 @@
 package entity;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Decision {
-    private LocalDateTime timestamp;
+    private int age;
     private final String decisionText;
-    private final double cashChange;
+    private final String response;
+    private final double netWorthChange;
     private final int happinessChange;
     private final double salaryChange;
 
-    public Decision(LocalDateTime timestamp, String decisionText, double cashChange, int happinessChange, double salaryChange) {
-        this.timestamp = timestamp;
+    // Regular constructor (without JSON handling)
+    public Decision(int age, String decisionText, String response, double netWorthChange,
+                    int happinessChange, double salaryChange) {
+        this.age = age;
         this.decisionText = decisionText;
-        this.cashChange = cashChange;
+        this.response = response;
+        this.netWorthChange = netWorthChange;
         this.happinessChange = happinessChange;
         this.salaryChange = salaryChange;
     }
-
+    // fromJson method to assign values from a Map
     public static Decision fromJson(Map<String, Object> json) {
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        LocalDateTime timestamp = LocalDateTime.parse((String) json.get("timestamp"), formatter);
-        String decisionText = (String) json.get("decisionText");
-        double cashChange = ((Number) json.get("cashChange")).doubleValue();
+        int age = (int) json.get("age");
+        String decisionText = (json.get("decisionText") != null) ? (String) json.get("decisionText") : "No decision";
+        String response = (String) json.get("response");
+        double netWorthChange = (Integer) json.get("cashChange");
         int happinessChange = ((Number) json.get("happinessChange")).intValue();
         double salaryChange = ((Number) json.get("salaryChange")).doubleValue();
 
-        return new Decision(timestamp, decisionText, cashChange, happinessChange, salaryChange);
+        return new Decision(age, decisionText, response, netWorthChange, happinessChange, salaryChange);
     }
 
+    public static Map<String, Double> calculateTotalStats(List<Decision> decisions) {
+        double totalNetWorthChange = 0;
+        int totalHappinessChange = 0;
 
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
+        for (Decision decision : decisions) {
+            totalNetWorthChange += decision.getNetWorthChange();
+            totalHappinessChange += decision.getHappinessChange();
+        }
+
+        Map<String, Double> totals = new HashMap<>();
+        totals.put("totalNetWorth", totalNetWorthChange);
+        totals.put("totalHappiness", (double) totalHappinessChange);
+
+        return totals;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
+    public int getAge() { return age; }
     public String getDecisionText() { return decisionText; }
-
-    public double getCashChange() {
-        return cashChange;
-    }
-
-    public int getHappinessChange() {
-        return happinessChange;
-    }
-
-    public double getSalaryChange() {
-        return salaryChange;
-    }
+    public String getResponse() { return response; }
+    public double getNetWorthChange() { return netWorthChange; }
+    public int getHappinessChange() { return happinessChange; }
+    public double getSalaryChange() { return salaryChange; }
 }

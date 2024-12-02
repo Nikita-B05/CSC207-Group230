@@ -1,9 +1,7 @@
 package app;
 
 import java.awt.CardLayout;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 
 import data_access.MongoDBUserDataAccessObject;
 import entity.CommonUserFactory;
@@ -25,6 +23,9 @@ import interface_adapter.game_decision.GameDecisionViewModel;
 import interface_adapter.game_over.GameOverController;
 import interface_adapter.game_over.GameOverPresenter;
 import interface_adapter.game_over.GameOverViewModel;
+import interface_adapter.decision_log.DecisionLogPresenter;
+import interface_adapter.decision_log.DecisionLogViewModel;
+import interface_adapter.decision_log.DecisionLogController;
 import interface_adapter.homepage.HomepageController;
 import interface_adapter.homepage.HomepagePresenter;
 import interface_adapter.homepage.HomepageViewModel;
@@ -92,6 +93,9 @@ import use_case.signup.SignupOutputBoundary;
 import use_case.settings.SettingsInputBoundary;
 import use_case.settings.SettingsInteractor;
 import use_case.settings.SettingsOutputBoundary;
+import use_case.decision_log.DecisionLogInputBoundary;
+import use_case.decision_log.DecisionLogInteractor;
+import use_case.decision_log.DecisionLogOutputBoundary;
 import view.*;
 
 /**
@@ -129,6 +133,8 @@ public class AppBuilder {
     private ManageHomeView manageHomeView;
     private ManageStockViewModel manageStockViewModel;
     private ManageStockView manageStockView;
+    private DecisionLogViewModel decisionLogViewModel;
+    private DecisionLogView decisionLogView;
 
     // New Views and ViewModels for Choose Avatar and Input Name
     private ChooseAvatarViewModel chooseAvatarViewModel;
@@ -209,6 +215,17 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the Decision Log Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addDecisionLogView() {
+        decisionLogViewModel = new DecisionLogViewModel();
+        decisionLogView = new DecisionLogView(decisionLogViewModel);
+        cardPanel.add(decisionLogView, decisionLogView.getViewName());
+        return this;
+    }
+
+    /**
      * Adds the Input Name View to the application.
      * @return this builder
      */
@@ -244,7 +261,9 @@ public class AppBuilder {
             }
         }, userDataAccessObject);
         DarkModeController darkModeController = new DarkModeController(darkModeInteractor);
-        LogoutController logoutController = new LogoutController(new LogoutInteractor(userDataAccessObject, new LogoutPresenter(viewManagerModel, settingsViewModel, loginViewModel)));
+        LogoutController logoutController =
+                new LogoutController(new LogoutInteractor(userDataAccessObject,
+                        new LogoutPresenter(viewManagerModel, settingsViewModel, loginViewModel)));
         settingsView = new SettingsView(settingsViewModel, darkModeController, logoutController);
         cardPanel.add(settingsView, settingsView.getViewName());
 
@@ -289,8 +308,10 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addSignupUseCase() {
-        final SignupOutputBoundary signupOutputBoundary = new SignupPresenter(viewManagerModel, signupViewModel, loginViewModel);
-        final SignupInputBoundary userSignupInteractor = new SignupInteractor(userDataAccessObject, signupOutputBoundary, userFactory);
+        final SignupOutputBoundary signupOutputBoundary =
+                new SignupPresenter(viewManagerModel, signupViewModel, loginViewModel);
+        final SignupInputBoundary userSignupInteractor =
+                new SignupInteractor(userDataAccessObject, signupOutputBoundary, userFactory);
         final SignupController controller = new SignupController(userSignupInteractor);
         signupView.setSignupController(controller);
         return this;
@@ -318,7 +339,8 @@ public class AppBuilder {
     public AppBuilder addHomepageUseCase() {
         // Updated to include ChooseAvatarViewModel in the HomepagePresenter
         final HomepageOutputBoundary homepageOutputBoundary = new HomepagePresenter(
-                viewManagerModel, homepageViewModel, settingsViewModel, chooseAvatarViewModel, gameDecisionViewModel);
+                viewManagerModel, homepageViewModel, settingsViewModel, chooseAvatarViewModel,
+                gameDecisionViewModel, decisionLogViewModel);
         final HomepageInputBoundary homepageInteractor = new HomepageInteractor(
                 userDataAccessObject, homepageOutputBoundary, stockDataAccessObject);
 
@@ -332,8 +354,10 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addChooseAvatarUseCase() {
-        final ChooseAvatarOutputBoundary chooseAvatarOutputBoundary = new ChooseAvatarPresenter(chooseAvatarViewModel, viewManagerModel, inputNameViewModel);
-        final ChooseAvatarInputBoundary chooseAvatarInteractor = new ChooseAvatarInteractor(userDataAccessObject, chooseAvatarOutputBoundary);
+        final ChooseAvatarOutputBoundary chooseAvatarOutputBoundary =
+                new ChooseAvatarPresenter(chooseAvatarViewModel, viewManagerModel, inputNameViewModel);
+        final ChooseAvatarInputBoundary chooseAvatarInteractor =
+                new ChooseAvatarInteractor(userDataAccessObject, chooseAvatarOutputBoundary);
         final ChooseAvatarController chooseAvatarController = new ChooseAvatarController(chooseAvatarInteractor);
         chooseAvatarView.setController(chooseAvatarController);
         return this;
@@ -344,8 +368,10 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addInputNameUseCase() {
-        final InputNameOutputBoundary inputNameOutputBoundary = new InputNamePresenter(inputNameViewModel, viewManagerModel, homepageViewModel);
-        final InputNameInputBoundary inputNameInteractor = new InputNameInteractor(userDataAccessObject, inputNameOutputBoundary);
+        final InputNameOutputBoundary inputNameOutputBoundary =
+                new InputNamePresenter(inputNameViewModel, viewManagerModel, homepageViewModel);
+        final InputNameInputBoundary inputNameInteractor =
+                new InputNameInteractor(userDataAccessObject, inputNameOutputBoundary);
         final InputNameController inputNameController = new InputNameController(inputNameInteractor);
         inputNameView.setController(inputNameController);
         return this;
@@ -408,7 +434,8 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addLogoutUseCase() {
-        final LogoutOutputBoundary logoutOutputBoundary = new LogoutPresenter(viewManagerModel, settingsViewModel, loginViewModel);
+        final LogoutOutputBoundary logoutOutputBoundary =
+                new LogoutPresenter(viewManagerModel, settingsViewModel, loginViewModel);
         final LogoutInputBoundary logoutInteractor = new LogoutInteractor(userDataAccessObject, logoutOutputBoundary);
         final LogoutController logoutController = new LogoutController(logoutInteractor);
         settingsView.setLogoutController(logoutController);
@@ -420,8 +447,11 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addSettingsUseCase() {
-        final SettingsOutputBoundary settingsOutputBoundary = new SettingsPresenter(settingsViewModel, viewManagerModel, changePasswordViewModel, homepageViewModel, loginViewModel);
-        final SettingsInputBoundary settingsInteractor = new SettingsInteractor(userDataAccessObject, settingsOutputBoundary);
+        final SettingsOutputBoundary settingsOutputBoundary =
+                new SettingsPresenter(settingsViewModel, viewManagerModel, changePasswordViewModel,
+                        homepageViewModel, loginViewModel);
+        final SettingsInputBoundary settingsInteractor =
+                new SettingsInteractor(userDataAccessObject, settingsOutputBoundary);
         final SettingsController settingsController = new SettingsController(settingsInteractor);
         settingsView.setSettingsController(settingsController);
         return this;
@@ -463,6 +493,20 @@ public class AppBuilder {
                 userDataAccessObject, stockDataAccessObject, manageStockOutputBoundary);
         final ManageStockController manageStockController = new ManageStockController(manageStockInteractor);
         manageStockView.setManageStockController(manageStockController);
+        return this;
+    }
+
+    /**
+     * Adds the Decision Log Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addDecisionLogUseCase() {
+        final DecisionLogOutputBoundary decisionLogOutputBoundary = new DecisionLogPresenter(
+                decisionLogViewModel, viewManagerModel, homepageViewModel);
+        final DecisionLogInputBoundary decisionLogInteractor = new DecisionLogInteractor(
+                userDataAccessObject, decisionLogOutputBoundary);
+        final DecisionLogController decisionLogController = new DecisionLogController(decisionLogInteractor);
+        decisionLogView.setDecisionLogController(decisionLogController);
         return this;
     }
 

@@ -60,7 +60,7 @@ public interface User {
      * Returns the salary of the user.
      * @return the salary of the user.
      */
-    public double getSalary();
+    double getSalary();
 
     /**
      * Returns the assets of the user.
@@ -132,7 +132,11 @@ public interface User {
 
     public void setAge(int Age);
 
-    public void changeHappiness(int happiness);
+    /**
+     * Changes the user's happiness by happiness.
+     * @param happiness the amount to change user's happiness by.
+     */
+    void changeHappiness(int happiness);
 
     public void addDecision(Decision decision);
 
@@ -140,11 +144,19 @@ public interface User {
 
     public Map<Integer, Question> getQuestion();
 
-    void setHappiness(int happiness);
-
-    void setSalary(double salary);
-
     void setAssets(Assets assets);
 
     void setDecisions(ArrayList<Decision> decisions);
+
+    /**
+     * Set the user's new salary.
+     * @param salary the user's new salary.
+     */
+    public void setSalary(double salary);
+
+    /**
+     * Set the user's new happiness.
+     * @param happiness the user's new happiness.
+     */
+    public void setHappiness(int happiness);
 }

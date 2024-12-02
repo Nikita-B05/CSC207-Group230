@@ -78,9 +78,9 @@
 //    }
 //
 //    @Override
-//    public void updateUserDarkMode(boolean isDarkMode) {
+//    public void updateUserDarkMode(boolean isDarkModeEnabled) {
 //        User user = getCurrentUser();
-//        user.setDarkMode(isDarkMode);
+//        user.setDarkModeEnabled(isDarkModeEnabled);
 //        save(user);
 //    }
 //

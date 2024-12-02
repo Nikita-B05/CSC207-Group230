@@ -29,6 +29,8 @@ public interface EntityConverterInterface {
     static final String NET_WORTH_CHANGE = "netWorthChange";
     static final String HAPPINESS_CHANGE = "happinessChange";
     static final String SALARY_CHANGE = "salaryChange";
+    static final String AGE = "age";
+
 
     public Avatar toAvatar(String jsonString);
     public Avatar toAvatar(JSONObject object);
