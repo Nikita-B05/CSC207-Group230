@@ -1,8 +1,6 @@
 package data_access;
 
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -16,7 +14,6 @@ import org.bson.Document;
 
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.choose_asset.ChooseAssetDataAccessInterface;
-import use_case.decision_log.DecisionLogUserDataAccessInterface;
 import use_case.game_decision.GameDecisionUserDataAccessInterface;
 import use_case.homepage.HomepageUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
@@ -44,6 +41,7 @@ public class MongoDBUserDataAccessObject implements
         ChooseAssetDataAccessInterface,
         ManageHomeDataAccessInterface,
         ManageStockDataAccessInterface,
+        DarkModeUserDataAccessInterface,
         GameDecisionUserDataAccessInterface {
 
     private static final String USERNAME = "username";
@@ -68,11 +66,6 @@ public class MongoDBUserDataAccessObject implements
         this.userFactory = userFactory;
         this.mongoDBConnection = new MongoDBConnection();
         this.converter = new EntityConverter();
-    }
-
-    @Override
-    public List<Decision> getDecisions(String username) {
-        return List.of();
     }
 
     @Override
@@ -266,7 +259,6 @@ public class MongoDBUserDataAccessObject implements
         updateUser(user, PASSWORD, user.getPassword());
     }
 
-//    @Override
     public void updateUserDarkMode(User user) {
         updateUser(user, DARK_MODE, user.isDarkMode());
     }

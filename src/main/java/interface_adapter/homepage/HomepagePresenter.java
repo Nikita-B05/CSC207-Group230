@@ -60,8 +60,8 @@ public class HomepagePresenter implements HomepageOutputBoundary {
         gameDecisionViewModel.getState().setQuestion(homepageOutputData.getQuestion(homepageOutputData.getAge()));
         gameDecisionViewModel.getState().setHappiness(homepageOutputData.getHappiness());
         gameDecisionViewModel.getState().setSalary(homepageOutputData.getSalary());
-        gameDecisionViewModel.getState().setStockPrices(homepageOutputData.getStockPrices());
         gameDecisionViewModel.getState().setAssets(homepageOutputData.getAssets());
+        gameDecisionViewModel.getState().setStockPrices(homepageOutputData.getStockPrices());
         gameDecisionViewModel.firePropertyChanged();
         viewManagerModel.setState(gameDecisionViewModel.getViewName());
         viewManagerModel.firePropertyChanged();

@@ -21,6 +21,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
 
     private JLabel questionLabel;
     private JLabel avatarLabel;
+    private JLabel ageLabel;
     private JLabel statsTitleLabel;
     private JLabel netWorthLabel;
     private JLabel happinessLabel;
@@ -43,6 +44,10 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
         questionLabel = new JLabel();
         questionLabel.setFont(new Font("Arial", Font.BOLD, 20));
         questionLabel.setHorizontalAlignment(SwingConstants.CENTER);
+
+        ageLabel = new JLabel();
+        ageLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        ageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         avatarLabel = new JLabel("User Avatar Img or Abstract");
         avatarLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -87,7 +92,15 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
         questionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         questionLabel.setHorizontalAlignment(SwingConstants.CENTER);
         questionPanel.add(questionLabel, BorderLayout.CENTER);
-        add(questionPanel, BorderLayout.NORTH);
+
+        JPanel agePanel = new JPanel(new BorderLayout());
+        agePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 20)); // 20 pixels of right padding
+        agePanel.add(ageLabel, BorderLayout.EAST);
+
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.add(agePanel, BorderLayout.EAST);
+        topPanel.add(questionPanel, BorderLayout.CENTER);
+        add(topPanel, BorderLayout.NORTH);
 
         JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridBagLayout());
@@ -166,7 +179,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
             int happiness = state.getHappiness();
             double netWorth = state.getAssets().getTotal(state.getStockPrices());
 
-            if ((age >= 22 && (happiness < 0 || netWorth < 0))) {
+            if ((age >= 22 && (happiness <= 0 || netWorth < 0))) {
                 gameDecisionController.switchToGameOver(
                         state.getUsername(),
                         age,
@@ -182,7 +195,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
                 return;
             }
 
-            if (age >= 28) {
+            if (age >= 33) {
                 gameDecisionController.switchToGameSuccess(
                         state.getUsername(),
                         age,
@@ -235,6 +248,8 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
 
         questionLabel.setText(state.getQuestion() != null ? state.getQuestion().getQuestionText() : "");
 
+        ageLabel.setText("Age: " + state.getAge());
+
         if (state.getAvatar() != null && state.getAvatar().getIcon() != null) {
             avatarLabel.setIcon(state.getAvatar().getIcon());
             avatarLabel.setText("");
@@ -243,10 +258,14 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
             avatarLabel.setText("No Avatar Available");
         }
 
-        statsTitleLabel.setText(state.getCharacterName() + "'s Stats");
-        netWorthLabel.setText("Net Worth: $happiness is true wealth");
+        String characterName = state.getCharacterName() != null && !state.getCharacterName().isEmpty()
+                ? state.getCharacterName()
+                : state.getUsername();
+
+        statsTitleLabel.setText(characterName + "'s Stats");
+        netWorthLabel.setText("Net Worth: $" + state.getNetWorth(state.getStockPrices()));
         happinessLabel.setText(String.format("Happiness: %d", state.getHappiness()));
-        salaryLabel.setText(String.format("Salary: $%.2f", state.getSalary()));
+        salaryLabel.setText(String.format("Salary: $%,.2f", state.getSalary()));
 
         List<Decision> decisions = state.getQuestion() != null ? state.getQuestion().getDecisions() : List.of();
         for (int i = 0; i < decisionButtons.length; i++) {
