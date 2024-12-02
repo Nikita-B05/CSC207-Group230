@@ -1,6 +1,7 @@
 package interface_adapter.game_decision;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.asset_manager.AssetManagerViewModel;
 import use_case.game_decision.GameDecisionOutputBoundary;
 import use_case.game_decision.GameDecisionOutputData;
 import interface_adapter.homepage.HomepageViewModel;
@@ -12,18 +13,22 @@ public class GameDecisionPresenter implements GameDecisionOutputBoundary {
     private final GameDecisionViewModel gameDecisionViewModel;
     private final ViewManagerModel viewManagerModel;
     private final HomepageViewModel homepageViewModel;
-//    private final AssetManagerViewModel assetManagerViewModel;
+    private final AssetManagerViewModel assetManagerViewModel;
 //    private final GameoverViewModel gameoverViewModel;
 
 
-    public GameDecisionPresenter(GameDecisionViewModel gameDecisionViewModel, ViewManagerModel viewManagerModel, HomepageViewModel homepageViewModel) {
+    public GameDecisionPresenter(
+            GameDecisionViewModel gameDecisionViewModel,
+            ViewManagerModel viewManagerModel,
+            HomepageViewModel homepageViewModel,
+            AssetManagerViewModel assetManagerViewModel
+    ) {
         this.gameDecisionViewModel = gameDecisionViewModel;
         this.viewManagerModel = viewManagerModel;
         this.homepageViewModel = homepageViewModel;
-//        this.assetManagerViewModel = assetManagerViewModel;
+        this.assetManagerViewModel = assetManagerViewModel;
 //        this.gameoverViewModel = gameoverViewModel
     }
-
 
     @Override
     public void prepareFailView(String errorMessage) {
@@ -37,10 +42,10 @@ public class GameDecisionPresenter implements GameDecisionOutputBoundary {
 
     @Override
     public void prepareAssetsView(GameDecisionOutputData outputData) {
-//        assetManagerViewModel.getState().setDarkMode(outputData.isDarkMode());
-//        assetManagerViewModel.firePropertyChanged();
-//        viewManagerModel.setState(assetManagerViewModel.getViewName());
-//        viewManagerModel.firePropertyChanged();
+        assetManagerViewModel.getState().setDarkMode(outputData.isDarkMode());
+        assetManagerViewModel.firePropertyChanged();
+        viewManagerModel.setState(assetManagerViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
     }
 // username, name, avatar, cash, happiness
     @Override
