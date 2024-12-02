@@ -3,13 +3,10 @@ package use_case.game_over;
 public class GameOverInputData {
     private final boolean isSuccess;  // True if the game was won, false if it was lost
     private final String username;   // to print out username with game over message
-    private final int finalScore;    // The player's final score or performance metric
 
-    public GameOverInputData(boolean isSuccess, String username, int finalScore) {
+    public GameOverInputData(boolean isSuccess, String username) {
         this.isSuccess = isSuccess;
-        this.username = username;
-        this.finalScore = finalScore;
-    }
+        this.username = username;}
 
     public boolean isSuccess() {
         return isSuccess;
@@ -17,10 +14,6 @@ public class GameOverInputData {
 
     public String getUsername() {
         return username;
-    }
-
-    public int getFinalScore() {
-        return finalScore;
     }
 }
 

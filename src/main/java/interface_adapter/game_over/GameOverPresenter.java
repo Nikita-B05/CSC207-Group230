@@ -1,6 +1,10 @@
 package interface_adapter.game_over;
 
-import javax.swing.JOptionPane;
+import interface_adapter.ViewManager;
+import interface_adapter.game_over.GameOverOutputBoundary;
+import interface_adapter.game_over.GameOverOutputData;
+import interface_adapter.game_over.GameOverView;
+import javax.swing.*;
 
 public class GameOverPresenter implements GameOverOutputBoundary {
     private final ViewManager viewManager;
