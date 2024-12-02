@@ -151,7 +151,7 @@ public interface User {
      * Changes the user's happiness by happiness.
      * @param happiness the amount to change user's happiness by.
      */
-    void changeHappiness(double happiness);
+    void changeHappiness(int happiness);
 
     /**
      * Adds a decision to the user.

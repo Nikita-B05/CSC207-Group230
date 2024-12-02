@@ -153,8 +153,13 @@ public class CommonUser implements User {
     }
 
     @Override
-    public void changeHappiness(double happiness) {
-        this.happiness += happiness;
+    public void changeHappiness(int happiness) {
+        if (this.happiness + happiness >= 100) {
+            this.happiness = 100;
+        }
+        else{
+            this.happiness += happiness;
+        }
     }
 
     @Override

@@ -64,7 +64,6 @@ public class AssetManagerPresenter implements ChooseAssetOutputBoundary {
 
     @Override
     public void switchToGameDecisionView(ChooseAssetOutputData chooseAssetOutputData) {
-        gameDecisionViewModel.getState().setAssets(chooseAssetOutputData.getAssets());
         gameDecisionViewModel.getState().setAge(chooseAssetOutputData.getAge());
         gameDecisionViewModel.getState().setAvatar(chooseAssetOutputData.getAvatar());
         gameDecisionViewModel.getState().setCharacterName(chooseAssetOutputData.getCharacterName());
@@ -72,6 +71,7 @@ public class AssetManagerPresenter implements ChooseAssetOutputBoundary {
         gameDecisionViewModel.getState().setDarkModeEnabled(chooseAssetOutputData.isDarkMode());
         gameDecisionViewModel.getState().setStockPrices(chooseAssetOutputData.getStockPrices());
         gameDecisionViewModel.getState().setSalary(chooseAssetOutputData.getSalary());
+        gameDecisionViewModel.getState().setAssets(chooseAssetOutputData.getAssets());
         gameDecisionViewModel.getState().setHappiness(chooseAssetOutputData.getHappiness());
         gameDecisionViewModel.firePropertyChanged();
         viewManagerModel.setState(gameDecisionViewModel.getViewName());
