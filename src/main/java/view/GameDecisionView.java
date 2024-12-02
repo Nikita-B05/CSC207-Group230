@@ -1,19 +1,47 @@
 package view;
 
-import entity.Decision;
-import interface_adapter.game_decision.GameDecisionController;
-import interface_adapter.game_decision.GameDecisionViewModel;
-import interface_adapter.game_decision.GameDecisionState;
-
-import javax.swing.*;
-import java.util.List;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
+import javax.swing.*;
+
+import entity.Decision;
+import interface_adapter.game_decision.GameDecisionController;
+import interface_adapter.game_decision.GameDecisionState;
+import interface_adapter.game_decision.GameDecisionViewModel;
+
+/**
+ * The view for making game decisions in the application.
+ * Displays a question with options and allows the user to make decisions.
+ *
+ * <p>Some methods and parameters may accept or return <code>null</code> values.</p>
+ */
 public class GameDecisionView extends JPanel implements ActionListener, PropertyChangeListener {
+
+    public static final int GREEN = 110;
+    public static final int BLUE = 250;
+    private static final String FONT_NAME = "Arial";
+    private static final int FONT_SIZE_20 = 20;
+    private static final int FONT_SIZE_16 = 16;
+    private static final int FONT_SIZE_14 = 14;
+    private static final int BUTTON_WIDTH = 150;
+    private static final int BUTTON_HEIGHT = 50;
+    private static final int GRID_GAP_X = 10;
+    private static final int GRID_GAP_Y = 10;
+    private static final int GRID_ROWS = 2;
+    private static final int GRID_COLS = 2;
+    private static final int PREFERRED_WIDTH = 10;
+    private static final int PREFERRED_HEIGHT = 30;
+    private static final int SPACER_PANEL_HEIGHT = 30;
+    private static final int DECISION_BUTTON_OPTIONS = 4;
+    private static final int EMPTY_BORDER = 10;
+    private static final int AGE_OUT_AGE = 28;
+    private static final int AGE_IN_AGE = 22;
+    private static final int RED = 80;
 
     private final String viewName = "game decision";
     private final GameDecisionViewModel gameDecisionViewModel;
@@ -41,32 +69,32 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
 
     private void initializeComponents() {
         questionLabel = new JLabel();
-        questionLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        questionLabel.setFont(new Font(FONT_NAME, Font.BOLD, FONT_SIZE_20));
         questionLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         avatarLabel = new JLabel("User Avatar Img or Abstract");
         avatarLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        avatarLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        avatarLabel.setFont(new Font(FONT_NAME, Font.PLAIN, FONT_SIZE_14));
 
         statsTitleLabel = new JLabel();
-        statsTitleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        statsTitleLabel.setFont(new Font(FONT_NAME, Font.BOLD, FONT_SIZE_16));
         statsTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         netWorthLabel = new JLabel("Net Worth: $happiness is true wealth");
-        netWorthLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        netWorthLabel.setFont(new Font(FONT_NAME, Font.PLAIN, FONT_SIZE_14));
 
         happinessLabel = new JLabel("Happiness: 0");
-        happinessLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        happinessLabel.setFont(new Font(FONT_NAME, Font.PLAIN, FONT_SIZE_14));
 
         salaryLabel = new JLabel("Salary: $0.00");
-        salaryLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        salaryLabel.setFont(new Font(FONT_NAME, Font.PLAIN, FONT_SIZE_14));
 
-        decisionButtons = new JButton[4];
-        for (int i = 0; i < 4; i++) {
+        decisionButtons = new JButton[DECISION_BUTTON_OPTIONS];
+        for (int i = 0; i < DECISION_BUTTON_OPTIONS; i++) {
             decisionButtons[i] = new JButton("Option " + (i + 1));
             decisionButtons[i].addActionListener(this);
-            decisionButtons[i].setFont(new Font("Arial", Font.PLAIN, 14));
-            decisionButtons[i].setPreferredSize(new Dimension(150, 50));
+            decisionButtons[i].setFont(new Font(FONT_NAME, Font.PLAIN, FONT_SIZE_14));
+            decisionButtons[i].setPreferredSize(new Dimension(BUTTON_WIDTH, BUTTON_HEIGHT));
         }
 
         confirmButton = new JButton("Submit");
@@ -77,56 +105,59 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
     }
 
     private void setupLayout() {
-        setLayout(new BorderLayout(20, 20));
+        setLayout(new BorderLayout(GRID_GAP_X, GRID_GAP_Y));
 
-        JPanel spacerPanel = new JPanel();
-        spacerPanel.setPreferredSize(new Dimension(10, 30));
+        final JPanel spacerPanel = new JPanel();
+        spacerPanel.setPreferredSize(new Dimension(PREFERRED_WIDTH, SPACER_PANEL_HEIGHT));
         add(spacerPanel, BorderLayout.NORTH);
 
-        JPanel questionPanel = new JPanel(new BorderLayout());
-        questionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        questionLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        final JPanel questionPanel = new JPanel(new BorderLayout());
+        questionPanel.setBorder(BorderFactory.createEmptyBorder(EMPTY_BORDER, EMPTY_BORDER,
+                EMPTY_BORDER, EMPTY_BORDER));
         questionPanel.add(questionLabel, BorderLayout.CENTER);
         add(questionPanel, BorderLayout.NORTH);
 
-        JPanel bottomPanel = new JPanel();
+        // Bottom Panel for avatar and stats
+        final JPanel bottomPanel = new JPanel();
         bottomPanel.setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
+        final GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(GRID_GAP_X, GRID_GAP_X, GRID_GAP_X, GRID_GAP_X);
 
-        JPanel avatarPanel = new JPanel();
+        // Avatar Panel
+        final JPanel avatarPanel = new JPanel();
         avatarPanel.setLayout(new BorderLayout());
-        avatarLabel.setHorizontalAlignment(SwingConstants.CENTER);
         avatarPanel.add(avatarLabel, BorderLayout.CENTER);
         gbc.gridx = 0;
         gbc.gridy = 0;
         bottomPanel.add(avatarPanel, gbc);
 
-        JPanel statsPanel = new JPanel();
+        // Stats Panel
+        final JPanel statsPanel = new JPanel();
         statsPanel.setLayout(new BoxLayout(statsPanel, BoxLayout.Y_AXIS));
         statsPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-
         statsPanel.add(statsTitleLabel);
-        statsPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        statsPanel.add(Box.createRigidArea(new Dimension(0, PREFERRED_WIDTH)));
         statsPanel.add(netWorthLabel);
         statsPanel.add(happinessLabel);
         statsPanel.add(salaryLabel);
 
         gbc.gridx = 1;
         bottomPanel.add(statsPanel, gbc);
-
         add(bottomPanel, BorderLayout.CENTER);
 
-        JPanel decisionsPanel = new JPanel(new GridLayout(2, 2, 10, 10));
+        // Decisions Panel
+        final JPanel decisionsPanel = new JPanel(new GridLayout(GRID_ROWS, GRID_COLS, GRID_GAP_X, GRID_GAP_Y));
         for (JButton button : decisionButtons) {
             decisionsPanel.add(button);
         }
 
-        JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        // Action Panel for confirm and cancel buttons
+        final JPanel actionPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, GRID_GAP_X, GRID_GAP_Y));
         actionPanel.add(cancelButton);
         actionPanel.add(confirmButton);
 
-        JPanel finalPanel = new JPanel(new BorderLayout(10, 10));
+        // Final Panel to hold everything together
+        final JPanel finalPanel = new JPanel(new BorderLayout(GRID_GAP_X, GRID_GAP_Y));
         finalPanel.add(decisionsPanel, BorderLayout.CENTER);
         finalPanel.add(actionPanel, BorderLayout.SOUTH);
 
@@ -139,7 +170,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        GameDecisionState state = gameDecisionViewModel.getState();
+        final GameDecisionState state = gameDecisionViewModel.getState();
 
         // Remove highlighting from previously selected button
         if (selectedDecisionIndex != -1) {
@@ -150,55 +181,33 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
         for (int i = 0; i < decisionButtons.length; i++) {
             if (e.getSource() == decisionButtons[i]) {
                 // Highlight the selected button by changing its background to dark blue
-                decisionButtons[i].setBackground(new Color(80, 110, 250));
+                decisionButtons[i].setBackground(new Color(RED, GREEN, BLUE));
                 selectedDecisionIndex = i;
 
                 if (i < state.getQuestion().getDecisions().size()) {
-                    Decision decision = state.getQuestion().getDecisions().get(i);
+                    final Decision decision = state.getQuestion().getDecisions().get(i);
                     state.setDecisionPicked(decision);
                 }
-                return;
             }
         }
 
+        // Handle Confirm and Cancel actions
         if (e.getSource() == confirmButton && selectedDecisionIndex != -1) {
-            int age = state.getAge();
-            int happiness = state.getHappiness();
-            double netWorth = state.getAssets().getTotal(state.getStockPrices());
+            handleConfirmAction(state);
+        }
 
-            if ((age >= 22 && (happiness <= 0 || netWorth <= 0))) {
-                gameDecisionController.switchToGameOver(
-                        state.getUsername(),
-                        age,
-                        state.getCharacterName(),
-                        state.isDarkModeEnabled(),
-                        state.getQuestion(),
-                        state.getAssets(),
-                        state.getAvatar(),
-                        state.getDecisionPicked(),
-                        happiness,
-                        state.getSalary()
-                );
-                return;
-            }
+        if (e.getSource() == cancelButton) {
+            handleCancelAction(state);
+        }
+    }
 
-            if (age >= 28) {
-                gameDecisionController.switchToGameSuccess(
-                        state.getUsername(),
-                        age,
-                        state.getCharacterName(),
-                        state.isDarkModeEnabled(),
-                        state.getQuestion(),
-                        state.getAssets(),
-                        state.getAvatar(),
-                        state.getDecisionPicked(),
-                        happiness,
-                        state.getSalary()
-                );
-                return;
-            }
+    private void handleConfirmAction(GameDecisionState state) {
+        final int age = state.getAge();
+        final int happiness = state.getHappiness();
+        final double netWorth = state.getAssets().getTotal(state.getStockPrices());
 
-            gameDecisionController.pickDecision(
+        if (age >= AGE_IN_AGE && (happiness <= 0 || netWorth <= 0)) {
+            gameDecisionController.switchToGameOver(
                     state.getUsername(),
                     age,
                     state.getCharacterName(),
@@ -212,33 +221,78 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
             );
         }
 
-        if (e.getSource() == cancelButton) {
-            gameDecisionController.switchToHomepage(
+        if (age >= AGE_OUT_AGE) {
+            gameDecisionController.switchToGameSuccess(
                     state.getUsername(),
-                    state.getAge(),
+                    age,
                     state.getCharacterName(),
                     state.isDarkModeEnabled(),
                     state.getQuestion(),
                     state.getAssets(),
                     state.getAvatar(),
                     state.getDecisionPicked(),
-                    state.getHappiness(),
+                    happiness,
                     state.getSalary()
             );
         }
+
+        gameDecisionController.pickDecision(
+                state.getUsername(),
+                age,
+                state.getCharacterName(),
+                state.isDarkModeEnabled(),
+                state.getQuestion(),
+                state.getAssets(),
+                state.getAvatar(),
+                state.getDecisionPicked(),
+                happiness,
+                state.getSalary()
+        );
+        gameDecisionController.switchToAssetsManager(
+                state.getUsername(),
+                age,
+                state.getCharacterName(),
+                state.isDarkModeEnabled(),
+                state.getQuestion(),
+                state.getAssets(),
+                state.getAvatar(),
+                state.getDecisionPicked(),
+                happiness,
+                state.getSalary()
+        );
     }
 
+    private void handleCancelAction(GameDecisionState state) {
+        gameDecisionController.switchToHomepage(
+                state.getUsername(),
+                state.getAge(),
+                state.getCharacterName(),
+                state.isDarkModeEnabled(),
+                state.getQuestion(),
+                state.getAssets(),
+                state.getAvatar(),
+                state.getDecisionPicked(),
+                state.getHappiness(),
+                state.getSalary()
+        );
+    }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        GameDecisionState state = gameDecisionViewModel.getState();
+        final GameDecisionState state = gameDecisionViewModel.getState();
 
-        questionLabel.setText(state.getQuestion() != null ? state.getQuestion().getQuestionText() : "");
+        if (state.getQuestion() != null) {
+            questionLabel.setText(state.getQuestion().getQuestionText());
+        }
+        else {
+            questionLabel.setText("");
+        }
 
         if (state.getAvatar() != null && state.getAvatar().getIcon() != null) {
             avatarLabel.setIcon(state.getAvatar().getIcon());
             avatarLabel.setText("");
-        } else {
+        }
+        else {
             avatarLabel.setIcon(null);
             avatarLabel.setText("No Avatar Available");
         }
@@ -248,13 +302,20 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
         happinessLabel.setText(String.format("Happiness: %d", state.getHappiness()));
         salaryLabel.setText(String.format("Salary: $%.2f", state.getSalary()));
 
-        List<Decision> decisions = state.getQuestion() != null ? state.getQuestion().getDecisions() : List.of();
+        final List<Decision> decisions;
+        if (state.getQuestion() != null) {
+            decisions = state.getQuestion().getDecisions();
+        }
+        else {
+            decisions = List.of();
+        }
         for (int i = 0; i < decisionButtons.length; i++) {
             if (i < decisions.size()) {
                 decisionButtons[i].setEnabled(true);
                 decisionButtons[i].setText(decisions.get(i).getDecisionText());
                 decisionButtons[i].setBackground(null);
-            } else {
+            }
+            else {
                 decisionButtons[i].setEnabled(false);
                 decisionButtons[i].setText("");
             }
@@ -262,7 +323,8 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
 
         if (state.isDarkModeEnabled()) {
             ColorTheme.applyDarkMode(this);
-        } else {
+        }
+        else {
             ColorTheme.applyLightMode(this);
         }
 

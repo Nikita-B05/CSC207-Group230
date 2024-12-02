@@ -1,17 +1,15 @@
 package app;
 
 import java.awt.CardLayout;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-//import data_access.InMemoryUserDataAccessObject;
 import data_access.MongoDBUserDataAccessObject;
-import entity.CommonUser;
 import entity.CommonUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
-import interface_adapter.ViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.ChangePasswordViewModel;
@@ -208,7 +206,8 @@ public class AppBuilder {
             }
         }, userDataAccessObject);
         DarkModeController darkModeController = new DarkModeController(darkModeInteractor);
-        LogoutController logoutController = new LogoutController(new LogoutInteractor(userDataAccessObject, new LogoutPresenter(viewManagerModel, settingsViewModel, loginViewModel)));
+        LogoutController logoutController = new LogoutController(new LogoutInteractor(userDataAccessObject,
+                new LogoutPresenter(viewManagerModel, settingsViewModel, loginViewModel)));
         settingsView = new SettingsView(settingsViewModel, darkModeController, logoutController);
         cardPanel.add(settingsView, settingsView.getViewName());
 
