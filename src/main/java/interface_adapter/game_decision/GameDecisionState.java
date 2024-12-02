@@ -116,4 +116,8 @@ public class GameDecisionState {
     public void setStockPrices(Map<String, Double> stockPrices) {
         this.stockPrices = stockPrices;
     }
+
+    public String getNetWorth(Map<String, Double> stockPrices) {
+        return String.format("%,.2f", Math.round(assets.getTotal(stockPrices) * 100.0) / 100.0);
+    }
 }

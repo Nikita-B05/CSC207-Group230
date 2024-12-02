@@ -85,7 +85,7 @@ public interface User {
      * @param stockPrices is the current market prices of stocks.
      * @return the net worth of the user.
      */
-    double getNetWorth(HashMap<String, Double> stockPrices);
+    double getNetWorth(Map<String, Double> stockPrices);
 
     /**
      * Returns the dark mode UI config of the user.
@@ -108,7 +108,7 @@ public interface User {
      * @param stockPrices is the current market prices of stocks.
      * @return if the user has the funds to buy stock.
      */
-    public boolean canBuyStock(String stockCode, int quantity, HashMap<String, Double> stockPrices);
+    public boolean canBuyStock(String stockCode, int quantity, Map<String, Double> stockPrices);
 
     /**
      * Returns the money made on the stock sold.
@@ -132,7 +132,7 @@ public interface User {
 
     public void setAge(int Age);
 
-    public void changeHappiness(double happiness);
+    public void changeHappiness(int happiness);
 
     public void addDecision(Decision decision);
 

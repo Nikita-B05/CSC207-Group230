@@ -163,7 +163,7 @@ public class SignupView extends JPanel {
                 return;
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error validating username: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "The username is invalid. Please try again.", "Validation Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
         signupController.execute(currentState.getUsername(), currentState.getPassword(), currentState.getRepeatPassword());
