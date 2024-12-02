@@ -159,4 +159,6 @@ public interface User {
      * @param happiness the user's new happiness.
      */
     public void setHappiness(int happiness);
+
+    void setSalary(int salary);
 }

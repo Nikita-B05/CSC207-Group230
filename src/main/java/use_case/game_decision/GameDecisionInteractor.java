@@ -4,6 +4,7 @@ import entity.Assets;
 import entity.Decision;
 import entity.Question;
 import entity.User;
+import use_case.choose_asset.ChooseAssetStockDataAccessInterface;
 
 /**
  * Interactor for the Settings use case.
@@ -11,16 +12,21 @@ import entity.User;
 public class GameDecisionInteractor implements GameDecisionInputBoundary {
     private final GameDecisionUserDataAccessInterface userDataAccess;
     private final GameDecisionOutputBoundary outputBoundary;
+    private final ChooseAssetStockDataAccessInterface stockDataAccessObject;
 
     public GameDecisionInteractor(GameDecisionUserDataAccessInterface userDataAccess,
-                                  GameDecisionOutputBoundary outputBoundary) {
+                                  GameDecisionOutputBoundary outputBoundary,
+                                  ChooseAssetStockDataAccessInterface stockDataAccessInterface) {
         this.userDataAccess = userDataAccess;
         this.outputBoundary = outputBoundary;
+        this.stockDataAccessObject = stockDataAccessInterface;
+
     }
 
     @Override
     public void switchToAssetsManager(GameDecisionInputData inputData) {
         User user = userDataAccess.getCurrentUser();
+        stockDataAccessObject.setDate(user.getAge());
         GameDecisionOutputData outputData = new GameDecisionOutputData(
                 inputData.getUsername(),
                 inputData.isDarkMode(),
@@ -29,7 +35,8 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
                 inputData.getAvatar(),
                 inputData.getAge(),
                 inputData.getHappiness(),
-                inputData.getSalary()
+                inputData.getSalary(),
+                stockDataAccessObject.getCodeToPrice()
         );
         outputBoundary.prepareAssetsView(outputData);
     }
@@ -81,8 +88,9 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
     @Override
     public void switchToGameSuccess(GameDecisionInputData inputData) {
         User user = userDataAccess.getCurrentUser();
+        stockDataAccessObject.setDate(user.getAge());
         GameDecisionOutputData outputData = new GameDecisionOutputData(inputData.getUsername(), inputData.isDarkMode(),
-                inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge(), inputData.getHappiness(), inputData.getSalary());
+                inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge(), inputData.getHappiness(), inputData.getSalary(), stockDataAccessObject.getCodeToPrice());
         outputBoundary.prepareGameSuccessView(outputData);
     }
 }

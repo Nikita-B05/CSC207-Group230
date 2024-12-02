@@ -27,6 +27,7 @@ public class Main {
                 .addGameDecisionView()
                 .addDecisionLogView()
                 .addGameOverView()
+                .addGameSuccessView()
                 .addSignupUseCase()
                 .addDecisionLogUseCase()
                 .addLoginUseCase()
@@ -42,6 +43,7 @@ public class Main {
                 .addChooseAssetUseCase()
                 .addManageHomeUseCase()
                 .addManageStockUseCase()
+                .addGameSuccessUseCase()
                 .build();
 
         application.pack();
