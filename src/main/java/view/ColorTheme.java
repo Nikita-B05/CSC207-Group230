@@ -13,7 +13,7 @@ public class ColorTheme {
             } else if (comp instanceof JLabel) {
                 comp.setForeground(Color.WHITE);
                 comp.setBackground(Color.DARK_GRAY);
-            } else if (comp instanceof JButton) {
+            } else if (comp instanceof JButton || comp instanceof JToggleButton) {
                 comp.setBackground(Color.GRAY);
                 comp.setForeground(Color.WHITE);
             } else if (comp instanceof JTextField || comp instanceof JPasswordField) {

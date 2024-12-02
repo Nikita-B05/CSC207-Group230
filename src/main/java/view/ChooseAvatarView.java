@@ -55,10 +55,11 @@ public class ChooseAvatarView extends JPanel implements ActionListener, Property
             avatarButton.setContentAreaFilled(false);
 
             // Add ItemListener to update border on selection
-            avatarButton.addItemListener(e -> {
+            avatarButton.addItemListener(evt -> {
                 if (avatarButton.isSelected()) {
                     avatarButton.setBorder(BorderFactory.createLineBorder(Color.BLUE, 2));
-                } else {
+                }
+                else {
                     avatarButton.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
                 }
             });
@@ -97,7 +98,8 @@ public class ChooseAvatarView extends JPanel implements ActionListener, Property
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             updateTheme(viewModel.getState().isDarkMode());
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -108,7 +110,8 @@ public class ChooseAvatarView extends JPanel implements ActionListener, Property
             ColorTheme.applyDarkMode(avatarPanel);
             ColorTheme.applyDarkMode(buttonPanel);
             titleLabel.setForeground(Color.WHITE);
-        } else {
+        }
+        else {
             ColorTheme.applyLightMode(this);
             ColorTheme.applyLightMode(avatarPanel);
             ColorTheme.applyLightMode(buttonPanel);

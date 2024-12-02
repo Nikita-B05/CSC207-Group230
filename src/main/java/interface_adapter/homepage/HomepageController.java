@@ -1,11 +1,7 @@
 package interface_adapter.homepage;
 
-import entity.Avatar;
-import entity.Decision;
 import use_case.homepage.HomepageInputBoundary;
 import use_case.homepage.HomepageInputData;
-
-import java.util.ArrayList;
 
 /**
  * Controller for the Homepage Use Case.
@@ -19,6 +15,7 @@ public class HomepageController {
 
     /**
      * Executes the "switch to ChooseAvatar" Use Case.
+     * @param username the username of the current user
      */
     public void switchToAvatarView(String username) {
         final HomepageInputData homepageInputData = new HomepageInputData(username);
@@ -27,6 +24,7 @@ public class HomepageController {
 
     /**
      * Executes the "switch to PlayGame" Use Case.
+     * @param username the username of the current user
      */
     public void switchToPlayGameView(String username) {
         final HomepageInputData homepageInputData = new HomepageInputData(username);
@@ -35,6 +33,7 @@ public class HomepageController {
 
     /**
      * Executes the "switch to DecisionLog" Use Case.
+     * @param username the username of the current user
      */
     public void switchToDecisionLogView(String username) {
         final HomepageInputData homepageInputData = new HomepageInputData(username);
@@ -43,6 +42,7 @@ public class HomepageController {
 
     /**
      * Executes the "switch to ProfileSettings" Use Case.
+     * @param username the username of the current user
      */
     public void switchToProfileSettingsView(String username) {
         final HomepageInputData homepageInputData = new HomepageInputData(username);

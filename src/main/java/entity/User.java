@@ -1,24 +1,12 @@
 package entity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The representation of a user in our program.
  */
 public interface User {
-
-    /**
-     * Sets the characterName of the user.
-     * @param characterName the new character name of the user.
-     */
-    void setCharacterName(String characterName);
-
-    /**
-     * Sets the avatar of the user.
-     * @param avatar the new avatar of the user.
-     */
-    void setAvatar(Avatar avatar);
 
     /**
      * Returns the username of the user.
@@ -60,7 +48,7 @@ public interface User {
      * Returns the salary of the user.
      * @return the salary of the user.
      */
-    public int getSalary();
+    double getSalary();
 
     /**
      * Returns the assets of the user.
@@ -85,46 +73,101 @@ public interface User {
      * @param stockPrices is the current market prices of stocks.
      * @return the net worth of the user.
      */
-    double getNetWorth(HashMap<String, Double> stockPrices);
+    double getNetWorth(Map<String, Double> stockPrices);
 
     /**
-     * Returns the dark mode UI config of the user.
+     * Sets the user's username.
+     * @param username new username
+     */
+    void setUsername(String username);
+
+    /**
+     * Sets the user's password.
+     * @param password new password
+     */
+    void setPassword(String password);
+
+    /**
+     * Sets the user's darkMode.
+     * @param isDarkMode new darkMode
      */
     void setDarkMode(boolean isDarkMode);
 
     /**
-     * Buys a stock for the user.
-     * Precondition: User has sufficient cash.
-     * @param stockCode code of the stock to be bought.
-     * @param quantity number of stock to be bought.
-     * @param buyPrice price of stock to be bought.
+     * Sets the characterName of the user.
+     * @param characterName the new character name of the user.
      */
-    public void buyStock(String stockCode, int quantity, double buyPrice);
+    void setCharacterName(String characterName);
 
     /**
-     * Returns if the user has the funds to buy stock.
-     * @param stockCode code of the stock to be bought.
-     * @param quantity number of stock to be bought.
-     * @param stockPrices is the current market prices of stocks.
-     * @return if the user has the funds to buy stock.
+     * Sets the avatar of the user.
+     * @param avatar the new avatar of the user.
      */
-    public boolean canBuyStock(String stockCode, int quantity, HashMap<String, Double> stockPrices);
+    void setAvatar(Avatar avatar);
 
     /**
-     * Returns the money made on the stock sold.
-     * Precondition: assumes the user owns enough stock to sell.
-     * @param stockCode code of the stock to be sold.
-     * @param quantity number of stock to be sold.
-     * @param sellPrice price of stock to be sold.
-     * @return the money made on the stock sold.
+     * Sets the user's happiness.
+     * @param happiness new happiness
      */
-    public double sellStock(String stockCode, int quantity, double sellPrice);
+    void setHappiness(int happiness);
 
     /**
-     * Returns if the user can sell the stock.
-     * @param stockCode code of the stock to be sold.
-     * @param quantity number of stock to be sold.
-     * @return if the user can sell the stock.
+     * Sets the user's salary.
+     * @param salary new salary
      */
-    public boolean isValidSell(String stockCode, int quantity);
+    void setSalary(int salary);
+
+    /**
+     * Sets the user's assets.
+     * @param assets new assets
+     */
+    void setAssets(Assets assets);
+
+    /**
+     * Sets the user's liabilities.
+     * @param liabilities new liabilities
+     */
+    void setLiabilities(Liabilities liabilities);
+
+    /**
+     * Sets the user's decisions.
+     * @param decisions new decisions
+     */
+    void setDecisions(ArrayList<Decision> decisions);
+
+    /**
+     * Returns the age of the user.
+     * @return the age of the user.
+     */
+    int getAge();
+
+    /**
+     * Sets the user's age.
+     * @param age new age
+     */
+    void setAge(int age);
+
+    /**
+     * Changes the user's happiness by happiness.
+     * @param happiness the amount to change user's happiness by.
+     */
+    void changeHappiness(double happiness);
+
+    /**
+     * Adds a decision to the user.
+     * @param decision the decision to be added.
+     */
+    void addDecision(Decision decision);
+
+    /**
+     * Changes the user's salary by modification.
+     * @param modification the amount to change user's salary by.
+     */
+    void modifySalary(double modification);
+
+    /**
+     * Returns the map of age to question.
+     * @return the map of age to question.
+     */
+    Map<Integer, Question> getQuestion();
 }
