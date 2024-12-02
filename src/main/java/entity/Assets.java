@@ -2,11 +2,12 @@ package entity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Assets {
     private final double home;
     private final ArrayList<Stock> stocks;
-    private final double cash;
+    private double cash;
     private final double car;
 
     public Assets() {
@@ -87,7 +88,7 @@ public class Assets {
         return multiplier * (sellPrice - buyPrice) + buyPrice;
     }
 
-    public double getTotal(HashMap<String, Double> stockPrices) {
+    public double getTotal(Map<String, Double> stockPrices) {
         double total = 0;
         total += home;
         for (Stock stock : stocks) {
@@ -96,5 +97,9 @@ public class Assets {
         total += cash;
         total += car;
         return total;
+    }
+
+    public void changeCash(double cashChange) {
+        this.cash += cashChange;
     }
 }

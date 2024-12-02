@@ -22,36 +22,43 @@ build financial literacy and understand the long-term effects of money managemen
 
 ### User
   - name: String
-  - character: Avatar
+  - password: String
+  - isDarkMode: boolean
+  - characterName: String
+  - age: int
+  - avatar: Avatar
   - happiness: int
-  - qualityOfLife: int
+  - salary: int
   - assets: Assets
   - liabilities: Liabilities
   - decisions: ArrayList<Decision>
 
+### Avatar
+  - id: String
+  - imagePath: String
+
 ### Assets
-  - home: int
+  - home: double
   - stocks: ArrayList<Stock>
-  - cash: int
-  - car: int
+  - cash: double
+  - car: double
 
 ### Liabilities
-  - loan: int
-  - creditCard: int
-  - other recuring expenses
+  - loan: double
+  - creditCard: double
 
 ### Stock
   - stockCode: String
   - quantity: int
   - buyPrice: double
-  - sellPrice: double
-  - netResult: double
   - multiplier: int
 
 ### Decision
-  - type: String
-  - question: String
-  - value: String
+  - timeStamp: LocalDateTime
+  - decisionText: String
+  - decisionResponse: String
+  - netWorthChange: double
+  - happinessChange: double
 
 ---
 

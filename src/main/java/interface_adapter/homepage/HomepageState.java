@@ -13,7 +13,7 @@ public class HomepageState {
     private String username = null;
     private Avatar avatar = new Avatar();
     private String name = null;
-    private boolean isDarkMode = false;;
+    private boolean isDarkMode = false;
 
     public String getUsername() {
         return username;

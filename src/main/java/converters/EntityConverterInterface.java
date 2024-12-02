@@ -28,6 +28,7 @@ public interface EntityConverterInterface {
     static final String DECISION_RESPONSE = "decisionResponse";
     static final String NET_WORTH_CHANGE = "netWorthChange";
     static final String HAPPINESS_CHANGE = "happinessChange";
+    static final String SALARY_CHANGE = "salaryChange";
 
     public Avatar toAvatar(String jsonString);
     public Avatar toAvatar(JSONObject object);

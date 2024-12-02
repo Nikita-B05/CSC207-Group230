@@ -1,6 +1,8 @@
 package data_access;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,6 +17,7 @@ import org.bson.Document;
 
 import use_case.change_password.ChangePasswordUserDataAccessInterface;
 import use_case.decision_log.DecisionLogUserDataAccessInterface;
+import use_case.game_decision.GameDecisionUserDataAccessInterface;
 import use_case.homepage.HomepageUserDataAccessInterface;
 import use_case.login.LoginUserDataAccessInterface;
 import use_case.logout.LogoutUserDataAccessInterface;
@@ -34,10 +37,12 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
         LogoutUserDataAccessInterface,
         HomepageUserDataAccessInterface,
         SettingsUserDataAccessInterface,
+        GameDecisionUserDataAccessInterface {
         DecisionLogUserDataAccessInterface {
 
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
+    private static final String AGE = "age";
     private static final String DARK_MODE = "darkMode";
     private static final String CHARACTER_NAME = "characterName";
     private static final String AVATAR = "avatar";
@@ -46,6 +51,7 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
     private static final String ASSETS = "assets";
     private static final String LIABILITIES = "liabilities";
     private static final String DECISIONS = "decisions";
+    private static final Object QUESTION_BANK = "questionBank";
 
     private final UserFactory userFactory;
     private final MongoDBConnection mongoDBConnection;
@@ -75,11 +81,12 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
         if (userDoc != null) {
             String name = userDoc.getString(USERNAME);
             String password = userDoc.getString(PASSWORD);
+            int age = userDoc.getInteger(AGE);
             boolean isDarkMode = userDoc.getBoolean(DARK_MODE, false);
             String characterName = userDoc.getString(CHARACTER_NAME);
             Avatar avatar = converter.toAvatar(userDoc.getString(AVATAR));
             int happiness = userDoc.getInteger(HAPPINESS);
-            int salary = userDoc.getInteger(SALARY);
+            double salary = userDoc.getDouble(SALARY);
             Assets assets = converter.toAssets(userDoc.getString(ASSETS));
             Liabilities liabilities = converter.toLiabilities(userDoc.getString(LIABILITIES));
             ArrayList<Decision> decisions = converter.toArrayListOfDecision(userDoc.getString(DECISIONS));
@@ -87,6 +94,7 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
             return userFactory.create(
                     name,
                     password,
+                    age,
                     isDarkMode,
                     characterName,
                     avatar,
@@ -144,12 +152,33 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
     }
 
     @Override
+    public void updateDecision(User user) {
+        updateUser(user, DECISIONS, user.getDecisions());
+    }
+
+    @Override
+    public void updateAssets(User user) {
+        updateUser(user, ASSETS, user.getAssets());
+    }
+
+    @Override
+    public void updateHappiness(User user) {
+        updateUser(user, HAPPINESS, user.getHappiness());
+    }
+
+    @Override
+    public void updateSalary(User user) {
+        updateUser(user, SALARY, user.getSalary());
+    }
+
+    @Override
     public void save(User user) {
         MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
 
         Document userDoc = new Document()
                 .append(USERNAME, user.getUsername())
                 .append(PASSWORD, user.getPassword())
+                .append(AGE, user.getAge())
                 .append(DARK_MODE, user.isDarkMode())
                 .append(CHARACTER_NAME, user.getCharacterName())
                 .append(AVATAR, converter.serialize(user.getAvatar()))
@@ -237,7 +266,7 @@ public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterfac
         usersCollection.deleteMany(Filters.eq(USERNAME, user));
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         User user = new CommonUser("Test", "1234");
         MongoDBUserDataAccessObject dao = new MongoDBUserDataAccessObject(new CommonUserFactory());
         dao.save(user);

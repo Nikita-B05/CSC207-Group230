@@ -21,6 +21,7 @@ public class Main {
                 .addInputNameView()
                 .addChangePasswordView()
                 .addSettingsView()
+                .addGameDecisionView()
                 .addDecisionLogView()
                 .addSignupUseCase()
                 .addLoginUseCase()
@@ -30,6 +31,7 @@ public class Main {
                 .addChangePasswordUseCase()
                 .addLogoutUseCase()
                 .addSettingsUseCase()
+                .addGameDecisionUseCase()
                 .addDecisionLogUseCase()
                 .build();
 
