@@ -118,7 +118,8 @@ public class InputNameView extends JPanel implements ActionListener, PropertyCha
                             "Invalid Name",
                             JOptionPane.WARNING_MESSAGE
                     );
-                } else {
+                }
+                else {
                     // Proceed if the name is valid
                     InputNameState state = viewModel.getState();
                     controller.inputCharacterName(state.getUsername(), characterName);
@@ -126,9 +127,9 @@ public class InputNameView extends JPanel implements ActionListener, PropertyCha
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(
                         this,
-                        "An error occurred while validating the name. Please try again.",
-                        "Error",
-                        JOptionPane.ERROR_MESSAGE
+                        "That's an invalid name. Please try again.",
+                        "Invalid Name",
+                        JOptionPane.WARNING_MESSAGE
                 );
                 ex.printStackTrace();
             }
