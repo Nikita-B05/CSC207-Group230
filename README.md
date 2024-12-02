@@ -14,6 +14,7 @@
 7. [License](#license)
 8. [Feedback](#feedback)
 9. [Contribution Guidelines](#contribution-guidelines)
+10. [Acknowledgements](#acknowledgements)
 
 ---
 
