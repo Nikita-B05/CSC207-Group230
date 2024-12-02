@@ -1,6 +1,7 @@
 package interface_adapter.settings;
 
 import interface_adapter.ViewManagerModel;
+import interface_adapter.login.LoginViewModel;
 import use_case.settings.SettingsOutputBoundary;
 import use_case.settings.SettingsOutputData;
 import interface_adapter.change_password.ChangePasswordViewModel;
@@ -15,12 +16,14 @@ public class SettingsPresenter implements SettingsOutputBoundary {
     private final ViewManagerModel viewManagerModel;
     private final ChangePasswordViewModel changePasswordViewModel;
     private final HomepageViewModel homepageViewModel;
+    private final LoginViewModel loginViewModel;
 
-    public SettingsPresenter(SettingsViewModel viewModel, ViewManagerModel viewManagerModel, ChangePasswordViewModel changePasswordViewModel, HomepageViewModel homepageViewModel) {
+    public SettingsPresenter(SettingsViewModel viewModel, ViewManagerModel viewManagerModel, ChangePasswordViewModel changePasswordViewModel, HomepageViewModel homepageViewModel, LoginViewModel loginViewModel) {
         this.viewModel = viewModel;
         this.viewManagerModel = viewManagerModel;
         this.changePasswordViewModel = changePasswordViewModel;
         this.homepageViewModel = homepageViewModel;
+        this.loginViewModel = loginViewModel;
     }
 
     @Override
@@ -36,7 +39,7 @@ public class SettingsPresenter implements SettingsOutputBoundary {
     public void prepareLogoutView(SettingsOutputData outputData) {
         viewModel.getState().setUsername(outputData.getUsername());
         viewModel.firePropertyChanged();
-        viewManagerModel.setState("log in");
+        viewManagerModel.setState(loginViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
     }
 
@@ -50,12 +53,5 @@ public class SettingsPresenter implements SettingsOutputBoundary {
 
         viewManagerModel.setState(homepageViewModel.getViewName());
         viewManagerModel.firePropertyChanged();
-    }
-
-
-    @Override
-    public void updateDarkMode(boolean darkModeEnabled) {
-        viewModel.getState().setDarkModeEnabled(darkModeEnabled);
-        viewModel.firePropertyChanged();
     }
 }

@@ -1,7 +1,9 @@
 package entity;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Factory for creating CommonUser objects.
@@ -14,20 +16,14 @@ public class CommonUserFactory implements UserFactory {
     }
 
     @Override
-    public User create(String username, String password, boolean isDarkMode) {
-        CommonUser user = new CommonUser(username, password);
-        user.setDarkMode(isDarkMode);
-        return user;
-    }
-
-    @Override
     public User create(String username,
                        String password,
+                       int age,
                        boolean isDarkMode,
                        String characterName,
                        Avatar avatar,
                        int happiness,
-                       int salary,
+                       double salary,
                        Assets assets,
                        Liabilities liabilities,
                        ArrayList<Decision> decisions
@@ -35,6 +31,7 @@ public class CommonUserFactory implements UserFactory {
         return new CommonUser(
                 username,
                 password,
+                age,
                 isDarkMode,
                 characterName,
                 avatar,

@@ -1,7 +1,11 @@
 package entity;
 
+import question_reader.QuestionReader;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple implementation of the User interface.
@@ -14,40 +18,46 @@ public class CommonUser implements User {
 
 
     private String characterName;
+    private int age;
     private Avatar avatar;
     private int happiness;
-    private int salary;
+    private double salary;
     private Assets assets;
     private Liabilities liabilities;
     private ArrayList<Decision> decisions;
+    private Map<Integer, Question> questionBank;
 
     public CommonUser(String username, String password) {
         this.username = username;
         this.password = password;
+        this.age = 18;
         this.isDarkMode = false;
         this.characterName = null;
         this.avatar = new Avatar();
         this.happiness = 100;
         this.salary = 0;
-        this.assets = null;
+        this.assets = new Assets();
         this.liabilities = null;
         this.decisions = new ArrayList<>();
+        this.questionBank = QuestionReader.parseQuestions("src/main/java/question_reader/samplequestionjson.txt");
     }
 
     public CommonUser(
             String username,
             String password,
+            int age,
             boolean isDarkMode,
             String characterName,
             Avatar avatar,
             int happiness,
-            int salary,
+            double salary,
             Assets assets,
             Liabilities liabilities,
             ArrayList<Decision> decisions
     ) {
         this.username = username;
         this.password = password;
+        this.age = age;
         this.isDarkMode = isDarkMode;
         this.characterName = characterName;
         this.avatar = avatar;
@@ -56,6 +66,7 @@ public class CommonUser implements User {
         this.assets = assets;
         this.liabilities = liabilities;
         this.decisions = decisions;
+        this.questionBank = QuestionReader.parseQuestions("src/main/java/question_reader/samplequestionjson.txt");
     }
 
     public CommonUser(String testUser) {
@@ -69,6 +80,8 @@ public class CommonUser implements User {
         this.assets = null;
         this.liabilities = null;
         this.decisions = new ArrayList<>();
+        this.questionBank = QuestionReader.parseQuestions("src/main/java/question_reader/samplequestionjson.txt");
+
     }
 
     @Override
@@ -102,7 +115,7 @@ public class CommonUser implements User {
     }
 
     @Override
-    public int getSalary() {
+    public double getSalary() {
         return salary;
     }
 
@@ -133,6 +146,26 @@ public class CommonUser implements User {
         isDarkMode = darkMode;
     }
 
+    @Override
+    public int getAge() {
+        return this.age;
+    }
+
+    @Override
+    public void setAge(int Age) {
+        this.age = Age;
+    }
+
+    @Override
+    public void changeHappiness(double happiness) {
+        this.happiness += happiness;
+    }
+
+    @Override
+    public void addDecision(Decision decision) {
+        this.decisions.add(decision);
+    }
+
     public void setCharacterName(String characterName) {
         this.characterName = characterName;
     }
@@ -161,6 +194,8 @@ public class CommonUser implements User {
         this.decisions = decisions;
     }
 
+
+
     @Override
     public void buyStock(String stockCode, int quantity, double buyPrice) {
         assets.buyStock(stockCode, quantity, buyPrice);
@@ -179,6 +214,16 @@ public class CommonUser implements User {
     @Override
     public boolean isValidSell(String stockCode, int quantity) {
         return assets.isValidSell(stockCode, quantity);
+    }
+
+    @Override
+    public void modifySalary(double factor){
+        this.salary += factor;
+    }
+
+    @Override
+    public Map<Integer, Question> getQuestion() {
+        return this.questionBank;
     }
 
     @Override

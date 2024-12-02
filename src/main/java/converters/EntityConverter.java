@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class EntityConverter implements EntityConverterInterface {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -252,11 +253,11 @@ public class EntityConverter implements EntityConverterInterface {
         }
         final LocalDateTime timestamp = LocalDateTime.parse(timeStampString, formatter);
         final String decisionText = object.getString(DECISION_TEXT);
-        final String decisionReponse = object.getString(DECISION_RESPONSE);
         final int netWorthChange = object.getInt(NET_WORTH_CHANGE);
         final int happinessChange = object.getInt(HAPPINESS_CHANGE);
+        final int salaryChange = object.getInt(SALARY_CHANGE);
 
-        return new Decision(timestamp, decisionText, decisionReponse, netWorthChange, happinessChange);
+        return new Decision(timestamp, decisionText, netWorthChange, happinessChange, salaryChange);
     }
 
     private JSONObject toJSONObject(Decision decision) {
@@ -266,9 +267,9 @@ public class EntityConverter implements EntityConverterInterface {
         final JSONObject object = new JSONObject();
         object.put(TIMESTAMP, decision.getTimestamp().format(formatter));
         object.put(DECISION_TEXT, decision.getDecisionText());
-        object.put(DECISION_RESPONSE, decision.getDecisionResponse());
-        object.put(NET_WORTH_CHANGE, decision.getNetWorthChange());
+        object.put(NET_WORTH_CHANGE, decision.getCashChange());
         object.put(HAPPINESS_CHANGE, decision.getHappinessChange());
+        object.put(SALARY_CHANGE, decision.getSalaryChange());
 
         return object;
     }

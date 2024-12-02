@@ -21,6 +21,7 @@ public class Main {
                 .addInputNameView()
                 .addChangePasswordView()
                 .addSettingsView()
+                .addGameDecisionView()
                 .addSignupUseCase()
                 .addLoginUseCase()
                 .addHomepageUseCase()
@@ -29,6 +30,7 @@ public class Main {
                 .addChangePasswordUseCase()
                 .addLogoutUseCase()
                 .addSettingsUseCase()
+                .addGameDecisionUseCase()
                 .build();
 
         application.pack();
