@@ -39,6 +39,7 @@ import interface_adapter.settings.SettingsViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import stock_api.PolygonStockDataAccessObject;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
@@ -86,7 +87,10 @@ public class AppBuilder {
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
-    private final MongoDBUserDataAccessObject userDataAccessObject = new MongoDBUserDataAccessObject(new CommonUserFactory());
+    private final MongoDBUserDataAccessObject userDataAccessObject
+            = new MongoDBUserDataAccessObject(new CommonUserFactory());
+    private final PolygonStockDataAccessObject stockDataAccessObject =
+            new PolygonStockDataAccessObject();
 
     // Existing Views and ViewModels
     private SignupView signupView;
@@ -119,7 +123,6 @@ public class AppBuilder {
      */
     public AppBuilder addSignupView() {
         signupViewModel = new SignupViewModel();
-        userDataAccessObject.save(new CommonUser("testUser"));
         signupView = new SignupView(signupViewModel);
         cardPanel.add(signupView, signupView.getViewName());
         return this;
@@ -248,7 +251,7 @@ public class AppBuilder {
         final HomepageOutputBoundary homepageOutputBoundary = new HomepagePresenter(
                 viewManagerModel, homepageViewModel, settingsViewModel, chooseAvatarViewModel, gameDecisionViewModel);
         final HomepageInputBoundary homepageInteractor = new HomepageInteractor(
-                userDataAccessObject, homepageOutputBoundary);
+                userDataAccessObject, homepageOutputBoundary, stockDataAccessObject);
 
         final HomepageController homepageController = new HomepageController(homepageInteractor);
         homepageView.setHomepageController(homepageController);

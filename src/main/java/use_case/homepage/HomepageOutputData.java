@@ -1,10 +1,12 @@
 package use_case.homepage;
 
+import entity.Assets;
 import entity.Avatar;
 import entity.Decision;
 import entity.Question;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class HomepageOutputData {
     private final String username;
@@ -16,8 +18,10 @@ public class HomepageOutputData {
     private Question question;
     int happiness;
     double salary;
+    private Map<String, Double> stockPrices;
+    private Assets assets;
 
-    public HomepageOutputData(String username, String characterName, Avatar avatar, boolean isDarkMode, ArrayList<Decision> decisions, int age, Question question, int happiness, double salary) {
+    public HomepageOutputData(String username, String characterName, Avatar avatar, boolean isDarkMode, ArrayList<Decision> decisions, int age, Question question, int happiness, double salary, Assets assets) {
         this.username = username;
         this.characterName = characterName;
         this.avatar = avatar;
@@ -27,6 +31,7 @@ public class HomepageOutputData {
         this.question = question;
         this.happiness = happiness;
         this.salary = salary;
+        this.assets = assets;
     }
 
     public String getUsername() {
@@ -63,5 +68,17 @@ public class HomepageOutputData {
 
     public double getSalary() {
         return salary;
+    }
+
+    public Map<String, Double> getStockPrices() {
+        return stockPrices;
+    }
+
+    public void setStockPrices(Map<String, Double> stockPrices) {
+        this.stockPrices = stockPrices;
+    }
+
+    public Assets getAssets() {
+        return this.assets;
     }
 }

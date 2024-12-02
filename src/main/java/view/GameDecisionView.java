@@ -161,11 +161,10 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
             }
         }
 
-        // Handle Submit button logic
         if (e.getSource() == confirmButton && selectedDecisionIndex != -1) {
             int age = state.getAge();
             int happiness = state.getHappiness();
-            double netWorth = state.getAssets().getNetWorth();
+            double netWorth = state.getAssets().getTotal(state.getStockPrices());
 
             if ((age >= 22 && (happiness <= 0 || netWorth <= 0))) {
                 gameDecisionController.switchToGameOver(

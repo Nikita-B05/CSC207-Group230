@@ -2,6 +2,8 @@ package interface_adapter.game_decision;
 
 import entity.*;
 
+import java.util.Map;
+
 /**
  * State for the Game Decision View.
  */
@@ -18,6 +20,7 @@ public class GameDecisionState {
     private Avatar avatar;
     private int happiness;
     private double salary;
+    private Map<String, Double> stockPrices;
 
 
     public String getDecisionError() {
@@ -104,5 +107,13 @@ public class GameDecisionState {
 
     public double getSalary() {
         return salary;
+    }
+
+    public Map<String, Double> getStockPrices() {
+        return stockPrices;
+    }
+
+    public void setStockPrices(Map<String, Double> stockPrices) {
+        this.stockPrices = stockPrices;
     }
 }
