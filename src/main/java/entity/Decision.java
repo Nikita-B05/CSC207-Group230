@@ -1,55 +1,42 @@
 package entity;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 public class Decision {
-    private LocalDateTime timestamp;
+    private int age;
     private final String decisionText;
-    private final double happinessChange;
-    private final double salaryChange;
+    private final String response;
     private final double netWorthChange;
+    private final int happinessChange;
+    private final double salaryChange;
 
-    public Decision(LocalDateTime timestamp, String decisionText, double netWorthChange, double happinessChange,
-                    double salaryChange) {
-        this.timestamp = timestamp;
+    // Regular constructor (without JSON handling)
+    public Decision(int age, String decisionText, String response, double netWorthChange,
+                    int happinessChange, double salaryChange) {
+        this.age = age;
         this.decisionText = decisionText;
+        this.response = response;
+        this.netWorthChange = netWorthChange;
         this.happinessChange = happinessChange;
         this.salaryChange = salaryChange;
-        this.netWorthChange = netWorthChange;
     }
-
+    // fromJson method to assign values from a Map
     public static Decision fromJson(Map<String, Object> json) {
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
-        LocalDateTime timestamp = LocalDateTime.parse((String) json.get("timestamp"), formatter);
-        String decisionText = (String) json.get("decisionText");
+        int age = (int) json.get("age");
+        String decisionText = (json.get("decisionText") != null) ? (String) json.get("decisionText") : "No decision";
+        String response = (String) json.get("response");
         double netWorthChange = ((Number) json.get("netWorthChange")).doubleValue();
-        double happinessChange = ((Number) json.get("happinessChange")).doubleValue();
+        int happinessChange = ((Number) json.get("happinessChange")).intValue();
         double salaryChange = ((Number) json.get("salaryChange")).doubleValue();
 
-        return new Decision(timestamp, decisionText, netWorthChange, happinessChange, salaryChange);
+        return new Decision(age, decisionText, response, happinessChange, happinessChange, salaryChange);
     }
 
 
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
+    public int getAge() { return age; }
     public String getDecisionText() { return decisionText; }
-
-    public double getHappinessChange() {
-        return happinessChange;
-    }
-
-    public double getSalaryChange() {
-        return salaryChange;
-    }
-
-    public double getNetWorthChange() { return netWorthChange;
-    }
+    public String getResponse() { return response; }
+    public double getNetWorthChange() { return netWorthChange; }
+    public int getHappinessChange() { return happinessChange; }
+    public double getSalaryChange() { return salaryChange; }
 }

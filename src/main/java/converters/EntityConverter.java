@@ -251,13 +251,14 @@ public class EntityConverter implements EntityConverterInterface {
         if (timeStampString == null) {
             throw new RuntimeException("JSONDecisionObject is not null and has null timestamp: " + object.toString());
         }
-        final LocalDateTime timestamp = LocalDateTime.parse(timeStampString, formatter);
+        final int age = object.optInt(AGE, 22);
         final String decisionText = object.getString(DECISION_TEXT);
+        final String response = object.optString(DECISION_RESPONSE, "");
         final int netWorthChange = object.getInt(NET_WORTH_CHANGE);
         final int happinessChange = object.getInt(HAPPINESS_CHANGE);
         final int salaryChange = object.getInt(SALARY_CHANGE);
 
-        return new Decision(timestamp, decisionText, netWorthChange, happinessChange, salaryChange);
+        return new Decision(age, decisionText, response, netWorthChange, happinessChange, salaryChange);
     }
 
     private JSONObject toJSONObject(Decision decision) {
@@ -265,8 +266,9 @@ public class EntityConverter implements EntityConverterInterface {
             throw new RuntimeException("decision is null");
         }
         final JSONObject object = new JSONObject();
-        object.put(TIMESTAMP, decision.getTimestamp().format(formatter));
+        object.put(AGE, decision.getAge());
         object.put(DECISION_TEXT, decision.getDecisionText());
+        object.put(DECISION_RESPONSE, decision.getResponse());
         object.put(NET_WORTH_CHANGE, decision.getNetWorthChange());
         object.put(HAPPINESS_CHANGE, decision.getHappinessChange());
         object.put(SALARY_CHANGE, decision.getSalaryChange());

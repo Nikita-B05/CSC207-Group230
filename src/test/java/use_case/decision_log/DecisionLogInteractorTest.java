@@ -1,113 +1,50 @@
 package use_case.decision_log;
 
-import entity.CommonUserFactory;
-import entity.Decision;
-import entity.User;
-import entity.UserFactory;
+import entity.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import data_access.MongoDBUserDataAccessObject;
+import stock_api.PolygonStockDataAccessObject;
+import use_case.choose_asset.ChooseAssetInputBoundary;
+import use_case.choose_asset.ChooseAssetInteractor;
+import use_case.choose_asset.ChooseAssetOutputBoundary;
+import use_case.choose_asset.ChooseAssetOutputData;
 import use_case.homepage.HomepageOutputData;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DecisionLogInteractorTest {
 
-    @Test
-    void successTest() {
+    private static MongoDBUserDataAccessObject userRepository;
 
-        // Create decisions for the user
-        Decision decision1 = new Decision(LocalDateTime.now(), "Decision text 1", "Option 1",
-                -100.0, 10.0);
-        Decision decision2 = new Decision(LocalDateTime.now(), "Decision text 2", "Option 2",
-                50.0, -5.0);
-        ArrayList<Decision> decisions = new ArrayList<>();
-        decisions.add(decision1);
-        decisions.add(decision2);
+    @BeforeAll
+    public static void setUp() {
+        User user = new CommonUser("testing", "password");
+        userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
+        userRepository.setCurrentUsername("testing");
+        userRepository.save(user);
+    }
 
-        // Create the user and assign the decisions
-        String username = "Paul";
-        MongoDBUserDataAccessObject decisionRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
-        UserFactory factory = new CommonUserFactory();
-        User user = factory.create(username, "password");
-        user.setDecisions(decisions);
-
-        // Save the user to the repository (simulating a database save)
-        decisionRepository.save(user);
-
-        // Prepare the presenter for success
-        DecisionLogOutputBoundary successPresenter = new DecisionLogOutputBoundary() {
-            @Override
-            public void prepareSuccessView(DecisionLogOutputData outputData) {
-                assertEquals("Paul", outputData.getUsername());
-                assertEquals(2, outputData.getDecisions().size());
-                assertEquals(-100.0, outputData.getDecisions().get(0).getNetWorthChange());
-            }
-
-            @Override
-            public void switchToHomepageView() {
-                fail("Homepage view is not expected");
-            }
-
-            @Override
-            public void prepareFailView(String error) {
-                fail("Failure should not happen in success test");
-            }
-
-            @Override
-            public void switchToDecisionLogView(DecisionLogOutputData outputData) {
-                fail("Decision log view is not expected");
-            }
-        };
-
-        // Create the interactor
-        DecisionLogInputBoundary interactor =
-                new DecisionLogInteractor(decisionRepository, successPresenter, decisionRepository);
-
-        // Create the input data
-        DecisionLogInputData inputData = new DecisionLogInputData(username);
-
-        // Execute the interactor and check results
-        interactor.execute(inputData);
+    @AfterAll
+    public static void tearDown() {
+            userRepository.deleteUser("testing");
     }
 
     @Test
-    void failureTest_noDecisions() {
-        // Create the user but don't add any decisions
-        String username = "Paul";
-        MongoDBUserDataAccessObject decisionRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
-        UserFactory factory = new CommonUserFactory();
-        User user = factory.create(username, "password");
-        decisionRepository.save(user); // Save the user with no decisions
-
-        // Prepare the presenter for failure
-        DecisionLogOutputBoundary failurePresenter = new DecisionLogOutputBoundary() {
+    void switchToHomepageView() {
+        DecisionLogOutputBoundary decisionLogPresenter = new DecisionLogOutputBoundary() {
             @Override
-            public void prepareSuccessView(DecisionLogOutputData outputData) {
-                fail("Success should not happen when there are no decisions");
-            }
-
-            @Override
-            public void prepareFailView(String error) {
-                assertEquals("No decisions found for Paul", error);
-            }
-
-            @Override
-            public void switchToHomePageView() {
-                // Handle expected behavior for switching
+            public void switchToHomepageView(DecisionLogOutputData decisionLogoutputData) {
+                assertEquals("testing", decisionLogoutputData.getUsername());
             }
         };
 
-        // Create the interactor
-        DecisionLogInputBoundary interactor =
-                new DecisionLogInteractor(decisionRepository, failurePresenter, decisionRepository);
-
-        // Create the input data
-        DecisionLogInputData inputData = new DecisionLogInputData(username);
-
-        // Execute the interactor and check results
-        interactor.execute(inputData);
+        DecisionLogInputBoundary interactor = new DecisionLogInteractor(
+                userRepository, decisionLogPresenter);
+        interactor.switchToHomepageView();
     }
 }

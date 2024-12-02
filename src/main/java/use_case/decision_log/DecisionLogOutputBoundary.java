@@ -1,16 +1,14 @@
-package use_case.decision_log;
-
-import use_case.homepage.HomepageOutputData;
+package use_case.decision_log;;
 
 /**
  * The output boundary for the DecisionLog Use Case.
  */
 public interface DecisionLogOutputBoundary {
-    void switchToDecisionLogView(DecisionLogOutputData outputData);
 
-    void prepareFailView(String s);
+    /**
+     * Switches to Manage Home View.
+     * @param decisionLogOutputData the input data
+     */
+    void switchToHomepageView(DecisionLogOutputData decisionLogOutputData);
 
-    void prepareSuccessView(DecisionLogOutputData outputData);
-
-    void switchToHomepageView();
 }

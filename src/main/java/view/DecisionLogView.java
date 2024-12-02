@@ -11,22 +11,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import interface_adapter.asset_manager.AssetManagerViewModel;
 import interface_adapter.decision_log.DecisionLogController;
 import interface_adapter.decision_log.DecisionLogViewModel;
+import interface_adapter.decision_log.DecisionLogState;
 import interface_adapter.dark_mode.DarkModeController;
-import interface_adapter.settings.SettingsController;
-import use_case.decision_log.DecisionLogInputBoundary;
 
 public class DecisionLogView extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final String viewName = "decisionLog";
     private DecisionLogController decisionLogController;
     private final DecisionLogViewModel decisionLogViewModel;
-    private final JCheckBox darkModeCheckBox;
 
     private JTable historyTable;
     private JScrollPane scrollPane;
@@ -35,13 +33,9 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
     private final JButton backButton;
     private MongoDBUserDataAccessObject userDataAccess;
 
-    public DecisionLogView(DecisionLogViewModel decisionLogViewModel,
-                           DecisionLogController decisionLogController,
-                           DarkModeController darkModeController,
-                           JCheckBox darkModeCheckBox) {
+    public DecisionLogView(DecisionLogViewModel decisionLogViewModel, MongoDBUserDataAccessObject userDataAccess) {
         this.decisionLogViewModel = decisionLogViewModel;
-        this.decisionLogController = decisionLogController;
-        this.darkModeCheckBox = darkModeCheckBox;
+        this.userDataAccess = userDataAccess;
 
         // Register property change listener
         this.decisionLogViewModel.addPropertyChangeListener(this);
@@ -49,17 +43,17 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
         setLayout(new BorderLayout());
 
         // Top Panel for Title
-        JLabel titleLabel = new JLabel("Decision Log", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel(AssetManagerViewModel.TITLE, SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         titleLabel.setBorder(BorderFactory.createEmptyBorder(10, 0, 20, 0)); // Add spacing
         add(titleLabel, BorderLayout.NORTH);
 
         // Columns for the decision log table
-        String[] columns = {"Time", "Decision", "Your Answer", "Net Worth Change", "Happiness Change"};
+        String[] columns = {"Age", "Decision", "Your Response", "Net Worth Change", "Happiness Change"};
 
         // Prepare data for the table
         DefaultTableModel model = new DefaultTableModel(columns, 0);
-        updateTableModel(model, decisionLogViewModel.getDecisions());
+        updateTableModel(model, decisionLogViewModel.getState().getDecisions());
 
         // Create the decision log table
         historyTable = new JTable(model);
@@ -107,8 +101,6 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
     }
 
     private void updateTheme(boolean isDarkMode) {
-        darkModeCheckBox.setSelected(isDarkMode);
-
         if (isDarkMode) {
             ColorTheme.applyDarkMode(this);
         } else {
@@ -120,25 +112,32 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
 
     private void updateTableModel(DefaultTableModel model, List<Decision> decisions) {
         model.setRowCount(0); // Clear existing rows
-        User user = userDataAccess.getCurrentUser();
+        DecisionLogState state = decisionLogViewModel.getState();
+
         for (Decision decision : decisions) {
-            Object[] row = {user.getAge(), decision.getDecisionText(), user.getDecisions(),
-                    decision.getNetWorthChange(), decision.getHappinessChange()};
+            Object[] row = {
+                    state.getAge(),
+                    decision.getDecisionText(),
+                    decision.getResponse(),
+                    decision.getNetWorthChange(),
+                    decision.getHappinessChange()
+            };
             model.addRow(row);
         }
     }
 
+
     private String getStatsText() {
-        return String.format("Net Worth: %.2f, Happiness: %.2f",
-                decisionLogViewModel.getTotalNetWorthChange(),
-                decisionLogViewModel.getTotalHappinessChange());
+        return String.format("Net Worth: %.2f, Happiness: %d",
+                decisionLogViewModel.getState().getTotalNetWorthChange(),
+                decisionLogViewModel.getState().getTotalHappinessChange());
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(backButton)) {
-            String username = decisionLogViewModel.getUsername();
-            decisionLogController.switchToHomepageView(username);
+            String username = decisionLogViewModel.getState().getUsername();
+            decisionLogController.switchToHomepageView();
         }
     }
 
@@ -148,47 +147,8 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        updateTableModel((DefaultTableModel) historyTable.getModel(), decisionLogViewModel.getDecisions());
+        updateTableModel((DefaultTableModel) historyTable.getModel(), decisionLogViewModel.getState().getDecisions());
         statsValues.setText(getStatsText());
-        updateTheme(decisionLogViewModel.isDarkModeEnabled());
-    }
-
-    public static void main(String[] args) {
-        // Create sample decisions for testing
-        List<Decision> decisions = new ArrayList<>();
-        decisions.add(new Decision(LocalDateTime.now(),
-                "Buy a house", -500000, -500000, -10));
-        decisions.add(new Decision(LocalDateTime.now(),
-                "Buy a car", -10000, -10000, -5));
-        decisions.add(new Decision(LocalDateTime.now(),
-                "Start a business", -100, 20000, 50));
-
-        // Create a DecisionLogViewModel and populate it with sample data
-        DecisionLogViewModel decisionLogViewModel = new DecisionLogViewModel();
-        decisionLogViewModel.setDecisions(decisions);
-        decisionLogViewModel.setDarkModeEnabled(false); // Default to light mode
-
-        // Create dummy controllers
-        DecisionLogController decisionLogController =
-                new DecisionLogController(null, null);
-        DarkModeController darkModeController = new DarkModeController(null);
-
-        // Create a JCheckBox for dark mode
-        JCheckBox darkModeCheckBox = new JCheckBox("Dark Mode");
-
-        // Create the DecisionLogView
-        DecisionLogView decisionLogView =
-                new DecisionLogView(decisionLogViewModel, decisionLogController, darkModeController, darkModeCheckBox);
-
-        // Set up the JFrame to display the view
-        JFrame frame = new JFrame("Decision Log Preview");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setContentPane(decisionLogView);
-        frame.setSize(800, 600); // Set the window size
-        frame.setVisible(true); // Make the window visible
-    }
-
-    public void DecisionLogController(DecisionLogController decisionLogController) {
-        this.decisionLogController = decisionLogController;
+        updateTheme(decisionLogViewModel.getState().isDarkMode());
     }
 }

@@ -9,25 +9,9 @@ import java.util.List;
  */
 
 public interface DecisionLogInputBoundary {
-
     /**
-     * Executes the decision log use case.
-     * @param DecisionLogInputData the decision log data
+     * Switches to Homepage View.
      */
-    void execute(DecisionLogInputData DecisionLogInputData);
-
     void switchToHomepageView();
 
-    /**
-     * Executes the switch to Homepage view use case.
-     */
-    void switchToHomepageView(DecisionLogInputData DecisionLogInputData);
-
-    void switchToDecisionLogView(DecisionLogInputData inputData);
-
-    List<Decision> getDecisions(String username);
-
-    double getTotalNetWorthChange(String username);
-
-    double getTotalHappinessChange(String username);
 }

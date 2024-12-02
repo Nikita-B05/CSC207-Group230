@@ -40,7 +40,7 @@ public class MongoDBUserDataAccessObject implements
         LogoutUserDataAccessInterface,
         HomepageUserDataAccessInterface,
         SettingsUserDataAccessInterface,
-        DecisionLogUserDataAccessInterface {
+        DecisionLogUserDataAccessInterface,
         ChooseAssetDataAccessInterface,
         ManageHomeDataAccessInterface,
         ManageStockDataAccessInterface,

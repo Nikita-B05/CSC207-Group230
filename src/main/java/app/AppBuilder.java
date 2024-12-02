@@ -199,6 +199,17 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the Decision Log Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addDecisionLogView() {
+        decisionLogViewModel = new DecisionLogViewModel();
+        decisionLogView = new DecisionLogView(decisionLogViewModel, userDataAccessObject);
+        cardPanel.add(decisionLogView, decisionLogView.getViewName());
+        return this;
+    }
+
+    /**
      * Adds the Input Name View to the application.
      * @return this builder
      */
@@ -457,34 +468,13 @@ public class AppBuilder {
      * @return this builder
      */
     public AppBuilder addDecisionLogUseCase() {
-        // Create the DecisionLogPresenter instance
-        DecisionLogPresenter decisionLogPresenter =
-                new DecisionLogPresenter(new DecisionLogViewModel(), new ViewManagerModel());
-
-        // Create the DecisionLogInteractor instance
-        DecisionLogInputBoundary decisionLogInteractor =
-                new DecisionLogInteractor(userDataAccessObject, decisionLogPresenter, userDataAccessObject);
-
-        // Create the DecisionLogController instance
-        final DecisionLogController decisionLogController =
-                new DecisionLogController(decisionLogInteractor, decisionLogPresenter);
+        final DecisionLogOutputBoundary decisionLogOutputBoundary = new DecisionLogPresenter(
+                decisionLogViewModel, viewManagerModel, homepageViewModel);
+        final DecisionLogInputBoundary decisionLogInteractor = new DecisionLogInteractor(
+                userDataAccessObject, decisionLogOutputBoundary);
+        final DecisionLogController decisionLogController = new DecisionLogController(decisionLogInteractor);
         decisionLogView.setDecisionLogController(decisionLogController);
-
         return this;
-    }
-
-    /**
-     * Adds the Decision Log Use Case to the application.
-     * @return this builder
-     */
-    public void addDecisionLogView() {
-        if (this.decisionLogView == null) {
-            throw new IllegalStateException("DecisionLogView must be initialized before setting the controller.");
-        }
-        this.decisionLogView.setDecisionLogController(new DecisionLogController(
-                new DecisionLogInteractor(userDataAccessObject, new DecisionLogPresenter(
-                        new DecisionLogViewModel(), viewManagerModel), userDataAccessObject),
-                new DecisionLogPresenter(new DecisionLogViewModel(), viewManagerModel)));
     }
 
     /**

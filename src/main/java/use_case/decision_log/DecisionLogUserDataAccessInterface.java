@@ -5,7 +5,7 @@ import entity.User;
 
 import java.util.List;
 
-//DAO for the Decision Log Use Case. okay no clue what's going on here do it later
+//DAO for the Decision Log Use Case.
 
 public interface DecisionLogUserDataAccessInterface {
     /**
@@ -15,5 +15,9 @@ public interface DecisionLogUserDataAccessInterface {
      */
     List<Decision> getDecisions(String username);
 
-    User get(String username);
+    /**
+     * Returns the current user.
+     * @return the current user.
+     */
+    User getCurrentUser();
 }
