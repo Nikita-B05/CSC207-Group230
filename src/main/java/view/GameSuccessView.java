@@ -87,7 +87,14 @@ public class GameSuccessView extends JPanel implements PropertyChangeListener {
         happinessLabel.setText("Happiness: " + state.getHappiness());
         netWorthLabel.setText(String.format("Net Worth: $%,.2f", state.getNetWorth()));
         avatarLabel.setIcon(state.getAvatar().getIcon());
-        successLabel.setText("Congratulations " + state.getCharacterName() + "!");
+        String charName;
+        if (state.getCharacterName() != null) {
+            charName = state.getCharacterName();
+        }
+        else{
+            charName = state.getUsername();
+        }
+        successLabel.setText("Congratulations " + charName + "!");
     }
 
     private void updateTheme(boolean isDarkMode) {
