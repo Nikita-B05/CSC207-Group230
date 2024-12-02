@@ -21,6 +21,7 @@ public class GameDecisionState {
     private int happiness;
     private double salary;
     private Map<String, Double> stockPrices;
+    private double netWorth;
 
     public String getDecisionError() {
         return decisionError;
