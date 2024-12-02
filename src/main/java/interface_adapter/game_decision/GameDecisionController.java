@@ -19,6 +19,11 @@ public class GameDecisionController {
         gameDecisionInteractor.pickDecision(inputData);
     }
 
+    public void switchToHomepage(String username, int age, String characterName, boolean darkMode, Question question, Assets assets, Avatar avatar, Decision decision, int happiness, double salary) {
+        final GameDecisionInputData inputData = new GameDecisionInputData(username, age, characterName, darkMode, question, assets, avatar, decision, happiness, salary);
+        gameDecisionInteractor.switchToHomeview(inputData);
+    }
+
     public void switchToAssetsManager(String username, int age, String characterName, boolean darkMode, Question question, Assets assets, Avatar avatar, Decision decision, int happiness, double salary) {
         final GameDecisionInputData inputData = new GameDecisionInputData(username, age, characterName, darkMode, question, assets, avatar, decision, happiness, salary);
         gameDecisionInteractor.switchToAssetsManager(inputData);
@@ -27,6 +32,10 @@ public class GameDecisionController {
     public void switchToGameOver(String username, int age, String characterName, boolean darkMode, Question question, Assets assets, Avatar avatar, Decision decision, int happiness, double salary) {
         final GameDecisionInputData inputData = new GameDecisionInputData(username, age, characterName, darkMode, question, assets, avatar, decision, happiness, salary);
         gameDecisionInteractor.switchToGameOver(inputData);
+    }
 
+    public void switchToSameSuccess(String username, int age, String characterName, boolean darkMode, Question question, Assets assets, Avatar avatar, Decision decision, int happiness, double salary) {
+        final GameDecisionInputData inputData = new GameDecisionInputData(username, age, characterName, darkMode, question, assets, avatar, decision, happiness, salary);
+        gameDecisionInteractor.switchToGameSuccess(inputData);
     }
 }

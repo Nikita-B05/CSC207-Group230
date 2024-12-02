@@ -11,5 +11,6 @@ public interface GameDecisionOutputBoundary {
     void prepareFailView(String errorMessage);
     void prepareAssetsView(GameDecisionOutputData outputData);
     void prepareGameOverView(GameDecisionOutputData outputData);
+    void prepareGameSuccessView(GameDecisionOutputData outputData);
     void prepareHomepageView(GameDecisionOutputData outputData);
 }

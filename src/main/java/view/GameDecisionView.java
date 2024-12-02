@@ -152,7 +152,6 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
                 if (i < state.getQuestion().getDecisions().size()) {
                     Decision decision = state.getQuestion().getDecisions().get(i);
                     state.setDecisionPicked(decision);
-                    JOptionPane.showMessageDialog(this, decision.getDecisionText(), "Decision Details", JOptionPane.INFORMATION_MESSAGE);
                 }
                 return;
             }
@@ -174,7 +173,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
         }
 
         if (e.getSource() == cancelButton) {
-            gameDecisionController.switchToGameOver(
+            gameDecisionController.switchToHomepage(
                     state.getUsername(),
                     state.getAge(),
                     state.getCharacterName(),
@@ -212,7 +211,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
         for (int i = 0; i < decisionButtons.length; i++) {
             if (i < decisions.size()) {
                 decisionButtons[i].setEnabled(true);
-                decisionButtons[i].setText("Option " + (i + 1));
+                decisionButtons[i].setText(decisions.get(i).getDecisionText()); // Set decision text on the button
                 decisionButtons[i].setBackground(null); // Reset background color when decisions are updated
             } else {
                 decisionButtons[i].setEnabled(false);

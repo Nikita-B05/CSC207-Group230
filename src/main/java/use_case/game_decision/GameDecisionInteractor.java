@@ -57,4 +57,13 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
         outputBoundary.prepareHomepageView(outputData);
 
     }
+
+    @Override
+    public void switchToGameSuccess(GameDecisionInputData inputData) {
+        User user = userDataAccess.getCurrentUser();
+        GameDecisionOutputData outputData = new GameDecisionOutputData(inputData.getUsername(), inputData.isDarkMode(),
+                inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge(), inputData.getHappiness(), inputData.getSalary());
+        outputBoundary.prepareGameSuccessView(outputData);
+
+    }
 }

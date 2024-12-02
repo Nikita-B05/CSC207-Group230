@@ -42,10 +42,32 @@ public class GameDecisionPresenter implements GameDecisionOutputBoundary {
 //        viewManagerModel.setState(assetManagerViewModel.getViewName());
 //        viewManagerModel.firePropertyChanged();
     }
-
+// username, name, avatar, cash, happiness
     @Override
     public void prepareGameOverView(GameDecisionOutputData outputData) {
-        // boop
+//        gameOverViewModel.getState().setDarkMode(outputData.isDarkMode());
+//        gameOverViewModel.getState().setName(outputData.getName());
+//        gameOverViewModel.getState().setUsername(outputData.getUsername());
+//        gameOverViewModel.getState().setAvatar(outputData.getAvatar());
+//        gameOverViewModel.getState().setAssets(outputData.getAssets());
+//        gameOverViewModel.getState().setHappiness(outputData.getHappiness());
+//        gameOverViewModel.firePropertyChanged();
+//        viewManagerModel.setState(gameOverViewModel.getViewName());
+//        viewManagerModel.firePropertyChanged();
+    }
+
+    @Override
+    public void prepareGameSuccessView(GameDecisionOutputData outputData) {
+//        gameSuccessViewModel.getState().setDarkMode(outputData.isDarkMode());
+//        gameSuccessViewModel.getState().setName(outputData.getName());
+//        gameSuccessViewModel.getState().setUsername(outputData.getUsername());
+//        gameSuccessViewModel.getState().setAvatar(outputData.getAvatar());
+//        gameSuccessViewModel.getState().setAssets(outputData.getAssets());
+//        gameSuccessViewModel.getState().setHappiness(outputData.getHappiness());
+//        gameSuccessViewModel.firePropertyChanged();
+//        viewManagerModel.setState(gameSuccessViewModel.getViewName());
+//        viewManagerModel.firePropertyChanged();
+
     }
 
     @Override
