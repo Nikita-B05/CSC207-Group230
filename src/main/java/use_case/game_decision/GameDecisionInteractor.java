@@ -20,8 +20,16 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
     @Override
     public void switchToAssetsManager(GameDecisionInputData inputData) {
         User user = userDataAccess.getCurrentUser();
-        GameDecisionOutputData outputData = new GameDecisionOutputData(inputData.getUsername(), inputData.isDarkMode(),
-                inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge(), inputData.getHappiness(), inputData.getSalary());
+        GameDecisionOutputData outputData = new GameDecisionOutputData(
+                inputData.getUsername(),
+                inputData.isDarkMode(),
+                inputData.getName(),
+                inputData.getAssets(),
+                inputData.getAvatar(),
+                inputData.getAge(),
+                inputData.getHappiness(),
+                inputData.getSalary()
+        );
         outputBoundary.prepareAssetsView(outputData);
     }
 
@@ -39,6 +47,9 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
         userDataAccess.updateDecision(user);
         userDataAccess.updateAssets(user);
         userDataAccess.updateHappiness(user);
+        userDataAccess.incrementAge();
+        userDataAccess.addSalary();
+        userDataAccess.appreciateHome();
     }
 
     @Override
@@ -64,6 +75,5 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
         GameDecisionOutputData outputData = new GameDecisionOutputData(inputData.getUsername(), inputData.isDarkMode(),
                 inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge(), inputData.getHappiness(), inputData.getSalary());
         outputBoundary.prepareGameSuccessView(outputData);
-
     }
 }

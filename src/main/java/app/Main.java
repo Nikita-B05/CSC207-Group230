@@ -20,6 +20,9 @@ public class Main {
                 .addChooseAvatarView()
                 .addInputNameView()
                 .addChangePasswordView()
+                .addAssetManagerView()
+                .addManageHomeView()
+                .addManageStockView()
                 .addSettingsView()
                 .addGameDecisionView()
                 .addDecisionLogView()
@@ -33,6 +36,10 @@ public class Main {
                 .addSettingsUseCase()
                 .addGameDecisionUseCase()
                 .addDecisionLogUseCase()
+                .addChangePasswordUseCase()
+                .addChooseAssetUseCase()
+                .addManageHomeUseCase()
+                .addManageStockUseCase()
                 .build();
 
         application.pack();

@@ -3,11 +3,13 @@ package app;
 import java.awt.CardLayout;
 import javax.swing.*;
 
-//import data_access.InMemoryUserDataAccessObject;
 import data_access.MongoDBUserDataAccessObject;
 import entity.CommonUserFactory;
 import entity.UserFactory;
 import interface_adapter.ViewManagerModel;
+import interface_adapter.asset_manager.AssetManagerController;
+import interface_adapter.asset_manager.AssetManagerPresenter;
+import interface_adapter.asset_manager.AssetManagerViewModel;
 import interface_adapter.change_password.ChangePasswordController;
 import interface_adapter.change_password.ChangePasswordPresenter;
 import interface_adapter.change_password.ChangePasswordViewModel;
@@ -32,12 +34,18 @@ import interface_adapter.login.LoginPresenter;
 import interface_adapter.login.LoginViewModel;
 import interface_adapter.logout.LogoutController;
 import interface_adapter.logout.LogoutPresenter;
-import interface_adapter.settings.SettingsController;
-import interface_adapter.settings.SettingsPresenter;
-import interface_adapter.settings.SettingsViewModel;
+import interface_adapter.manage_home.ManageHomeController;
+import interface_adapter.manage_home.ManageHomePresenter;
+import interface_adapter.manage_home.ManageHomeViewModel;
+import interface_adapter.manage_stock.ManageStockController;
+import interface_adapter.manage_stock.ManageStockPresenter;
+import interface_adapter.manage_stock.ManageStockViewModel;
 import interface_adapter.signup.SignupController;
 import interface_adapter.signup.SignupPresenter;
 import interface_adapter.signup.SignupViewModel;
+import interface_adapter.settings.SettingsController;
+import interface_adapter.settings.SettingsPresenter;
+import interface_adapter.settings.SettingsViewModel;
 import stock_api.PolygonStockDataAccessObject;
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
@@ -45,6 +53,9 @@ import use_case.change_password.ChangePasswordOutputBoundary;
 import use_case.choose_avatar.ChooseAvatarInputBoundary;
 import use_case.choose_avatar.ChooseAvatarInteractor;
 import use_case.choose_avatar.ChooseAvatarOutputBoundary;
+import use_case.choose_asset.ChooseAssetInputBoundary;
+import use_case.choose_asset.ChooseAssetInteractor;
+import use_case.choose_asset.ChooseAssetOutputBoundary;
 import use_case.game_decision.GameDecisionInputBoundary;
 import use_case.game_decision.GameDecisionInteractor;
 import use_case.game_decision.GameDecisionOutputBoundary;
@@ -64,12 +75,18 @@ import use_case.login.LoginOutputBoundary;
 import use_case.logout.LogoutInputBoundary;
 import use_case.logout.LogoutInteractor;
 import use_case.logout.LogoutOutputBoundary;
-import use_case.settings.SettingsInputBoundary;
-import use_case.settings.SettingsInteractor;
-import use_case.settings.SettingsOutputBoundary;
+import use_case.manage_home.ManageHomeInputBoundary;
+import use_case.manage_home.ManageHomeInteractor;
+import use_case.manage_home.ManageHomeOutputBoundary;
+import use_case.manage_stock.ManageStockInputBoundary;
+import use_case.manage_stock.ManageStockInteractor;
+import use_case.manage_stock.ManageStockOutputBoundary;
 import use_case.signup.SignupInputBoundary;
 import use_case.signup.SignupInteractor;
 import use_case.signup.SignupOutputBoundary;
+import use_case.settings.SettingsInputBoundary;
+import use_case.settings.SettingsInteractor;
+import use_case.settings.SettingsOutputBoundary;
 import use_case.decision_log.DecisionLogInputBoundary;
 import use_case.decision_log.DecisionLogInteractor;
 import use_case.decision_log.DecisionLogOutputBoundary;
@@ -89,10 +106,9 @@ public class AppBuilder {
     private final ViewManagerModel viewManagerModel = new ViewManagerModel();
     private final ViewManager viewManager = new ViewManager(cardPanel, cardLayout, viewManagerModel);
 
-    private final MongoDBUserDataAccessObject userDataAccessObject
-            = new MongoDBUserDataAccessObject(new CommonUserFactory());
-    private final PolygonStockDataAccessObject stockDataAccessObject =
-            new PolygonStockDataAccessObject();
+    private final MongoDBUserDataAccessObject userDataAccessObject =
+            new MongoDBUserDataAccessObject(new CommonUserFactory());
+    private final PolygonStockDataAccessObject stockDataAccessObject = new PolygonStockDataAccessObject();
 
     // Existing Views and ViewModels
     private SignupView signupView;
@@ -105,6 +121,12 @@ public class AppBuilder {
     private ChangePasswordView changePasswordView;
     private SettingsView settingsView;
     private SettingsViewModel settingsViewModel;
+    private AssetManagerViewModel assetManagerViewModel;
+    private AssetManagerView assetManagerView;
+    private ManageHomeViewModel manageHomeViewModel;
+    private ManageHomeView manageHomeView;
+    private ManageStockViewModel manageStockViewModel;
+    private ManageStockView manageStockView;
     private DecisionLogViewModel decisionLogViewModel;
     private DecisionLogView decisionLogView;
 
@@ -222,6 +244,39 @@ public class AppBuilder {
     }
 
     /**
+     * Adds the Asset Manager View to the application.
+     * @return this builder
+     */
+    public AppBuilder addAssetManagerView() {
+        assetManagerViewModel = new AssetManagerViewModel();
+        assetManagerView = new AssetManagerView(assetManagerViewModel);
+        cardPanel.add(assetManagerView, assetManagerView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Manager Home View to the application.
+     * @return this builder
+     */
+    public AppBuilder addManageHomeView() {
+        manageHomeViewModel = new ManageHomeViewModel();
+        manageHomeView = new ManageHomeView(manageHomeViewModel);
+        cardPanel.add(manageHomeView, manageHomeView.getViewName());
+        return this;
+    }
+
+    /**
+     * Adds the Manage Stock View to the application.
+     * @return this builder
+     */
+    public AppBuilder addManageStockView() {
+        manageStockViewModel = new ManageStockViewModel();
+        manageStockView = new ManageStockView(manageStockViewModel);
+        cardPanel.add(manageStockView, manageStockView.getViewName());
+        return this;
+    }
+
+    /**
      * Adds the Signup Use Case to the application.
      * @return this builder
      */
@@ -301,7 +356,12 @@ public class AppBuilder {
      */
     public AppBuilder addGameDecisionUseCase() {
         final GameDecisionOutputBoundary gameDecisionOutputBoundary =
-                new GameDecisionPresenter(gameDecisionViewModel, viewManagerModel, homepageViewModel);
+                new GameDecisionPresenter(
+                        gameDecisionViewModel,
+                        viewManagerModel,
+                        homepageViewModel,
+                        assetManagerViewModel
+                );
         final GameDecisionInputBoundary gameDecisionInteractor =
                 new GameDecisionInteractor(userDataAccessObject, gameDecisionOutputBoundary);
         final GameDecisionController gameDecisionController =
@@ -350,6 +410,45 @@ public class AppBuilder {
                 new SettingsInteractor(userDataAccessObject, settingsOutputBoundary);
         final SettingsController settingsController = new SettingsController(settingsInteractor);
         settingsView.setSettingsController(settingsController);
+        return this;
+    }
+
+    /**
+     * Adds the Choose Asset Use Case to the application.
+     * @return this builder
+     */
+    public AppBuilder addChooseAssetUseCase() {
+        final ChooseAssetOutputBoundary chooseAssetOutputBoundary = new AssetManagerPresenter(
+                assetManagerViewModel,
+                viewManagerModel,
+                manageHomeViewModel,
+                manageStockViewModel,
+                gameDecisionViewModel
+        );
+        final ChooseAssetInputBoundary chooseAssetInteractor = new ChooseAssetInteractor(
+                userDataAccessObject, chooseAssetOutputBoundary, stockDataAccessObject);
+        final AssetManagerController assetManagerController = new AssetManagerController(chooseAssetInteractor);
+        assetManagerView.setAssetManagerController(assetManagerController);
+        return this;
+    }
+
+    public AppBuilder addManageHomeUseCase() {
+        final ManageHomeOutputBoundary manageHomeOutputBoundary = new ManageHomePresenter(
+                viewManagerModel, manageHomeViewModel, assetManagerViewModel);
+        final ManageHomeInputBoundary manageHomeInteractor = new ManageHomeInteractor(
+                userDataAccessObject, manageHomeOutputBoundary);
+        final ManageHomeController manageHomeController = new ManageHomeController(manageHomeInteractor);
+        manageHomeView.setManageHomeController(manageHomeController);
+        return this;
+    }
+
+    public AppBuilder addManageStockUseCase() {
+        final ManageStockOutputBoundary manageStockOutputBoundary = new ManageStockPresenter(
+                viewManagerModel, manageStockViewModel, assetManagerViewModel);
+        final ManageStockInputBoundary manageStockInteractor = new ManageStockInteractor(
+                userDataAccessObject, stockDataAccessObject, manageStockOutputBoundary);
+        final ManageStockController manageStockController = new ManageStockController(manageStockInteractor);
+        manageStockView.setManageStockController(manageStockController);
         return this;
     }
 

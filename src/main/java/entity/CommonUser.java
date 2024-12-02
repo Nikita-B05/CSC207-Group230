@@ -1,8 +1,6 @@
 package entity;
 
 import question_reader.QuestionReader;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +13,6 @@ public class CommonUser implements User {
     private String username;
     private String password;
     private boolean isDarkMode;
-
 
     private String characterName;
     private int age;
@@ -37,7 +34,7 @@ public class CommonUser implements User {
         this.happiness = 100;
         this.salary = 0;
         this.assets = new Assets();
-        this.liabilities = null;
+        this.liabilities = new Liabilities();
         this.decisions = new ArrayList<>();
         this.questionBank = QuestionReader.parseQuestions("src/main/java/question_reader/samplequestionjson.txt");
     }
@@ -81,7 +78,6 @@ public class CommonUser implements User {
         this.liabilities = null;
         this.decisions = new ArrayList<>();
         this.questionBank = QuestionReader.parseQuestions("src/main/java/question_reader/samplequestionjson.txt");
-
     }
 
     @Override
@@ -194,30 +190,24 @@ public class CommonUser implements User {
         this.decisions = decisions;
     }
 
-
-
-    @Override
     public void buyStock(String stockCode, int quantity, double buyPrice) {
         assets.buyStock(stockCode, quantity, buyPrice);
     }
 
-    @Override
     public boolean canBuyStock(String stockCode, int quantity, HashMap<String, Double> stockPrices) {
         return assets.canBuyStock(stockCode, quantity, stockPrices);
     }
 
-    @Override
-    public double sellStock(String stockCode, int quantity, double sellPrice) {
-        return assets.sellStock(stockCode, quantity, sellPrice);
+    public void sellStock(String stockCode, int quantity, double sellPrice) {
+        assets.sellStock(stockCode, quantity, sellPrice);
     }
 
-    @Override
     public boolean isValidSell(String stockCode, int quantity) {
         return assets.isValidSell(stockCode, quantity);
     }
 
     @Override
-    public void modifySalary(double factor){
+    public void modifySalary(double factor) {
         this.salary += factor;
     }
 
@@ -227,14 +217,17 @@ public class CommonUser implements User {
     }
 
     @Override
-    public double getNetWorth(HashMap<String, Double> stockPrices) {
+    public double getNetWorth(Map<String, Double> stockPrices) {
         if (assets == null && liabilities == null) {
             return 0;
-        } else if (assets != null && liabilities == null) {
+        }
+        else if (assets != null && liabilities == null) {
             return assets.getTotal(stockPrices);
-        } else if (assets == null && liabilities != null) {
+        }
+        else if (assets == null && liabilities != null) {
             return -1 * liabilities.getTotal();
-        } else {
+        }
+        else {
             return assets.getTotal(stockPrices) - liabilities.getTotal();
         }
     }
