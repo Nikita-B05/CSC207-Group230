@@ -26,8 +26,8 @@ public class SettingsInteractor implements SettingsInputBoundary {
 
     @Override
     public void logout(SettingsInputData inputData) {
-        userDataAccess.setCurrentUsername(null);
         User user = userDataAccess.getCurrentUser();
+        userDataAccess.setCurrentUsername(null);
         SettingsOutputData outputData = new SettingsOutputData(inputData.getUsername(), inputData.isDarkMode(), user.getAvatar(), user.getCharacterName());
         outputBoundary.prepareLogoutView(outputData);
     }

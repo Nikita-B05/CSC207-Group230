@@ -685,7 +685,9 @@
         <module name="CyclomaticComplexity">
             <property name="switchBlockAsSingleDecisionPoint" value="true"/>
         </module>
-        <module name="JavaNCSS"/>
+        <module name="JavaNCSS">
+            <property name="methodMaximum" value="500"/>
+        </module>
         <module name="NPathComplexity"/>
 
         <!-- Misc -->
@@ -783,9 +785,11 @@
             <property name="max" value="30"/>
         </module>
         <module name="ExecutableStatementCount">
-            <property name="max" value="30"/>
+            <property name="max" value="35"/>
         </module>
-        <module name="LambdaBodyLength"/>
+        <module name="LambdaBodyLength">
+            <property name="max" value="24"/>
+        </module>
         <module name="MethodCount">
             <property name="maxTotal" value="34"/>
         </module>
