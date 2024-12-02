@@ -1,18 +1,18 @@
 package stock_api;
 
-import com.google.gson.JsonArray;
-import okhttp3.*;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import okhttp3.*;
+
 public class PolygonApiClient {
 
-    private static final String[] stockCodes = {"AAPL", "NVDA", "MSFT", "AMZN", "GOOGL", "META", "TSLA"};
-    private static final String[] companyNames = {"Apple", "Nvidia", "Microsoft", "Amazon", "Google", "Meta", "Tesla"};
+    private static final String[] STOCK_CODES = {"AAPL", "NVDA", "MSFT", "AMZN", "GOOGL", "META", "TSLA"};
+    private static final String[] COMPANY_NAMES = {"Apple", "Nvidia", "Microsoft", "Amazon", "Google", "Meta", "Tesla"};
     private static final String BASE_URL = "https://api.polygon.io";
     private String apiKey;
     private final OkHttpClient client;
