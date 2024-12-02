@@ -179,7 +179,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
             int happiness = state.getHappiness();
             double netWorth = state.getAssets().getTotal(state.getStockPrices());
 
-            if ((age >= 22 && (happiness < 0 || netWorth < 0))) {
+            if ((age >= 22 && (happiness <= 0 || netWorth < 0))) {
                 gameDecisionController.switchToGameOver(
                         state.getUsername(),
                         age,
@@ -195,7 +195,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
                 return;
             }
 
-            if (age >= 32) {
+            if (age >= 33) {
                 gameDecisionController.switchToGameSuccess(
                         state.getUsername(),
                         age,
