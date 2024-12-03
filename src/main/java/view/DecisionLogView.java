@@ -143,7 +143,6 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         updateTableData();
-        updateStatsLabels();
         DecisionLogState state = decisionLogViewModel.getState();
         if (state.isDarkMode()) {
             ColorTheme.applyDarkMode(this);
