@@ -1,0 +1,548 @@
+Index: src/main/java/use_case/decision_log/DecisionLogOutputBoundary.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package use_case.decision_log;\r\n\r\n/**\r\n * The output boundary for the DecisionLog Use Case.\r\n */\r\npublic interface DecisionLogOutputBoundary {\r\n    /**\r\n     * Switches to the Homepage View.\r\n     */\r\n\r\n    void switchToHomePageView();\r\n\r\n    void prepareFailView(String s);\r\n\r\n    <DecisionLogOutputData> void prepareSuccessView(DecisionLogOutputData outputData);\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/use_case/decision_log/DecisionLogOutputBoundary.java b/src/main/java/use_case/decision_log/DecisionLogOutputBoundary.java
+--- a/src/main/java/use_case/decision_log/DecisionLogOutputBoundary.java	(revision 65e2fa6cd69fcce22e7dbb57a33d3580ea99d9a0)
++++ b/src/main/java/use_case/decision_log/DecisionLogOutputBoundary.java	(date 1732930925027)
+@@ -1,5 +1,7 @@
+ package use_case.decision_log;
+ 
++import use_case.logout.LogoutOutputData;
++
+ /**
+  * The output boundary for the DecisionLog Use Case.
+  */
+@@ -10,7 +12,15 @@
+ 
+     void switchToHomePageView();
+ 
+-    void prepareFailView(String s);
++    /**
++     * Prepares the success view for the Decision Log Use Case.
++     * @param outputData the output data
++     */
++    void prepareSuccessView(DecisionLogOutputData outputData);
+ 
+-    <DecisionLogOutputData> void prepareSuccessView(DecisionLogOutputData outputData);
++    /**
++     * Prepares the failure view for the Decision Log Use Case.
++     * @param errorMessage the explanation of the failure
++     */
++    void prepareFailView(String errorMessage);
+ }
+\ No newline at end of file
+Index: src/test/java/use_case/login/LoginInteractorTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package use_case.login;\r\n\r\nimport data_access.MongoDBUserDataAccessObject;\r\nimport entity.CommonUserFactory;\r\nimport entity.User;\r\nimport entity.UserFactory;\r\nimport org.junit.jupiter.api.Test;\r\n\r\nimport static org.junit.jupiter.api.Assertions.*;\r\n\r\nclass LoginInteractorTest {\r\n\r\n    @Test\r\n    void successTest() {\r\n        LoginInputData inputData = new LoginInputData(\"Paul\", \"password\");\r\n        LoginUserDataAccessInterface userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());\r\n\r\n        // For the success test, we need to add Paul to the data access repository before we log in.\r\n        UserFactory factory = new CommonUserFactory();\r\n        User user = factory.create(\"Paul\", \"password\");\r\n        userRepository.save(user);\r\n\r\n        // This creates a successPresenter that tests whether the test case is as we expect.\r\n        LoginOutputBoundary successPresenter = new LoginOutputBoundary() {\r\n            @Override\r\n            public void prepareSuccessView(LoginOutputData user) {\r\n                assertEquals(\"Paul\", user.getUsername());\r\n            }\r\n\r\n            @Override\r\n            public void prepareFailView(String error) {\r\n                fail(\"Use case failure is unexpected.\");\r\n            }\r\n\r\n            @Override\r\n            public void switchToSignUpView() {\r\n                // This is expected\r\n            }\r\n        };\r\n\r\n        LoginInputBoundary interactor = new LoginInteractor(userRepository, successPresenter);\r\n        interactor.execute(inputData);\r\n    }\r\n\r\n    @Test\r\n    void successUserLoggedInTest() {\r\n        LoginInputData inputData = new LoginInputData(\"Paul\", \"password\");\r\n        LoginUserDataAccessInterface userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());\r\n\r\n        // For the success test, we need to add Paul to the data access repository before we log in.\r\n        UserFactory factory = new CommonUserFactory();\r\n        User user = factory.create(\"Paul\", \"password\");\r\n        userRepository.save(user);\r\n\r\n        // This creates a successPresenter that tests whether the test case is as we expect.\r\n        LoginOutputBoundary successPresenter = new LoginOutputBoundary() {\r\n            @Override\r\n            public void prepareSuccessView(LoginOutputData user) {\r\n                assertEquals(\"Paul\", userRepository.getCurrentUsername());\r\n            }\r\n\r\n            @Override\r\n            public void prepareFailView(String error) {\r\n                fail(\"Use case failure is unexpected.\");\r\n            }\r\n\r\n            @Override\r\n            public void switchToSignUpView() {\r\n                // This is expected\r\n            }\r\n        };\r\n\r\n        LoginInputBoundary interactor = new LoginInteractor(userRepository, successPresenter);\r\n        assertEquals(null, userRepository.getCurrentUsername());\r\n\r\n        interactor.execute(inputData);\r\n    }\r\n\r\n    @Test\r\n    void failurePasswordMismatchTest() {\r\n        LoginInputData inputData = new LoginInputData(\"Paul\", \"wrong\");\r\n        LoginUserDataAccessInterface userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());\r\n\r\n        // For this failure test, we need to add Paul to the data access repository before we log in, and\r\n        // the passwords should not match.\r\n        UserFactory factory = new CommonUserFactory();\r\n        User user = factory.create(\"Paul\", \"password\");\r\n        userRepository.save(user);\r\n\r\n        // This creates a presenter that tests whether the test case is as we expect.\r\n        LoginOutputBoundary failurePresenter = new LoginOutputBoundary() {\r\n            @Override\r\n            public void prepareSuccessView(LoginOutputData user) {\r\n                // this should never be reached since the test case should fail\r\n                fail(\"Use case success is unexpected.\");\r\n            }\r\n\r\n            @Override\r\n            public void prepareFailView(String error) {\r\n                assertEquals(\"Incorrect password for \\\"Paul\\\".\", error);\r\n            }\r\n\r\n            @Override\r\n            public void switchToSignUpView() {\r\n                // This is expected\r\n            }\r\n        };\r\n\r\n        LoginInputBoundary interactor = new LoginInteractor(userRepository, failurePresenter);\r\n        interactor.execute(inputData);\r\n    }\r\n\r\n    @Test\r\n    void failureUserDoesNotExistTest() {\r\n        LoginInputData inputData = new LoginInputData(\"Paul\", \"password\");\r\n        LoginUserDataAccessInterface userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());\r\n\r\n        // Add Paul to the repo so that when we check later they already exist\r\n\r\n        // This creates a presenter that tests whether the test case is as we expect.\r\n        LoginOutputBoundary failurePresenter = new LoginOutputBoundary() {\r\n            @Override\r\n            public void prepareSuccessView(LoginOutputData user) {\r\n                // this should never be reached since the test case should fail\r\n                fail(\"Use case success is unexpected.\");\r\n            }\r\n\r\n            @Override\r\n            public void prepareFailView(String error) {\r\n                assertEquals(\"Paul: Account does not exist.\", error);\r\n            }\r\n\r\n            @Override\r\n            public void switchToSignUpView() {\r\n                // This is expected\r\n            }\r\n        };\r\n\r\n        LoginInputBoundary interactor = new LoginInteractor(userRepository, failurePresenter);\r\n        interactor.execute(inputData);\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/use_case/login/LoginInteractorTest.java b/src/test/java/use_case/login/LoginInteractorTest.java
+--- a/src/test/java/use_case/login/LoginInteractorTest.java	(revision 65e2fa6cd69fcce22e7dbb57a33d3580ea99d9a0)
++++ b/src/test/java/use_case/login/LoginInteractorTest.java	(date 1732841295478)
+@@ -76,6 +76,67 @@
+         interactor.execute(inputData);
+     }
+ 
++    @Test
++    void failureEmptyUsernameTest() {
++        LoginInputData inputData = new LoginInputData("", "password");
++        LoginUserDataAccessInterface userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
++
++        // This creates a presenter that tests whether the test case is as we expect.
++        LoginOutputBoundary failurePresenter = new LoginOutputBoundary() {
++            @Override
++            public void prepareSuccessView(LoginOutputData user) {
++                // this should never be reached since the test case should fail
++                fail("Use case success is unexpected.");
++            }
++
++            @Override
++            public void prepareFailView(String error) {
++                assertEquals("Username cannot be empty.", error);
++            }
++
++            @Override
++            public void switchToSignUpView() {
++                // This is expected
++            }
++        };
++
++        LoginInputBoundary interactor = new LoginInteractor(userRepository, failurePresenter);
++        interactor.execute(inputData);
++    }
++
++    void failureEmptyPasswordTest() {
++        LoginInputData inputData = new LoginInputData("Paul", "password");
++        LoginUserDataAccessInterface userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
++
++        // For this failure test, we need to add Paul to the data access repository before we log in, and
++        // the passwords should not match.
++        UserFactory factory = new CommonUserFactory();
++        User user = factory.create("Paul", "password");
++        userRepository.save(user);
++
++        // This creates a presenter that tests whether the test case is as we expect.
++        LoginOutputBoundary failurePresenter = new LoginOutputBoundary() {
++            @Override
++            public void prepareSuccessView(LoginOutputData user) {
++                // this should never be reached since the test case should fail
++                fail("Use case success is unexpected.");
++            }
++
++            @Override
++            public void prepareFailView(String error) {
++                assertEquals("Incorrect password for \"Paul\".", error);
++            }
++
++            @Override
++            public void switchToSignUpView() {
++                // This is expected
++            }
++        };
++
++        LoginInputBoundary interactor = new LoginInteractor(userRepository, failurePresenter);
++        interactor.execute(inputData);
++    }
++
+     @Test
+     void failurePasswordMismatchTest() {
+         LoginInputData inputData = new LoginInputData("Paul", "wrong");
+Index: src/main/java/view/DecisionLogView.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package view;\r\n\r\nimport entity.Decision;\r\n\r\nimport javax.swing.*;\r\nimport javax.swing.table.DefaultTableModel;\r\nimport java.awt.*;\r\nimport java.time.LocalDateTime;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\npublic class DecisionLogView extends JPanel {\r\n    private JTable historyTable;\r\n    private JScrollPane scrollPane;\r\n\r\n    public DecisionLogView(List<Decision> decisions) {\r\n        setLayout(new BorderLayout());\r\n\r\n        // Columns for the decision log table\r\n        String[] columns = {\"Timestamp\", \"Decision\", \"Your Answer\", \"Net Worth Change\", \"Happiness Change\"};\r\n\r\n        // Prepare data for the table\r\n        DefaultTableModel model = new DefaultTableModel(columns, 0);\r\n        int totalNetWorthChange = 0;\r\n        int totalHappinessChange = 0;\r\n\r\n        for (Decision decision : decisions) {\r\n            Object[] row = {decision.getTimestamp(), decision.getDecisionText(), decision.getDecisionResponse(),\r\n                    decision.getNetWorthChange(), decision.getHappinessChange()};\r\n            model.addRow(row);\r\n\r\n            // Accumulate stats\r\n            totalNetWorthChange += decision.getNetWorthChange();\r\n            totalHappinessChange += decision.getHappinessChange();\r\n        }\r\n\r\n        // Create the decision log table\r\n        historyTable = new JTable(model);\r\n        scrollPane = new JScrollPane(historyTable);\r\n        add(scrollPane, BorderLayout.CENTER);\r\n\r\n        // Add the stats section at the bottom\r\n        JPanel bottomPanel = new JPanel();\r\n        bottomPanel.setLayout(new BorderLayout());\r\n        bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Padding\r\n\r\n        // Stats panel\r\n        JPanel statsPanel = new JPanel(new GridLayout(1, 2, 10, 10));\r\n        JLabel statsHeader = new JLabel(\"Current Stats:\");\r\n        statsHeader.setFont(new Font(\"Arial\", Font.BOLD, 14));\r\n\r\n        JLabel statsValues = new JLabel(String.format(\"Net Worth: %d, Happiness: %d\",\r\n                totalNetWorthChange, totalHappinessChange));\r\n        statsValues.setFont(new Font(\"Arial\", Font.PLAIN, 14));\r\n\r\n        statsPanel.add(statsHeader);\r\n        statsPanel.add(statsValues);\r\n\r\n        // Button panel\r\n        JPanel buttonPanel = new JPanel();\r\n        JButton backButton = new JButton(\"Homepage\");\r\n        backButton.setPreferredSize(new Dimension(120, 30)); // Smaller button size\r\n        buttonPanel.add(backButton);\r\n\r\n        // Add stats panel and button panel to the bottom panel\r\n        bottomPanel.add(statsPanel, BorderLayout.CENTER);\r\n        bottomPanel.add(buttonPanel, BorderLayout.SOUTH);\r\n\r\n        add(bottomPanel, BorderLayout.SOUTH);\r\n\r\n        // Button action\r\n        backButton.addActionListener(e -> {\r\n            System.out.println(\"Back to Homepage clicked\");\r\n        });\r\n    }\r\n\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/view/DecisionLogView.java b/src/main/java/view/DecisionLogView.java
+--- a/src/main/java/view/DecisionLogView.java	(revision 65e2fa6cd69fcce22e7dbb57a33d3580ea99d9a0)
++++ b/src/main/java/view/DecisionLogView.java	(date 1732931914517)
+@@ -16,10 +16,9 @@
+     public DecisionLogView(List<Decision> decisions) {
+         setLayout(new BorderLayout());
+ 
+-        // Columns for the decision log table
+-        String[] columns = {"Timestamp", "Decision", "Your Answer", "Net Worth Change", "Happiness Change"};
++        // naming the columns for the decision log table
++        String[] columns = {"Time", "Decision", "Your Answer", "Net Worth Change", "Happiness Change"};
+ 
+-        // Prepare data for the table
+         DefaultTableModel model = new DefaultTableModel(columns, 0);
+         int totalNetWorthChange = 0;
+         int totalHappinessChange = 0;
+@@ -29,22 +28,21 @@
+                     decision.getNetWorthChange(), decision.getHappinessChange()};
+             model.addRow(row);
+ 
+-            // Accumulate stats
+-            totalNetWorthChange += decision.getNetWorthChange();
++            // accumulate stats until now
+             totalHappinessChange += decision.getHappinessChange();
+         }
+ 
+-        // Create the decision log table
++        // create the decision log table
+         historyTable = new JTable(model);
+         scrollPane = new JScrollPane(historyTable);
+         add(scrollPane, BorderLayout.CENTER);
+ 
+-        // Add the stats section at the bottom
++        // Add the stats section at the bottom with some padding
+         JPanel bottomPanel = new JPanel();
+         bottomPanel.setLayout(new BorderLayout());
+-        bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10)); // Padding
++        bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+ 
+-        // Stats panel
++        // current stats panel
+         JPanel statsPanel = new JPanel(new GridLayout(1, 2, 10, 10));
+         JLabel statsHeader = new JLabel("Current Stats:");
+         statsHeader.setFont(new Font("Arial", Font.BOLD, 14));
+@@ -56,22 +54,41 @@
+         statsPanel.add(statsHeader);
+         statsPanel.add(statsValues);
+ 
+-        // Button panel
++        // homepage button panel
+         JPanel buttonPanel = new JPanel();
+         JButton backButton = new JButton("Homepage");
+-        backButton.setPreferredSize(new Dimension(120, 30)); // Smaller button size
++        backButton.setPreferredSize(new Dimension(120, 30));
+         buttonPanel.add(backButton);
+ 
+-        // Add stats panel and button panel to the bottom panel
++        // stats panel and button panel right above homepage button panel
+         bottomPanel.add(statsPanel, BorderLayout.CENTER);
+         bottomPanel.add(buttonPanel, BorderLayout.SOUTH);
+ 
+         add(bottomPanel, BorderLayout.SOUTH);
+ 
+-        // Button action
++        // button action
+         backButton.addActionListener(e -> {
+             System.out.println("Back to Homepage clicked");
+         });
+     }
+ 
++    public static void main(String[] args) {
++        // create some sample Decision objects for testing
++        List<Decision> decisions = new ArrayList<>();
++        decisions.add(new Decision(LocalDateTime.now(), "Decision 1", "Answer 1", 1000, 10));
++        decisions.add(new Decision(LocalDateTime.now().minusMinutes(10), "Decision 2", "Answer 2", 1500, 5));
++        decisions.add(new Decision(LocalDateTime.now().minusMinutes(20), "Decision 3", "Answer 3", -500, -2));
++
++        // make an instance of DecisionLogView and pass the list of decisions
++        DecisionLogView decisionLogView = new DecisionLogView(decisions);
++
++        // set up the JFrame to display the view
++        JFrame frame = new JFrame("Decision Log View");
++        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
++        frame.setSize(600, 400);
++        frame.setLocationRelativeTo(null); // Center the frame on the screen
++        frame.add(decisionLogView);
++        frame.setVisible(true);
++    }
++
+ }
+Index: src/main/java/use_case/decision_log/DecisionLogInteractor.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package use_case.decision_log;\r\n\r\nimport entity.Decision;\r\nimport java.util.List;\r\n\r\n/**\r\n * The Decision Log Interactor.\r\n */\r\npublic class DecisionLogInteractor implements DecisionLogInputBoundary {\r\n    private final DecisionLogDataAccessInterface decisionDataAccessObject;\r\n    private final DecisionLogOutputBoundary decisionLogPresenter;\r\n\r\n    public DecisionLogInteractor(DecisionLogDataAccessInterface decisionDataAccessInterface,\r\n                                 DecisionLogOutputBoundary decisionLogOutputBoundary) {\r\n        this.decisionDataAccessObject = decisionDataAccessInterface;\r\n        this.decisionLogPresenter = decisionLogOutputBoundary;\r\n    }\r\n\r\n    @Override\r\n    public void execute(DecisionLogInputData decisionLogInputData) {\r\n        // Retrieve username from input data\r\n        String username = decisionLogInputData.getUsername();\r\n\r\n        // Fetch decisions for the user\r\n        List<Decision> decisions = decisionDataAccessObject.getDecisions(username);\r\n\r\n        if (decisions.isEmpty()) {\r\n            // No decisions found\r\n            decisionLogPresenter.prepareFailView(\"No decisions found for \" + username);\r\n        } else {\r\n            // Prepare the decision log output data\r\n            DecisionLogOutputData outputData = new DecisionLogOutputData(decisions);\r\n            decisionLogPresenter.prepareSuccessView(outputData);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void switchToHomepageView() {\r\n        // Implement navigation logic to homepage\r\n        decisionLogPresenter.switchToHomePageView();\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/use_case/decision_log/DecisionLogInteractor.java b/src/main/java/use_case/decision_log/DecisionLogInteractor.java
+--- a/src/main/java/use_case/decision_log/DecisionLogInteractor.java	(revision 65e2fa6cd69fcce22e7dbb57a33d3580ea99d9a0)
++++ b/src/main/java/use_case/decision_log/DecisionLogInteractor.java	(date 1732928579314)
+@@ -28,7 +28,7 @@
+             // No decisions found
+             decisionLogPresenter.prepareFailView("No decisions found for " + username);
+         } else {
+-            // Prepare the decision log output data
++            // Prepare decision log output data
+             DecisionLogOutputData outputData = new DecisionLogOutputData(decisions);
+             decisionLogPresenter.prepareSuccessView(outputData);
+         }
+Index: src/main/java/data_access/DBUserDataAccessObject.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package data_access;\r\n\r\nimport java.io.IOException;\r\n<<<<<<< HEAD\r\nimport java.time.LocalDateTime;\r\nimport java.time.format.DateTimeFormatter;\r\nimport java.util.ArrayList;\r\nimport java.util.List;\r\n\r\nimport entity.Decision;\r\nimport org.json.JSONArray;\r\n=======\r\nimport java.util.ArrayList;\r\n\r\nimport converters.EntityConverterInterface;\r\nimport converters.EntityConverter;\r\nimport entity.*;\r\n>>>>>>> main\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport okhttp3.MediaType;\r\nimport okhttp3.OkHttpClient;\r\nimport okhttp3.Request;\r\nimport okhttp3.RequestBody;\r\nimport okhttp3.Response;\r\nimport use_case.change_password.ChangePasswordUserDataAccessInterface;\r\nimport use_case.homepage.HomepageUserDataAccessInterface;\r\nimport use_case.login.LoginUserDataAccessInterface;\r\nimport use_case.logout.LogoutUserDataAccessInterface;\r\nimport use_case.signup.SignupUserDataAccessInterface;\r\n\r\n/**\r\n * The DAO for user data.\r\n */\r\npublic class DBUserDataAccessObject implements SignupUserDataAccessInterface,\r\n        LoginUserDataAccessInterface,\r\n        ChangePasswordUserDataAccessInterface,\r\n        LogoutUserDataAccessInterface,\r\n        HomepageUserDataAccessInterface\r\n{\r\n    private static final int SUCCESS_CODE = 200;\r\n    private static final String CONTENT_TYPE_LABEL = \"Content-Type\";\r\n    private static final String CONTENT_TYPE_JSON = \"application/json\";\r\n    private static final String STATUS_CODE_LABEL = \"status_code\";\r\n    private static final String USERNAME = \"username\";\r\n    private static final String PASSWORD = \"password\";\r\n    private static final String INFO = \"info\";\r\n    private static final String DARK_MODE = \"darkMode\";\r\n    private static final String CHARACTER_NAME = \"characterName\";\r\n    private static final String AVATAR = \"avatar\";\r\n    private static final String HAPPINESS = \"happiness\";\r\n    private static final String SALARY = \"salary\";\r\n    private static final String ASSETS = \"assets\";\r\n    private static final String LIABILITIES = \"liabilities\";\r\n    private static final String DECISIONS = \"decisions\";\r\n\r\n    private static final String MESSAGE = \"message\";\r\n    private final UserFactory userFactory;\r\n    private final EntityConverterInterface converter;\r\n\r\n    public DBUserDataAccessObject(UserFactory userFactory) {\r\n        this.userFactory = userFactory;\r\n        this.converter = new EntityConverter();\r\n        // No need to do anything to reinitialize a user list! The data is the cloud that may be miles away.\r\n    }\r\n\r\n    @Override\r\n    public User get(String username) {\r\n        // Make an API call to get the user object.\r\n        final OkHttpClient client = new OkHttpClient().newBuilder().build();\r\n        final Request request = new Request.Builder()\r\n                .url(String.format(\"http://vm003.teach.cs.toronto.edu:20112/user?username=%s\", username))\r\n                .addHeader(\"Content-Type\", CONTENT_TYPE_JSON)\r\n                .build();\r\n        try {\r\n            final Response response = client.newCall(request).execute();\r\n\r\n            final JSONObject responseBody = new JSONObject(response.body().string());\r\n\r\n            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {\r\n                final JSONObject userJSONObject = responseBody.getJSONObject(\"user\");\r\n\r\n                String dbUsername = userJSONObject.has(USERNAME) ? userJSONObject.getString(USERNAME) : username;\r\n\r\n                final String password = userJSONObject.has(PASSWORD) ? userJSONObject.getString(PASSWORD) : null;\r\n\r\n                if (!userJSONObject.has(INFO) || userJSONObject.isNull(INFO)) {\r\n                    return userFactory.create(dbUsername, password);\r\n                }\r\n                JSONObject infoJSON = userJSONObject.getJSONObject(INFO);\r\n\r\n                final boolean isDarkMode = infoJSON.has(DARK_MODE) ? infoJSON.getBoolean(DARK_MODE) : false;\r\n\r\n                final String characterName = infoJSON.has(CHARACTER_NAME) ?\r\n                        infoJSON.getString(CHARACTER_NAME) : null;\r\n\r\n                Avatar avatar = new Avatar();\r\n                if (infoJSON.has(AVATAR)) {\r\n                    converter.toAvatar(infoJSON.getJSONObject(AVATAR));\r\n                }\r\n\r\n                final int happiness = infoJSON.has(HAPPINESS) ? infoJSON.getInt(HAPPINESS) : 0;\r\n                final int salary = infoJSON.has(SALARY) ? infoJSON.getInt(SALARY) : 0;\r\n\r\n                Assets assets = new Assets();\r\n                if (infoJSON.has(ASSETS)) {\r\n                    converter.toAssets(infoJSON.getJSONObject(ASSETS));\r\n                }\r\n\r\n                Liabilities liabilities = new Liabilities();\r\n                if (infoJSON.has(LIABILITIES)) {\r\n                    converter.toLiabilities(infoJSON.getJSONObject(LIABILITIES));\r\n                }\r\n\r\n                ArrayList<Decision> decisions = new ArrayList<>();\r\n                if (infoJSON.has(DECISIONS)) {\r\n                    decisions = converter.toArrayListOfDecision(infoJSON.getJSONArray(DECISIONS));\r\n                }\r\n\r\n                return userFactory.create(\r\n                        dbUsername,\r\n                        password,\r\n                        isDarkMode,\r\n                        characterName,\r\n                        avatar,\r\n                        happiness,\r\n                        salary,\r\n                        assets,\r\n                        liabilities,\r\n                        decisions\r\n                );\r\n            }\r\n            else {\r\n                throw new RuntimeException(responseBody.getString(MESSAGE));\r\n            }\r\n        }\r\n        catch (IOException | JSONException ex) {\r\n            throw new RuntimeException(ex);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void setCurrentUsername(String name) {\r\n        // this isn't implemented for the lab\r\n    }\r\n\r\n    @Override\r\n    public boolean existsByName(String username) {\r\n        final OkHttpClient client = new OkHttpClient().newBuilder()\r\n                .build();\r\n        final Request request = new Request.Builder()\r\n                .url(String.format(\"http://vm003.teach.cs.toronto.edu:20112/checkIfUserExists?username=%s\", username))\r\n                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)\r\n                .build();\r\n        try {\r\n            final Response response = client.newCall(request).execute();\r\n\r\n            final JSONObject responseBody = new JSONObject(response.body().string());\r\n\r\n            return responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE;\r\n        }\r\n        catch (IOException | JSONException ex) {\r\n            throw new RuntimeException(ex);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void save(User user) {\r\n        final OkHttpClient client = new OkHttpClient().newBuilder()\r\n                .build();\r\n\r\n        // POST METHOD\r\n        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);\r\n        final JSONObject requestBody = new JSONObject();\r\n\r\n        requestBody.put(USERNAME, user.getUsername());\r\n        requestBody.put(PASSWORD, user.getPassword());\r\n\r\n        final JSONObject infoBody = new JSONObject();\r\n\r\n        infoBody.put(DARK_MODE, user.isDarkMode());\r\n        infoBody.put(CHARACTER_NAME, user.getCharacterName());\r\n        infoBody.put(AVATAR, converter.toJSONObject(user.getAvatar()));\r\n        infoBody.put(HAPPINESS, user.getHappiness());\r\n        infoBody.put(SALARY, user.getSalary());\r\n        infoBody.put(ASSETS, converter.toJSONObject(user.getAssets()));\r\n        infoBody.put(LIABILITIES, converter.toJSONObject(user.getLiabilities()));\r\n        infoBody.put(DECISIONS, converter.toJSONArray(user.getDecisions()));\r\n\r\n        requestBody.put(INFO, infoBody);\r\n\r\n        final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);\r\n        final Request request = new Request.Builder()\r\n                .url(\"http://vm003.teach.cs.toronto.edu:20112/user\")\r\n                .method(\"POST\", body)\r\n                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)\r\n                .build();\r\n        try {\r\n            final Response response = client.newCall(request).execute();\r\n\r\n            final JSONObject responseBody = new JSONObject(response.body().string());\r\n\r\n            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {\r\n                // success!\r\n            }\r\n            else {\r\n                throw new RuntimeException(responseBody.getString(MESSAGE));\r\n            }\r\n        }\r\n        catch (IOException | JSONException ex) {\r\n            throw new RuntimeException(ex);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void changePassword(User user) {\r\n        final OkHttpClient client = new OkHttpClient().newBuilder()\r\n                .build();\r\n\r\n        // POST METHOD\r\n        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);\r\n        final JSONObject requestBody = new JSONObject();\r\n        requestBody.put(USERNAME, user.getUsername());\r\n        requestBody.put(PASSWORD, user.getPassword());\r\n        final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);\r\n        final Request request = new Request.Builder()\r\n                .url(\"http://vm003.teach.cs.toronto.edu:20112/user\")\r\n                .method(\"PUT\", body)\r\n                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)\r\n                .build();\r\n        try {\r\n            final Response response = client.newCall(request).execute();\r\n\r\n            final JSONObject responseBody = new JSONObject(response.body().string());\r\n\r\n            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {\r\n                // success!\r\n            }\r\n            else {\r\n                throw new RuntimeException(responseBody.getString(MESSAGE));\r\n            }\r\n        }\r\n        catch (IOException | JSONException ex) {\r\n            throw new RuntimeException(ex);\r\n        }\r\n    }\r\n\r\n//    @Override\r\n    public void updateUser(User user) {\r\n        final OkHttpClient client = new OkHttpClient().newBuilder()\r\n                .build();\r\n\r\n        if (!existsByName(user.getUsername())) {\r\n            throw new RuntimeException(String.format(\"User %s does not exist\", user.getUsername()));\r\n        }\r\n\r\n        // POST METHOD\r\n        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);\r\n        final JSONObject requestBody = new JSONObject();\r\n\r\n        requestBody.put(USERNAME, user.getUsername());\r\n        requestBody.put(PASSWORD, user.getPassword());\r\n\r\n        final JSONObject infoBody = new JSONObject();\r\n\r\n        infoBody.put(DARK_MODE, user.isDarkMode());\r\n        infoBody.put(CHARACTER_NAME, user.getCharacterName());\r\n        infoBody.put(AVATAR, converter.toJSONObject(user.getAvatar()));\r\n        infoBody.put(HAPPINESS, user.getHappiness());\r\n        infoBody.put(SALARY, user.getSalary());\r\n        infoBody.put(ASSETS, converter.toJSONObject(user.getAssets()));\r\n        infoBody.put(LIABILITIES, converter.toJSONObject(user.getLiabilities()));\r\n        infoBody.put(DECISIONS, converter.toJSONArray(user.getDecisions()));\r\n\r\n        requestBody.put(INFO, infoBody);\r\n\r\n        final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);\r\n        final Request request = new Request.Builder()\r\n                .url(\"http://vm003.teach.cs.toronto.edu:20112/modifyUserInfo\")\r\n                .method(\"PUT\", body)\r\n                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)\r\n                .build();\r\n        try {\r\n            final Response response = client.newCall(request).execute();\r\n\r\n            final JSONObject responseBody = new JSONObject(response.body().string());\r\n\r\n            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {\r\n                // success!\r\n            }\r\n            else {\r\n                throw new RuntimeException(responseBody.getString(MESSAGE));\r\n            }\r\n        }\r\n        catch (IOException | JSONException ex) {\r\n            throw new RuntimeException(ex);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public String getCurrentUsername() {\r\n        return null;\r\n    }\r\n\r\n<<<<<<< HEAD\r\n    public List<Decision> getUserDecisions(String username) {\r\n        final OkHttpClient client = new OkHttpClient().newBuilder().build();\r\n        final Request request = new Request.Builder()\r\n                .url(String.format(\"http://vm003.teach.cs.toronto.edu:20112/decisions?username=%s\", username))\r\n                .addHeader(\"Content-Type\", CONTENT_TYPE_JSON)\r\n                .build();\r\n\r\n        try {\r\n            final Response response = client.newCall(request).execute();\r\n            final JSONObject responseBody = new JSONObject(response.body().string());\r\n\r\n            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {\r\n                final JSONArray decisionsArray = responseBody.getJSONArray(\"decisions\");\r\n                final List<Decision> decisions = new ArrayList<>();\r\n\r\n                for (int i = 0; i < decisionsArray.length(); i++) {\r\n                    final JSONObject decisionObject = decisionsArray.getJSONObject(i);\r\n                    final String timestampString = decisionObject.getString(\"timestamp\");\r\n                    LocalDateTime timestamp = LocalDateTime.parse(timestampString, DateTimeFormatter.ofPattern(\"MM/dd HH:mm\"));\r\n                    final String decisionText = decisionObject.getString(\"decisionText\");\r\n                    final String decisionResponse = decisionObject.getString(\"decisionResponse\");\r\n                    final int happinessImpact = decisionObject.getInt(\"happinessImpact\");\r\n                    final int netWorthImpact = decisionObject.getInt(\"netWorthImpact\");\r\n\r\n                    decisions.add(new Decision(timestamp, decisionText, decisionResponse, happinessImpact, netWorthImpact));\r\n                }\r\n\r\n                return decisions;\r\n            } else {\r\n                throw new RuntimeException(responseBody.getString(MESSAGE));\r\n            }\r\n        } catch (IOException | JSONException ex) {\r\n            throw new RuntimeException(ex);\r\n        }\r\n    }\r\n\r\n}\r\n=======\r\n    public static void main(String[] args) {\r\n        UserFactory userFactory = new CommonUserFactory();\r\n        DBUserDataAccessObject dao = new DBUserDataAccessObject(userFactory);\r\n        User user = userFactory.create(\r\n                \"Paul\",\r\n                \"abc\",\r\n                true,\r\n                \"Joe Roggens\",\r\n                new Avatar(),\r\n                0,\r\n                100000,\r\n                null,\r\n                null,\r\n                new ArrayList<>()\r\n        );\r\n        dao.updateUser(user);\r\n        user = dao.get(\"Paul\");\r\n    }\r\n}\r\n>>>>>>> main\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/data_access/DBUserDataAccessObject.java b/src/main/java/data_access/DBUserDataAccessObject.java
+--- a/src/main/java/data_access/DBUserDataAccessObject.java	(revision 65e2fa6cd69fcce22e7dbb57a33d3580ea99d9a0)
++++ b/src/main/java/data_access/DBUserDataAccessObject.java	(date 1732842669453)
+@@ -1,7 +1,6 @@
+ package data_access;
+ 
+ import java.io.IOException;
+-<<<<<<< HEAD
+ import java.time.LocalDateTime;
+ import java.time.format.DateTimeFormatter;
+ import java.util.ArrayList;
+@@ -9,13 +8,11 @@
+ 
+ import entity.Decision;
+ import org.json.JSONArray;
+-=======
+ import java.util.ArrayList;
+ 
+ import converters.EntityConverterInterface;
+ import converters.EntityConverter;
+ import entity.*;
+->>>>>>> main
+ import org.json.JSONException;
+ import org.json.JSONObject;
+ 
+@@ -303,7 +300,7 @@
+         return null;
+     }
+ 
+-<<<<<<< HEAD
++
+     public List<Decision> getUserDecisions(String username) {
+         final OkHttpClient client = new OkHttpClient().newBuilder().build();
+         final Request request = new Request.Builder()
+@@ -340,8 +337,6 @@
+         }
+     }
+ 
+-}
+-=======
+     public static void main(String[] args) {
+         UserFactory userFactory = new CommonUserFactory();
+         DBUserDataAccessObject dao = new DBUserDataAccessObject(userFactory);
+@@ -361,4 +356,3 @@
+         user = dao.get("Paul");
+     }
+ }
+->>>>>>> main
+Index: src/main/java/view/GameOverView.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/view/GameOverView.java b/src/main/java/view/GameOverView.java
+new file mode 100644
+--- /dev/null	(date 1732928412003)
++++ b/src/main/java/view/GameOverView.java	(date 1732928412003)
+@@ -0,0 +1,74 @@
++package view;
++
++import javax.swing.*;
++import java.awt.*;
++
++/**
++ * A view to display when the player runs out of money and assets, ending the game.
++ */
++public class GameOverView extends JPanel {
++
++    public GameOverView(int finalNetWorth, int finalHappiness) {
++        setLayout(new BorderLayout());
++
++        // create a panel for the game over message
++        JPanel gameOverPanel = new JPanel();
++        gameOverPanel.setLayout(new BoxLayout(gameOverPanel, BoxLayout.Y_AXIS));
++        gameOverPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
++
++        // game over message
++        JLabel gameOverLabel = new JLabel("GAME OVER");
++        gameOverLabel.setFont(new Font("Constantia", Font.BOLD, 36));
++        gameOverLabel.setForeground(Color.RED);
++        gameOverLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
++        gameOverPanel.add(gameOverLabel);
++
++        // wealth message
++        JLabel wealthLabel = new JLabel(String.format("Final Net Worth: $%d", finalNetWorth));
++        wealthLabel.setFont(new Font("Arial", Font.PLAIN, 16));
++        wealthLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
++        gameOverPanel.add(wealthLabel);
++
++        JLabel happinessLabel = new JLabel(String.format("Final Happiness: %d", finalHappiness));
++        happinessLabel.setFont(new Font("Arial", Font.PLAIN, 16));
++        happinessLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
++        gameOverPanel.add(happinessLabel);
++
++        // give up button to go back to homepage
++        JPanel buttonPanel = new JPanel();
++        JButton restartButton = new JButton("Give Up");
++        restartButton.setPreferredSize(new Dimension(150, 30));
++        buttonPanel.add(restartButton);
++
++        // Add action for the restart button (can be implemented later)
++        restartButton.addActionListener(e -> {
++            System.out.println("Restart the game...");
++            // Logic for restarting the game can be added here
++        });
++
++        // Add both panels to the main panel
++        add(gameOverPanel, BorderLayout.CENTER);
++        add(buttonPanel, BorderLayout.SOUTH);
++
++        // Make the panel look nicer with some padding
++        setBorder(BorderFactory.createEmptyBorder(50, 50, 50, 50));
++    }
++
++    public static void main(String[] args) {
++        // test
++        JFrame frame = new JFrame("Game Over");
++        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
++        frame.setSize(400, 300);
++        frame.setLocationRelativeTo(null); // Center the frame on the screen
++
++        // Assume these are the final stats when the player runs out of assets and money
++        int finalNetWorth = 0;
++        int finalHappiness = 0;
++
++        // Add the GameOverView to the frame
++        GameOverView gameOverView = new GameOverView(finalNetWorth, finalHappiness);
++        frame.add(gameOverView);
++        frame.setVisible(true);
++    }
++}
++
+Index: src/main/java/entity/Decision.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package entity;\r\n\r\nimport java.time.LocalDateTime;\r\n\r\npublic class Decision {\r\n    private final LocalDateTime timestamp;\r\n    private final String decisionText;\r\n    private final String decisionResponse;\r\n    private final double netWorthChange;\r\n    private final double happinessChange;\r\n\r\n    public Decision(LocalDateTime timestamp, String decisionText, String decisionResponse, double netWorthChange, double happinessChange) {\r\n        this.timestamp = timestamp;\r\n        this.decisionText = decisionText;\r\n        this.decisionResponse = decisionResponse;\r\n        this.netWorthChange = netWorthChange;\r\n        this.happinessChange = happinessChange;\r\n    }\r\n\r\n    public LocalDateTime getTimestamp() {\r\n        return timestamp;\r\n    }\r\n\r\n    public String getDecisionText() { return decisionText; }\r\n\r\n    public String getDecisionResponse() { return decisionResponse; }\r\n\r\n    public double getNetWorthChange() {\r\n        return netWorthChange;\r\n    }\r\n\r\n    public double getHappinessChange() {\r\n        return happinessChange;\r\n    }\r\n<<<<<<< HEAD\r\n}\r\n=======\r\n}\r\n>>>>>>> main\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/entity/Decision.java b/src/main/java/entity/Decision.java
+--- a/src/main/java/entity/Decision.java	(revision 65e2fa6cd69fcce22e7dbb57a33d3580ea99d9a0)
++++ b/src/main/java/entity/Decision.java	(date 1732841295486)
+@@ -21,9 +21,13 @@
+         return timestamp;
+     }
+ 
+-    public String getDecisionText() { return decisionText; }
++    public String getDecisionText() {
++        return decisionText;
++    }
+ 
+-    public String getDecisionResponse() { return decisionResponse; }
++    public String getDecisionResponse() {
++        return decisionResponse;
++    }
+ 
+     public double getNetWorthChange() {
+         return netWorthChange;
+@@ -32,8 +36,5 @@
+     public double getHappinessChange() {
+         return happinessChange;
+     }
+-<<<<<<< HEAD
++
+ }
+-=======
+-}
+->>>>>>> main
+Index: src/main/java/use_case/game_over/GameOverInteractor.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/use_case/game_over/GameOverInteractor.java b/src/main/java/use_case/game_over/GameOverInteractor.java
+new file mode 100644
+--- /dev/null	(date 1732846719211)
++++ b/src/main/java/use_case/game_over/GameOverInteractor.java	(date 1732846719211)
+@@ -0,0 +1,15 @@
++package use_case.game_over;
++
++public class GameOverInteractor {
++    private GameOverOutputBoundary presenter;
++
++    public GameOverInteractor(GameOverOutputBoundary presenter)
++    {
++        this.presenter = presenter;
++    }
++
++    public void execute()
++    {
++        presenter.presentGameOver();
++    }
++}
+Index: src/main/java/use_case/game_over/GameOverOutputBoundary.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/use_case/game_over/GameOverOutputBoundary.java b/src/main/java/use_case/game_over/GameOverOutputBoundary.java
+new file mode 100644
+--- /dev/null	(date 1732846885112)
++++ b/src/main/java/use_case/game_over/GameOverOutputBoundary.java	(date 1732846885112)
+@@ -0,0 +1,24 @@
++package use_case.game_over;
++
++/**
++ * OutputBoundary for the GameOver use case.
++ * This interface defines the methods required for displaying the game over result
++ * and for restarting the game.
++ */
++public interface GameOverOutputBoundary {
++
++    /**
++     * Displays the game over message along with the final stats such as net worth and happiness.
++     *
++     * @param finalNetWorth the final net worth of the player
++     * @param finalHappiness the final happiness of the player
++     */
++    void displayGameOver(int finalNetWorth, int finalHappiness);
++
++    /**
++     * Restarts the game. This method can be implemented with logic to reset the game state.
++     */
++    void restartGame();
++
++    void presentGameOver();
++}
+Index: src/test/java/use_case/decision_log/DecisionLogInteractorTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/test/java/use_case/decision_log/DecisionLogInteractorTest.java b/src/test/java/use_case/decision_log/DecisionLogInteractorTest.java
+new file mode 100644
+--- /dev/null	(date 1732930925040)
++++ b/src/test/java/use_case/decision_log/DecisionLogInteractorTest.java	(date 1732930925040)
+@@ -0,0 +1,72 @@
++package use_case.decision_log;
++
++import data_access.MongoDBUserDataAccessObject;
++import entity.CommonUser;
++import entity.Decision;
++import entity.CommonUserFactory;
++import entity.User;
++import org.junit.jupiter.api.Test;
++
++import java.time.LocalDateTime;
++import java.util.ArrayList;
++import java.util.List;
++
++import static org.junit.jupiter.api.Assertions.*;
++
++class DecisionLogInteractorTest {
++
++    @Test
++    void successTest() {
++        // Arrange: Set up the test data
++        String username = "Paul";
++        ArrayList<Decision> decisions = new ArrayList<>();
++        Decision decision1 = new Decision(
++                LocalDateTime.now(),
++                "You are an hour walk away from school, and walking drains you. Would you like to get a " +
++                        "Maserati, used 2001 car, bicycle, or just walk?",
++                "get a Maserati",
++                -101010,
++                100
++        );
++        Decision decision2 = new Decision(
++                LocalDateTime.now(),
++                "Your car window broke, would you like to pay to replace it or just duct tape it up for now?"
++                , "duct tape",
++                -1,
++                -10
++        );
++        decisions.add(decision1);
++        decisions.add(decision2);
++
++        // Add decisions to the mock MongoDB repo (using MongoDBDecisionDataAccessObject)
++        MongoDBUserDataAccessObject decisionRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
++        User user = new CommonUser(username, "password", false, "CharacterName",
++                null, 50, 5000, null, null, decisions);
++        decisionRepository.save(user);
++
++        // Create successPresenter that checks if success logic is handled correctly
++        DecisionLogOutputBoundary successPresenter = new DecisionLogOutputBoundary() {
++
++            @Override
++            public void switchToHomePageView() {
++                fail("Use case HomePageView is unexpected.");
++            }
++
++            @Override
++            public void prepareSuccessView(DecisionLogOutputData decisionLogOutputData) {
++                assertEquals(username, user.getUsername());
++                assertEquals(decisions, decisionLogOutputData.getDecisions());
++            }
++
++            @Override
++            public void prepareFailView(String error) {
++                fail("Failure view should not be called in success test.");
++            }
++        };
++
++        // Create interactor and execute
++        DecisionLogInputBoundary interactor = new DecisionLogInteractor(decisionRepository, successPresenter);
++        DecisionLogInputData inputData = new DecisionLogInputData(username);
++        interactor.execute(inputData);
++    }
++}
+\ No newline at end of file

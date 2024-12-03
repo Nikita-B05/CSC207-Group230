@@ -1,0 +1,398 @@
+Index: src/main/java/data_access/DBUserDataAccessObject.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package data_access;\r\n\r\nimport java.io.IOException;\r\nimport java.security.cert.CollectionCertStoreParameters;\r\nimport java.time.LocalDateTime;\r\nimport java.time.format.DateTimeFormatter;\r\nimport java.util.ArrayList;\r\nimport java.util.Collection;\r\nimport java.util.List;\r\n\r\nimport com.mongodb.client.MongoCollection;\r\nimport com.mongodb.client.model.Filters;\r\nimport com.mongodb.client.model.Updates;\r\nimport entity.Decision;\r\nimport org.json.JSONArray;\r\n\r\nimport converters.EntityConverterInterface;\r\nimport converters.EntityConverter;\r\nimport entity.*;\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport okhttp3.MediaType;\r\nimport okhttp3.OkHttpClient;\r\nimport okhttp3.Request;\r\nimport okhttp3.RequestBody;\r\nimport okhttp3.Response;\r\nimport use_case.change_password.ChangePasswordUserDataAccessInterface;\r\nimport use_case.homepage.HomepageUserDataAccessInterface;\r\nimport use_case.login.LoginUserDataAccessInterface;\r\nimport use_case.logout.LogoutUserDataAccessInterface;\r\nimport use_case.signup.SignupUserDataAccessInterface;\r\n\r\nimport javax.swing.text.Document;\r\n\r\n/**\r\n * The DAO for user data.\r\n */\r\npublic class DBUserDataAccessObject implements SignupUserDataAccessInterface,\r\n        LoginUserDataAccessInterface,\r\n        ChangePasswordUserDataAccessInterface,\r\n        LogoutUserDataAccessInterface,\r\n        HomepageUserDataAccessInterface\r\n{\r\n    private static final int SUCCESS_CODE = 200;\r\n    private static final String CONTENT_TYPE_LABEL = \"Content-Type\";\r\n    private static final String CONTENT_TYPE_JSON = \"application/json\";\r\n    private static final String STATUS_CODE_LABEL = \"status_code\";\r\n    private static final String USERNAME = \"username\";\r\n    private static final String PASSWORD = \"password\";\r\n    private static final String INFO = \"info\";\r\n    private static final String DARK_MODE = \"darkMode\";\r\n    private static final String CHARACTER_NAME = \"characterName\";\r\n    private static final String AVATAR = \"avatar\";\r\n    private static final String HAPPINESS = \"happiness\";\r\n    private static final String SALARY = \"salary\";\r\n    private static final String ASSETS = \"assets\";\r\n    private static final String LIABILITIES = \"liabilities\";\r\n    private static final String DECISIONS = \"decisions\";\r\n\r\n    private static final String MESSAGE = \"message\";\r\n    private final UserFactory userFactory;\r\n    private final EntityConverterInterface converter;\r\n\r\n    public DBUserDataAccessObject(UserFactory userFactory) {\r\n        this.userFactory = userFactory;\r\n        this.converter = new EntityConverter();\r\n        // No need to do anything to reinitialize a user list! The data is the cloud that may be miles away.\r\n    }\r\n\r\n    @Override\r\n    public User get(String username) {\r\n        // Make an API call to get the user object.\r\n        final OkHttpClient client = new OkHttpClient().newBuilder().build();\r\n        final Request request = new Request.Builder()\r\n                .url(String.format(\"http://vm003.teach.cs.toronto.edu:20112/user?username=%s\", username))\r\n                .addHeader(\"Content-Type\", CONTENT_TYPE_JSON)\r\n                .build();\r\n        try {\r\n            final Response response = client.newCall(request).execute();\r\n\r\n            final JSONObject responseBody = new JSONObject(response.body().string());\r\n\r\n            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {\r\n                final JSONObject userJSONObject = responseBody.getJSONObject(\"user\");\r\n\r\n                String dbUsername = userJSONObject.has(USERNAME) ? userJSONObject.getString(USERNAME) : username;\r\n\r\n                final String password = userJSONObject.has(PASSWORD) ? userJSONObject.getString(PASSWORD) : null;\r\n\r\n                if (!userJSONObject.has(INFO) || userJSONObject.isNull(INFO)) {\r\n                    return userFactory.create(dbUsername, password);\r\n                }\r\n                JSONObject infoJSON = userJSONObject.getJSONObject(INFO);\r\n\r\n                final boolean isDarkMode = infoJSON.has(DARK_MODE) ? infoJSON.getBoolean(DARK_MODE) : false;\r\n\r\n                final String characterName = infoJSON.has(CHARACTER_NAME) ?\r\n                        infoJSON.getString(CHARACTER_NAME) : null;\r\n\r\n                Avatar avatar = new Avatar();\r\n                if (infoJSON.has(AVATAR)) {\r\n                    converter.toAvatar(infoJSON.getJSONObject(AVATAR));\r\n                }\r\n\r\n                final int happiness = infoJSON.has(HAPPINESS) ? infoJSON.getInt(HAPPINESS) : 0;\r\n                final int salary = infoJSON.has(SALARY) ? infoJSON.getInt(SALARY) : 0;\r\n\r\n                Assets assets = new Assets();\r\n                if (infoJSON.has(ASSETS)) {\r\n                    converter.toAssets(infoJSON.getJSONObject(ASSETS));\r\n                }\r\n\r\n                Liabilities liabilities = new Liabilities();\r\n                if (infoJSON.has(LIABILITIES)) {\r\n                    converter.toLiabilities(infoJSON.getJSONObject(LIABILITIES));\r\n                }\r\n\r\n                ArrayList<Decision> decisions = new ArrayList<>();\r\n                if (infoJSON.has(DECISIONS)) {\r\n                    decisions = converter.toArrayListOfDecision(infoJSON.getJSONArray(DECISIONS));\r\n                }\r\n\r\n                return userFactory.create(\r\n                        dbUsername,\r\n                        password,\r\n                        isDarkMode,\r\n                        characterName,\r\n                        avatar,\r\n                        happiness,\r\n                        salary,\r\n                        assets,\r\n                        liabilities,\r\n                        decisions\r\n                );\r\n            }\r\n            else {\r\n                throw new RuntimeException(responseBody.getString(MESSAGE));\r\n            }\r\n        }\r\n        catch (IOException | JSONException ex) {\r\n            throw new RuntimeException(ex);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void setCurrentUsername(String name) {\r\n        // this isn't implemented for the lab\r\n    }\r\n\r\n\r\n    @Override\r\n    public boolean existsByName(String username) {\r\n        final OkHttpClient client = new OkHttpClient().newBuilder()\r\n                .build();\r\n        final Request request = new Request.Builder()\r\n                .url(String.format(\"http://vm003.teach.cs.toronto.edu:20112/checkIfUserExists?username=%s\", username))\r\n                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)\r\n                .build();\r\n        try {\r\n            final Response response = client.newCall(request).execute();\r\n\r\n            final JSONObject responseBody = new JSONObject(response.body().string());\r\n\r\n            return responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE;\r\n        }\r\n        catch (IOException | JSONException ex) {\r\n            throw new RuntimeException(ex);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void save(User user) {\r\n        final OkHttpClient client = new OkHttpClient().newBuilder()\r\n                .build();\r\n\r\n        // POST METHOD\r\n        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);\r\n        final JSONObject requestBody = new JSONObject();\r\n\r\n        requestBody.put(USERNAME, user.getUsername());\r\n        requestBody.put(PASSWORD, user.getPassword());\r\n\r\n        final JSONObject infoBody = new JSONObject();\r\n\r\n        infoBody.put(DARK_MODE, user.isDarkMode());\r\n        infoBody.put(CHARACTER_NAME, user.getCharacterName());\r\n        infoBody.put(AVATAR, converter.toJSONObject(user.getAvatar()));\r\n        infoBody.put(HAPPINESS, user.getHappiness());\r\n        infoBody.put(SALARY, user.getSalary());\r\n        infoBody.put(ASSETS, converter.toJSONObject(user.getAssets()));\r\n        infoBody.put(LIABILITIES, converter.toJSONObject(user.getLiabilities()));\r\n        infoBody.put(DECISIONS, converter.toJSONArray(user.getDecisions()));\r\n\r\n        requestBody.put(INFO, infoBody);\r\n\r\n        final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);\r\n        final Request request = new Request.Builder()\r\n                .url(\"http://vm003.teach.cs.toronto.edu:20112/user\")\r\n                .method(\"POST\", body)\r\n                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)\r\n                .build();\r\n        try {\r\n            final Response response = client.newCall(request).execute();\r\n\r\n            final JSONObject responseBody = new JSONObject(response.body().string());\r\n\r\n            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {\r\n                // success!\r\n            }\r\n            else {\r\n                throw new RuntimeException(responseBody.getString(MESSAGE));\r\n            }\r\n        }\r\n        catch (IOException | JSONException ex) {\r\n            throw new RuntimeException(ex);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public void changePassword(User user) {\r\n        final OkHttpClient client = new OkHttpClient().newBuilder()\r\n                .build();\r\n\r\n        // POST METHOD\r\n        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);\r\n        final JSONObject requestBody = new JSONObject();\r\n        requestBody.put(USERNAME, user.getUsername());\r\n        requestBody.put(PASSWORD, user.getPassword());\r\n        final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);\r\n        final Request request = new Request.Builder()\r\n                .url(\"http://vm003.teach.cs.toronto.edu:20112/user\")\r\n                .method(\"PUT\", body)\r\n                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)\r\n                .build();\r\n        try {\r\n            final Response response = client.newCall(request).execute();\r\n\r\n            final JSONObject responseBody = new JSONObject(response.body().string());\r\n\r\n            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {\r\n                // success!\r\n            }\r\n            else {\r\n                throw new RuntimeException(responseBody.getString(MESSAGE));\r\n            }\r\n        }\r\n        catch (IOException | JSONException ex) {\r\n            throw new RuntimeException(ex);\r\n        }\r\n    }\r\n\r\n//    @Override\r\n    public void updateUser(User user) {\r\n        final OkHttpClient client = new OkHttpClient().newBuilder()\r\n                .build();\r\n\r\n        if (!existsByName(user.getUsername())) {\r\n            throw new RuntimeException(String.format(\"User %s does not exist\", user.getUsername()));\r\n        }\r\n\r\n        // POST METHOD\r\n        final MediaType mediaType = MediaType.parse(CONTENT_TYPE_JSON);\r\n        final JSONObject requestBody = new JSONObject();\r\n\r\n        requestBody.put(USERNAME, user.getUsername());\r\n        requestBody.put(PASSWORD, user.getPassword());\r\n\r\n        final JSONObject infoBody = new JSONObject();\r\n\r\n        infoBody.put(DARK_MODE, user.isDarkMode());\r\n        infoBody.put(CHARACTER_NAME, user.getCharacterName());\r\n        infoBody.put(AVATAR, converter.toJSONObject(user.getAvatar()));\r\n        infoBody.put(HAPPINESS, user.getHappiness());\r\n        infoBody.put(SALARY, user.getSalary());\r\n        infoBody.put(ASSETS, converter.toJSONObject(user.getAssets()));\r\n        infoBody.put(LIABILITIES, converter.toJSONObject(user.getLiabilities()));\r\n        infoBody.put(DECISIONS, converter.toJSONArray(user.getDecisions()));\r\n\r\n        requestBody.put(INFO, infoBody);\r\n\r\n        final RequestBody body = RequestBody.create(requestBody.toString(), mediaType);\r\n        final Request request = new Request.Builder()\r\n                .url(\"http://vm003.teach.cs.toronto.edu:20112/modifyUserInfo\")\r\n                .method(\"PUT\", body)\r\n                .addHeader(CONTENT_TYPE_LABEL, CONTENT_TYPE_JSON)\r\n                .build();\r\n        try {\r\n            final Response response = client.newCall(request).execute();\r\n\r\n            final JSONObject responseBody = new JSONObject(response.body().string());\r\n\r\n            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {\r\n                // success!\r\n            }\r\n            else {\r\n                throw new RuntimeException(responseBody.getString(MESSAGE));\r\n            }\r\n        }\r\n        catch (IOException | JSONException ex) {\r\n            throw new RuntimeException(ex);\r\n        }\r\n    }\r\n\r\n    @Override\r\n    public String getCurrentUsername() {\r\n        return null;\r\n    }\r\n\r\n    public List<Decision> getUserDecisions(String username) {\r\n        final OkHttpClient client = new OkHttpClient().newBuilder().build();\r\n        final Request request = new Request.Builder()\r\n                .url(String.format(\"http://vm003.teach.cs.toronto.edu:20112/decisions?username=%s\", username))\r\n                .addHeader(\"Content-Type\", CONTENT_TYPE_JSON)\r\n                .build();\r\n\r\n        try {\r\n            final Response response = client.newCall(request).execute();\r\n            final JSONObject responseBody = new JSONObject(response.body().string());\r\n\r\n            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {\r\n                final JSONArray decisionsArray = responseBody.getJSONArray(\"decisions\");\r\n                final List<Decision> decisions = new ArrayList<>();\r\n\r\n                for (int i = 0; i < decisionsArray.length(); i++) {\r\n                    final JSONObject decisionObject = decisionsArray.getJSONObject(i);\r\n                    final String timestampString = decisionObject.getString(\"timestamp\");\r\n                    LocalDateTime timestamp = LocalDateTime.parse(timestampString, DateTimeFormatter.ofPattern(\"MM/dd HH:mm\"));\r\n                    final String decisionText = decisionObject.getString(\"decisionText\");\r\n                    final String decisionResponse = decisionObject.getString(\"decisionResponse\");\r\n                    final int happinessImpact = decisionObject.getInt(\"happinessImpact\");\r\n                    final int netWorthImpact = decisionObject.getInt(\"netWorthImpact\");\r\n\r\n                    decisions.add(new Decision(timestamp, decisionText, decisionResponse, happinessImpact, netWorthImpact));\r\n                }\r\n\r\n                return decisions;\r\n            } else {\r\n                throw new RuntimeException(responseBody.getString(MESSAGE));\r\n            }\r\n        } catch (IOException | JSONException ex) {\r\n            throw new RuntimeException(ex);\r\n        }\r\n    }\r\n\r\n}\r\n    public void main(String[] args) {\r\n        UserFactory userFactory = new CommonUserFactory();\r\n        DBUserDataAccessObject dao = new DBUserDataAccessObject(userFactory);\r\n        User user = userFactory.create(\r\n                \"Paul\",\r\n                \"abc\",\r\n                true,\r\n                \"Paulll\",\r\n                new Avatar(),\r\n                0,\r\n                100000,\r\n                null,\r\n                null,\r\n                new ArrayList<>()\r\n        );\r\n        dao.updateUser(user);\r\n        user = dao.get(\"Paul\");\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/data_access/DBUserDataAccessObject.java b/src/main/java/data_access/DBUserDataAccessObject.java
+--- a/src/main/java/data_access/DBUserDataAccessObject.java	(revision fc1d7e1647607a34c2493ec230616a0ab191466b)
++++ b/src/main/java/data_access/DBUserDataAccessObject.java	(date 1732938424687)
+@@ -1,18 +1,7 @@
+ package data_access;
+ 
+ import java.io.IOException;
+-import java.security.cert.CollectionCertStoreParameters;
+-import java.time.LocalDateTime;
+-import java.time.format.DateTimeFormatter;
+ import java.util.ArrayList;
+-import java.util.Collection;
+-import java.util.List;
+-
+-import com.mongodb.client.MongoCollection;
+-import com.mongodb.client.model.Filters;
+-import com.mongodb.client.model.Updates;
+-import entity.Decision;
+-import org.json.JSONArray;
+ 
+ import converters.EntityConverterInterface;
+ import converters.EntityConverter;
+@@ -31,8 +20,6 @@
+ import use_case.logout.LogoutUserDataAccessInterface;
+ import use_case.signup.SignupUserDataAccessInterface;
+ 
+-import javax.swing.text.Document;
+-
+ /**
+  * The DAO for user data.
+  */
+@@ -148,7 +135,6 @@
+         // this isn't implemented for the lab
+     }
+ 
+-
+     @Override
+     public boolean existsByName(String username) {
+         final OkHttpClient client = new OkHttpClient().newBuilder()
+@@ -250,7 +236,7 @@
+         }
+     }
+ 
+-//    @Override
++    //    @Override
+     public void updateUser(User user) {
+         final OkHttpClient client = new OkHttpClient().newBuilder()
+                 .build();
+@@ -307,51 +293,14 @@
+         return null;
+     }
+ 
+-    public List<Decision> getUserDecisions(String username) {
+-        final OkHttpClient client = new OkHttpClient().newBuilder().build();
+-        final Request request = new Request.Builder()
+-                .url(String.format("http://vm003.teach.cs.toronto.edu:20112/decisions?username=%s", username))
+-                .addHeader("Content-Type", CONTENT_TYPE_JSON)
+-                .build();
+-
+-        try {
+-            final Response response = client.newCall(request).execute();
+-            final JSONObject responseBody = new JSONObject(response.body().string());
+-
+-            if (responseBody.getInt(STATUS_CODE_LABEL) == SUCCESS_CODE) {
+-                final JSONArray decisionsArray = responseBody.getJSONArray("decisions");
+-                final List<Decision> decisions = new ArrayList<>();
+-
+-                for (int i = 0; i < decisionsArray.length(); i++) {
+-                    final JSONObject decisionObject = decisionsArray.getJSONObject(i);
+-                    final String timestampString = decisionObject.getString("timestamp");
+-                    LocalDateTime timestamp = LocalDateTime.parse(timestampString, DateTimeFormatter.ofPattern("MM/dd HH:mm"));
+-                    final String decisionText = decisionObject.getString("decisionText");
+-                    final String decisionResponse = decisionObject.getString("decisionResponse");
+-                    final int happinessImpact = decisionObject.getInt("happinessImpact");
+-                    final int netWorthImpact = decisionObject.getInt("netWorthImpact");
+-
+-                    decisions.add(new Decision(timestamp, decisionText, decisionResponse, happinessImpact, netWorthImpact));
+-                }
+-
+-                return decisions;
+-            } else {
+-                throw new RuntimeException(responseBody.getString(MESSAGE));
+-            }
+-        } catch (IOException | JSONException ex) {
+-            throw new RuntimeException(ex);
+-        }
+-    }
+-
+-}
+-    public void main(String[] args) {
++    public static void main(String[] args) {
+         UserFactory userFactory = new CommonUserFactory();
+         DBUserDataAccessObject dao = new DBUserDataAccessObject(userFactory);
+         User user = userFactory.create(
+                 "Paul",
+                 "abc",
+                 true,
+-                "Paulll",
++                "Joe Roggens",
+                 new Avatar(),
+                 0,
+                 100000,
+Index: src/main/java/data_access/MongoDBUserDataAccessObject.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/data_access/MongoDBUserDataAccessObject.java b/src/main/java/data_access/MongoDBUserDataAccessObject.java
+new file mode 100644
+--- /dev/null	(date 1732938344462)
++++ b/src/main/java/data_access/MongoDBUserDataAccessObject.java	(date 1732938344462)
+@@ -0,0 +1,239 @@
++package data_access;
++
++import java.util.ArrayList;
++import java.util.Objects;
++import java.util.Optional;
++
++import com.mongodb.client.MongoCollection;
++import com.mongodb.client.model.Filters;
++import com.mongodb.client.model.Updates;
++import converters.EntityConverter;
++import converters.EntityConverterInterface;
++import entity.*;
++import org.bson.Document;
++
++import use_case.change_password.ChangePasswordUserDataAccessInterface;
++import use_case.homepage.HomepageUserDataAccessInterface;
++import use_case.login.LoginUserDataAccessInterface;
++import use_case.logout.LogoutUserDataAccessInterface;
++import use_case.settings.SettingsUserDataAccessInterface;
++import use_case.signup.SignupUserDataAccessInterface;
++import use_case.choose_avatar.ChooseAvatarUserDataAccessInterface;
++import use_case.input_name.InputNameUserDataAccessInterface;
++
++/**
++ * The DAO for user data, now using MongoDB.
++ */
++public class MongoDBUserDataAccessObject implements SignupUserDataAccessInterface,
++        LoginUserDataAccessInterface,
++        ChangePasswordUserDataAccessInterface,
++        ChooseAvatarUserDataAccessInterface,
++        InputNameUserDataAccessInterface,
++        LogoutUserDataAccessInterface,
++        HomepageUserDataAccessInterface,
++        SettingsUserDataAccessInterface {
++
++    private static final String USERNAME = "username";
++    private static final String PASSWORD = "password";
++    private static final String DARK_MODE = "darkMode";
++    private static final String CHARACTER_NAME = "characterName";
++    private static final String AVATAR = "avatar";
++    private static final String HAPPINESS = "happiness";
++    private static final String SALARY = "salary";
++    private static final String ASSETS = "assets";
++    private static final String LIABILITIES = "liabilities";
++    private static final String DECISIONS = "decisions";
++
++    private final UserFactory userFactory;
++    private final MongoDBConnection mongoDBConnection;
++    private final EntityConverterInterface converter;
++    private String currentUsername = null;
++
++    public MongoDBUserDataAccessObject(UserFactory userFactory) {
++        this.userFactory = userFactory;
++        this.mongoDBConnection = new MongoDBConnection();
++        this.converter = new EntityConverter();
++    }
++
++    @Override
++    public User get(String username) {
++        if (username == null || username.isEmpty()) {
++            throw new IllegalArgumentException("Username cannot be null or empty");
++        }
++        MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
++
++        Document userDoc = usersCollection.find(Filters.eq(USERNAME, username)).first();
++
++        if (userDoc != null) {
++            String name = userDoc.getString(USERNAME);
++            String password = userDoc.getString(PASSWORD);
++            boolean isDarkMode = userDoc.getBoolean(DARK_MODE, false);
++            String characterName = userDoc.getString(CHARACTER_NAME);
++            Avatar avatar = converter.toAvatar(userDoc.getString(AVATAR));
++            int happiness = userDoc.getInteger(HAPPINESS);
++            int salary = userDoc.getInteger(SALARY);
++            Assets assets = converter.toAssets(userDoc.getString(ASSETS));
++            Liabilities liabilities = converter.toLiabilities(userDoc.getString(LIABILITIES));
++            ArrayList<Decision> decisions = converter.toArrayListOfDecision(userDoc.getString(DECISIONS));
++
++            return userFactory.create(
++                    name,
++                    password,
++                    isDarkMode,
++                    characterName,
++                    avatar,
++                    happiness,
++                    salary,
++                    assets,
++                    liabilities,
++                    decisions
++            );
++        } else {
++            throw new RuntimeException("User not found");
++        }
++    }
++
++    @Override
++    public void setCurrentUsername(String name) {
++        if (name != null && name.isEmpty()) {
++            throw new IllegalArgumentException("Current username cannot be an empty string");
++        }
++        this.currentUsername = name;
++    }
++
++    @Override
++    public void updateUserDarkMode(boolean isDarkMode) {
++        User user = getCurrentUser();
++        updateUser(user, DARK_MODE, isDarkMode);
++    }
++
++    @Override
++    public void updateCharacterName(String characterName) {
++        User user = getCurrentUser();
++        updateUser(user, CHARACTER_NAME, characterName);
++    }
++
++    @Override
++    public void updateAvatar(Avatar avatar) {
++        User user = getCurrentUser();
++        updateUser(user, AVATAR, avatar);
++    }
++
++    @Override
++    public String getCurrentUsername() {
++        if (currentUsername == null) {
++            throw new IllegalStateException("No current user is set");
++        }
++        return currentUsername;
++    }
++
++    @Override
++    public User getCurrentUser() {
++        if (currentUsername == null) {
++            throw new IllegalStateException("No current user is logged in");
++        }
++        return get(currentUsername);
++    }
++
++    @Override
++    public void save(User user) {
++        MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
++
++        Document userDoc = new Document()
++                .append(USERNAME, user.getUsername())
++                .append(PASSWORD, user.getPassword())
++                .append(DARK_MODE, user.isDarkMode())
++                .append(CHARACTER_NAME, user.getCharacterName())
++                .append(AVATAR, converter.serialize(user.getAvatar()))
++                .append(HAPPINESS, user.getHappiness())
++                .append(SALARY, user.getSalary())
++                .append(ASSETS, converter.serialize(user.getAssets()))
++                .append(LIABILITIES, converter.serialize(user.getLiabilities()))
++                .append(DECISIONS, converter.serialize(user.getDecisions()));
++
++        usersCollection.insertOne(userDoc);
++    }
++
++    @Override
++    public void changePassword(User user) {
++        updateUser(user, PASSWORD, user.getPassword());
++    }
++
++    //    @Override
++    public void updateUserDarkMode(User user) {
++        updateUser(user, DARK_MODE, user.isDarkMode());
++    }
++
++    private void updateUser(User user, String key, Object value) {
++        MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
++
++        if (Objects.equals(key, AVATAR)) {
++            if (!(value instanceof Avatar)) {
++                throw new IllegalArgumentException("Class of <value> must be equal to <key>.");
++            }
++            usersCollection.updateOne(
++                    Filters.eq(USERNAME, user.getUsername()),
++                    Updates.set(key, converter.serialize((Avatar) value))
++            );
++        }
++        else if (Objects.equals(key, ASSETS)) {
++            if (!(value instanceof Assets)) {
++                throw new IllegalArgumentException("Class of <value> must be equal to <key>.");
++            }
++            usersCollection.updateOne(
++                    Filters.eq(USERNAME, user.getUsername()),
++                    Updates.set(key, converter.serialize((Assets) value))
++            );
++        }
++        else if (Objects.equals(key, LIABILITIES)) {
++            if (!(value instanceof Liabilities)) {
++                throw new IllegalArgumentException("Class of <value> must be equal to <key>.");
++            }
++            usersCollection.updateOne(
++                    Filters.eq(USERNAME, user.getUsername()),
++                    Updates.set(key, converter.serialize((Liabilities) value))
++            );
++        }
++        else if (Objects.equals(key, DECISIONS)) {
++            if (!(value instanceof ArrayList)) {
++                throw new IllegalArgumentException("Class of <value> must be equal to <key>.");
++            }
++            for (Object o : (ArrayList) value) {
++                if (!(o instanceof Decision)) {
++                    throw new IllegalArgumentException("Value is not an ArrayList of Decision.");
++                }
++            }
++            usersCollection.updateOne(
++                    Filters.eq(USERNAME, user.getUsername()),
++                    Updates.set(key, converter.serialize((ArrayList<Decision>) value))
++            );
++        } else {
++            usersCollection.updateOne(
++                    Filters.eq(USERNAME, user.getUsername()),
++                    Updates.set(key, value)
++            );
++        }
++    }
++
++    @Override
++    public boolean existsByName(String username) {
++        MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
++
++        Optional<Document> userDoc = Optional.ofNullable(usersCollection.find(Filters.eq(USERNAME, username)).first());
++
++        return userDoc.isPresent();
++    }
++
++    private void deleteUser(String user) {
++        MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
++        usersCollection.deleteMany(Filters.eq(USERNAME, user));
++    }
++
++    public static void main(String[] args) {
++        User user = new CommonUser("Test", "1234");
++        MongoDBUserDataAccessObject dao = new MongoDBUserDataAccessObject(new CommonUserFactory());
++        dao.save(user);
++        System.out.println(dao.get(user.getUsername()).getSalary());
++        dao.deleteUser(user.getUsername());
++    }
++}
+\ No newline at end of file
+Index: src/main/java/data_access/MongoDBConnection.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/data_access/MongoDBConnection.java b/src/main/java/data_access/MongoDBConnection.java
+new file mode 100644
+--- /dev/null	(date 1732938389875)
++++ b/src/main/java/data_access/MongoDBConnection.java	(date 1732938389875)
+@@ -0,0 +1,29 @@
++package data_access;
++
++import com.mongodb.client.MongoCollection;
++import com.mongodb.client.MongoClients;
++import data_access.config.ConfigLoader;
++import org.bson.Document;
++
++public class MongoDBConnection {
++
++    private final com.mongodb.client.MongoClient mongoClient;
++    private final MongoCollection<Document> collection;
++
++    public MongoDBConnection() {
++        String mongoUri = ConfigLoader.getProperty("mongo.uri");
++        String databaseName = ConfigLoader.getProperty("mongo.database");
++        String collectionName = ConfigLoader.getProperty("mongo.collection");
++
++        this.mongoClient = MongoClients.create(mongoUri);
++        this.collection = mongoClient.getDatabase(databaseName).getCollection(collectionName);
++    }
++
++    public MongoCollection<Document> getCollection() {
++        return collection;
++    }
++
++    public void close() {
++        mongoClient.close();
++    }
++}
