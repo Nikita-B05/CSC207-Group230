@@ -30,11 +30,9 @@ class LogoutInteractorTest {
     @Test
     void successTest() {
         LogoutInputData inputData = new LogoutInputData("testing");
-        // This creates a successPresenter that tests whether the test case is as we expect.
         LogoutOutputBoundary successPresenter = new LogoutOutputBoundary() {
             @Override
             public void prepareSuccessView(LogoutOutputData user) {
-                // check that the output data contains the username of who logged out
                 assertEquals("testing", user.getUsername());
             }
 
