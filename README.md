@@ -292,4 +292,3 @@ Thank you for looking through our project! We hope you find it useful.
 
 ---
 
-[open main file.mp4](..%2F..%2FVideos%2Fopen%20main%20file.mp4)
