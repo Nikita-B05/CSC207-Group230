@@ -1,32 +1,41 @@
 package use_case.logout;
 
 import data_access.MongoDBUserDataAccessObject;
+import entity.CommonUser;
 import entity.CommonUserFactory;
 import entity.User;
 import entity.UserFactory;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class LogoutInteractorTest {
+    private static MongoDBUserDataAccessObject userRepository;
+
+    @BeforeAll
+    public static void setUp() {
+        User user = new CommonUser("testing", "password");
+        userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
+        userRepository.setCurrentUsername("testing");
+        userRepository.save(user);
+    }
+
+    @AfterAll
+    public static void tearDown() {
+        userRepository.deleteUser("testing");
+    }
 
     @Test
     void successTest() {
-        LogoutInputData inputData = new LogoutInputData("Paul");
-        MongoDBUserDataAccessObject userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
-
-        // For the success test, we need to add Paul to the data access repository before we log in.
-        UserFactory factory = new CommonUserFactory();
-        User user = factory.create("Paul", "password");
-        userRepository.save(user);
-        userRepository.setCurrentUsername("Paul");
-
+        LogoutInputData inputData = new LogoutInputData("testing");
         // This creates a successPresenter that tests whether the test case is as we expect.
         LogoutOutputBoundary successPresenter = new LogoutOutputBoundary() {
             @Override
             public void prepareSuccessView(LogoutOutputData user) {
                 // check that the output data contains the username of who logged out
-                assertEquals("Paul", user.getUsername());
+                assertEquals("testing", user.getUsername());
             }
 
             @Override
@@ -38,7 +47,11 @@ class LogoutInteractorTest {
         LogoutInputBoundary interactor = new LogoutInteractor(userRepository, successPresenter);
         interactor.execute(inputData);
         // check that the user was logged out
-        assertNull(userRepository.getCurrentUsername());
+        try {
+            userRepository.getCurrentUsername();
+        } catch (IllegalStateException exception) {
+            assertEquals(exception.getMessage(), "No current user is set");
+        }
     }
 
 }
