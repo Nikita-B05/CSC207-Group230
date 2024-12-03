@@ -15,12 +15,10 @@ public class SettingsInteractorTest {
 
     @BeforeAll
     public static void setUp() {
-        // Create and save the test user
         User user = new CommonUser("testing", "password");
         userRepository = new MongoDBUserDataAccessObject(new CommonUserFactory());
         userRepository.save(user);
 
-        // Set the current username and verify it's set
         userRepository.setCurrentUsername("testing");
         assertNotNull(userRepository.getCurrentUser(), "Current user should not be null after setup.");
     }
@@ -32,7 +30,6 @@ public class SettingsInteractorTest {
 
     @Test
     void navigateToChangePasswordTest() {
-        // Ensure the user is logged in
         userRepository.setCurrentUsername("testing");
 
         SettingsOutputBoundary passwordPresenter = new SettingsOutputBoundary() {
@@ -86,7 +83,6 @@ public class SettingsInteractorTest {
 
     @Test
     void navigateToHomePageTest() {
-        // Ensure the user is logged in
         userRepository.setCurrentUsername("testing");
 
         SettingsOutputBoundary homepagePresenter = new SettingsOutputBoundary() {

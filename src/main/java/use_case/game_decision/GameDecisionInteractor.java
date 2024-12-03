@@ -27,6 +27,29 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
     public void switchToAssetsManager(GameDecisionInputData inputData) {
         User user = userDataAccess.getCurrentUser();
         stockDataAccessObject.setDate(user.getAge());
+        Question question = inputData.getQuestion();
+        Decision decision = inputData.getDecisionQuestion();
+
+        Decision newDecision = new Decision(
+                user.getAge(),
+                question.getQuestionText(),
+                decision.getDecisionText(),
+                decision.getNetWorthChange(),
+                decision.getHappinessChange(),
+                decision.getSalaryChange()
+        );
+
+        user.addDecision(newDecision);
+        user.modifySalary(decision.getSalaryChange());
+        user.getAssets().changeCash(decision.getNetWorthChange());
+        user.changeHappiness(decision.getHappinessChange());
+        userDataAccess.updateSalary(user);
+        userDataAccess.updateDecision(user);
+        userDataAccess.updateAssets(user);
+        userDataAccess.updateHappiness(user);
+        userDataAccess.incrementAge();
+        userDataAccess.addSalary();
+        userDataAccess.appreciateHome();
         GameDecisionOutputData outputData = new GameDecisionOutputData(
                 inputData.getUsername(),
                 inputData.isDarkMode(),
@@ -39,35 +62,6 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
                 stockDataAccessObject.getCodeToPrice()
         );
         outputBoundary.prepareAssetsView(outputData);
-    }
-
-    @Override
-    public void pickDecision(GameDecisionInputData inputData) {
-        User user = userDataAccess.getCurrentUser();
-        Question question = inputData.getQuestion();
-        Decision decision = inputData.getDecisionQuestion();
-        
-        // Create new decision with proper order of text and response
-        Decision newDecision = new Decision(
-            user.getAge(),
-            question.getQuestionText(),
-            decision.getDecisionText(),
-            decision.getNetWorthChange(),
-            decision.getHappinessChange(),
-            decision.getSalaryChange()
-        );
-        
-        user.addDecision(newDecision);
-        user.modifySalary(decision.getSalaryChange());
-        user.getAssets().changeCash(decision.getNetWorthChange());
-        user.changeHappiness(decision.getHappinessChange());
-        userDataAccess.updateSalary(user);
-        userDataAccess.updateDecision(user);
-        userDataAccess.updateAssets(user);
-        userDataAccess.updateHappiness(user);
-        userDataAccess.incrementAge();
-        userDataAccess.addSalary();
-        userDataAccess.appreciateHome();
     }
 
     @Override
