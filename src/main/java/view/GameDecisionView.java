@@ -246,6 +246,12 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
     public void propertyChange(PropertyChangeEvent evt) {
         GameDecisionState state = gameDecisionViewModel.getState();
 
+        // Reset selected decision index and unhighlight the buttons
+        selectedDecisionIndex = -1;
+        for (JButton button : decisionButtons) {
+            button.setBackground(null);  // Ensure no buttons are highlighted
+        }
+
         questionLabel.setText(state.getQuestion() != null ? state.getQuestion().getQuestionText() : "");
 
         ageLabel.setText("Age: " + state.getAge());
@@ -257,8 +263,8 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
             avatarLabel.setIcon(null);
             avatarLabel.setText("No Avatar Available");
         }
-        String characterName = state.getCharacterName() != null ? state.getCharacterName() : state.getUsername();
 
+        String characterName = state.getCharacterName() != null ? state.getCharacterName() : state.getUsername();
         statsTitleLabel.setText(characterName + "'s Stats");
         netWorthLabel.setText("Net Worth: $" + state.getNetWorth(state.getStockPrices()));
         happinessLabel.setText(String.format("Happiness: %d", state.getHappiness()));
@@ -269,7 +275,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
             if (i < decisions.size()) {
                 decisionButtons[i].setEnabled(true);
                 decisionButtons[i].setText(decisions.get(i).getDecisionText());
-                decisionButtons[i].setBackground(null);
+                decisionButtons[i].setBackground(null); // Ensure no buttons are highlighted
             } else {
                 decisionButtons[i].setEnabled(false);
                 decisionButtons[i].setText("");

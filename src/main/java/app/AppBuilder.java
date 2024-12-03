@@ -1,67 +1,26 @@
 package app;
 
 import java.awt.CardLayout;
+
 import javax.swing.*;
 
 import data_access.MongoDBUserDataAccessObject;
+import stock_api.PolygonStockDataAccessObject;
 import entity.CommonUserFactory;
 import entity.UserFactory;
-import interface_adapter.ViewManagerModel;
-import interface_adapter.asset_manager.AssetManagerController;
-import interface_adapter.asset_manager.AssetManagerPresenter;
-import interface_adapter.asset_manager.AssetManagerViewModel;
-import interface_adapter.change_password.ChangePasswordController;
-import interface_adapter.change_password.ChangePasswordPresenter;
-import interface_adapter.change_password.ChangePasswordViewModel;
-import interface_adapter.choose_avatar.ChooseAvatarController;
-import interface_adapter.choose_avatar.ChooseAvatarPresenter;
-import interface_adapter.choose_avatar.ChooseAvatarViewModel;
-import interface_adapter.dark_mode.DarkModeController;
-import interface_adapter.game_decision.GameDecisionController;
-import interface_adapter.game_decision.GameDecisionPresenter;
-import interface_adapter.game_decision.GameDecisionViewModel;
-import interface_adapter.game_over.GameOverController;
-import interface_adapter.game_over.GameOverPresenter;
-import interface_adapter.game_over.GameOverViewModel;
-import interface_adapter.decision_log.DecisionLogPresenter;
-import interface_adapter.decision_log.DecisionLogViewModel;
-import interface_adapter.decision_log.DecisionLogController;
-import interface_adapter.game_success.GameSuccesController;
-import interface_adapter.game_success.GameSuccessPresenter;
-import interface_adapter.game_success.GameSuccessViewModel;
-import interface_adapter.homepage.HomepageController;
-import interface_adapter.homepage.HomepagePresenter;
-import interface_adapter.homepage.HomepageViewModel;
-import interface_adapter.input_name.InputNameController;
-import interface_adapter.input_name.InputNamePresenter;
-import interface_adapter.input_name.InputNameViewModel;
-import interface_adapter.login.LoginController;
-import interface_adapter.login.LoginPresenter;
-import interface_adapter.login.LoginViewModel;
-import interface_adapter.logout.LogoutController;
-import interface_adapter.logout.LogoutPresenter;
-import interface_adapter.manage_home.ManageHomeController;
-import interface_adapter.manage_home.ManageHomePresenter;
-import interface_adapter.manage_home.ManageHomeViewModel;
-import interface_adapter.manage_stock.ManageStockController;
-import interface_adapter.manage_stock.ManageStockPresenter;
-import interface_adapter.manage_stock.ManageStockViewModel;
-import interface_adapter.signup.SignupController;
-import interface_adapter.signup.SignupPresenter;
-import interface_adapter.signup.SignupViewModel;
-import interface_adapter.settings.SettingsController;
-import interface_adapter.settings.SettingsPresenter;
-import interface_adapter.settings.SettingsViewModel;
-import stock_api.PolygonStockDataAccessObject;
+
 import use_case.change_password.ChangePasswordInputBoundary;
 import use_case.change_password.ChangePasswordInteractor;
 import use_case.change_password.ChangePasswordOutputBoundary;
-import use_case.choose_avatar.ChooseAvatarInputBoundary;
-import use_case.choose_avatar.ChooseAvatarInteractor;
-import use_case.choose_avatar.ChooseAvatarOutputBoundary;
 import use_case.choose_asset.ChooseAssetInputBoundary;
 import use_case.choose_asset.ChooseAssetInteractor;
 import use_case.choose_asset.ChooseAssetOutputBoundary;
+import use_case.choose_avatar.ChooseAvatarInputBoundary;
+import use_case.choose_avatar.ChooseAvatarInteractor;
+import use_case.choose_avatar.ChooseAvatarOutputBoundary;
+import use_case.decision_log.DecisionLogInputBoundary;
+import use_case.decision_log.DecisionLogInteractor;
+import use_case.decision_log.DecisionLogOutputBoundary;
 import use_case.game_decision.GameDecisionInputBoundary;
 import use_case.game_decision.GameDecisionInteractor;
 import use_case.game_decision.GameDecisionOutputBoundary;
@@ -99,15 +58,59 @@ import use_case.signup.SignupOutputBoundary;
 import use_case.settings.SettingsInputBoundary;
 import use_case.settings.SettingsInteractor;
 import use_case.settings.SettingsOutputBoundary;
-import use_case.decision_log.DecisionLogInputBoundary;
-import use_case.decision_log.DecisionLogInteractor;
-import use_case.decision_log.DecisionLogOutputBoundary;
+
+import interface_adapter.ViewManagerModel;
+import interface_adapter.asset_manager.AssetManagerController;
+import interface_adapter.asset_manager.AssetManagerPresenter;
+import interface_adapter.asset_manager.AssetManagerViewModel;
+import interface_adapter.change_password.ChangePasswordController;
+import interface_adapter.change_password.ChangePasswordPresenter;
+import interface_adapter.change_password.ChangePasswordViewModel;
+import interface_adapter.choose_avatar.ChooseAvatarController;
+import interface_adapter.choose_avatar.ChooseAvatarPresenter;
+import interface_adapter.choose_avatar.ChooseAvatarViewModel;
+import interface_adapter.dark_mode.DarkModeController;
+import interface_adapter.game_decision.GameDecisionController;
+import interface_adapter.game_decision.GameDecisionPresenter;
+import interface_adapter.game_decision.GameDecisionViewModel;
+import interface_adapter.game_over.GameOverController;
+import interface_adapter.game_over.GameOverPresenter;
+import interface_adapter.game_over.GameOverViewModel;
+import interface_adapter.decision_log.DecisionLogController;
+import interface_adapter.decision_log.DecisionLogPresenter;
+import interface_adapter.decision_log.DecisionLogViewModel;
+import interface_adapter.game_success.GameSuccesController;
+import interface_adapter.game_success.GameSuccessPresenter;
+import interface_adapter.game_success.GameSuccessViewModel;
+import interface_adapter.homepage.HomepageController;
+import interface_adapter.homepage.HomepagePresenter;
+import interface_adapter.homepage.HomepageViewModel;
+import interface_adapter.input_name.InputNameController;
+import interface_adapter.input_name.InputNamePresenter;
+import interface_adapter.input_name.InputNameViewModel;
+import interface_adapter.login.LoginController;
+import interface_adapter.login.LoginPresenter;
+import interface_adapter.login.LoginViewModel;
+import interface_adapter.logout.LogoutController;
+import interface_adapter.logout.LogoutPresenter;
+import interface_adapter.manage_home.ManageHomeController;
+import interface_adapter.manage_home.ManageHomePresenter;
+import interface_adapter.manage_home.ManageHomeViewModel;
+import interface_adapter.manage_stock.ManageStockController;
+import interface_adapter.manage_stock.ManageStockPresenter;
+import interface_adapter.manage_stock.ManageStockViewModel;
+import interface_adapter.signup.SignupController;
+import interface_adapter.signup.SignupPresenter;
+import interface_adapter.signup.SignupViewModel;
+import interface_adapter.settings.SettingsController;
+import interface_adapter.settings.SettingsPresenter;
+import interface_adapter.settings.SettingsViewModel;
+
 import view.*;
 
 /**
  * The AppBuilder class is responsible for putting together the pieces of
  * our Clean Architecture; piece by piece.
- *
  * This is done by adding each View and then adding related Use Cases.
  */
 public class AppBuilder {
@@ -204,6 +207,10 @@ public class AppBuilder {
         return this;
     }
 
+    /**
+     * Adds the Game Over View to the application.
+     * @return this builder
+     */
     public AppBuilder addGameOverView() {
         gameOverViewModel = new GameOverViewModel();
         gameOverView = new GameOverView(gameOverViewModel);
@@ -262,14 +269,14 @@ public class AppBuilder {
     public AppBuilder addSettingsView() {
         settingsViewModel = new SettingsViewModel();
 
-        DarkModeInputBoundary darkModeInteractor = new DarkModeInteractor(new DarkModeOutputBoundary() {
+        final DarkModeInputBoundary darkModeInteractor = new DarkModeInteractor(new DarkModeOutputBoundary() {
             @Override
             public void updateUIMode(DarkModeOutputData outputData) {
                 settingsViewModel.setDarkMode(outputData.isDarkMode());
             }
         }, userDataAccessObject);
-        DarkModeController darkModeController = new DarkModeController(darkModeInteractor);
-        LogoutController logoutController =
+        final DarkModeController darkModeController = new DarkModeController(darkModeInteractor);
+        final LogoutController logoutController =
                 new LogoutController(new LogoutInteractor(userDataAccessObject,
                         new LogoutPresenter(viewManagerModel, settingsViewModel, loginViewModel)));
         settingsView = new SettingsView(settingsViewModel, darkModeController, logoutController);

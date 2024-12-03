@@ -16,6 +16,10 @@ import java.beans.PropertyChangeListener;
  * The View for the Asset Manager Use Case.
  */
 public class AssetManagerView extends JPanel implements ActionListener, PropertyChangeListener {
+    public static final int TWENTY = 20;
+    public static final int TEN = 10;
+    public static final int FIVE_HUNDRED = 500;
+    public static final int SIX_HUNDRED = 600;
     private final String viewName = "assetManager";
 
     private final AssetManagerViewModel assetManagerViewModel;
@@ -31,7 +35,7 @@ public class AssetManagerView extends JPanel implements ActionListener, Property
         this.assetManagerViewModel = assetManagerViewModel;
         this.assetManagerViewModel.addPropertyChangeListener(this);
 
-        AssetManagerState assetManagerState = assetManagerViewModel.getState();
+        final AssetManagerState assetManagerState = assetManagerViewModel.getState();
 
         title = new JLabel(AssetManagerViewModel.TITLE);
         manageStock = new JButton(AssetManagerViewModel.MANAGE_STOCK_LABEL);
@@ -40,7 +44,7 @@ public class AssetManagerView extends JPanel implements ActionListener, Property
 
         // Set the layout to BoxLayout and add padding
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        this.setBorder(BorderFactory.createEmptyBorder(TWENTY, TWENTY, TWENTY, TWENTY));
 
         // Center the content horizontally using alignment
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -51,11 +55,11 @@ public class AssetManagerView extends JPanel implements ActionListener, Property
         // Add content to the panel
         this.add(Box.createVerticalGlue());
         this.add(title);
-        this.add(Box.createVerticalStrut(10));  // Add space between buttons
+        this.add(Box.createVerticalStrut(TEN));  // Add space between buttons
         this.add(manageHome);
-        this.add(Box.createVerticalStrut(10));  // Add space between buttons
+        this.add(Box.createVerticalStrut(TEN));  // Add space between buttons
         this.add(manageStock);
-        this.add(Box.createVerticalStrut(20));  // Add space between buttons
+        this.add(Box.createVerticalStrut(TWENTY));  // Add space between buttons
         this.add(done);
         this.add(Box.createVerticalGlue());
 
@@ -81,20 +85,21 @@ public class AssetManagerView extends JPanel implements ActionListener, Property
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             updateTheme(assetManagerState.isDarkMode());
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+        catch (Exception exp) {
+            exp.printStackTrace();
         }
     }
 
     private void updateTheme(boolean isDarkMode) {
         if (isDarkMode) {
             ColorTheme.applyDarkMode(this);
-        } else {
+        }
+        else {
             ColorTheme.applyLightMode(this);
         }
         SwingUtilities.updateComponentTreeUI(this);
     }
-
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -110,9 +115,13 @@ public class AssetManagerView extends JPanel implements ActionListener, Property
         this.assetManagerController = assetManagerController;
     }
 
+    /**
+     * An example of asset manager view.
+     * @param args a list of strings representing NOTHING!
+     */
     public static void main(String[] args) {
         final JFrame frame = new JFrame("Asset Manager Example");
-        frame.setSize(500, 600);  // Set frame size to 500x600px
+        frame.setSize(FIVE_HUNDRED, SIX_HUNDRED);  // Set frame size to 500x600px
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         // Just to see the view

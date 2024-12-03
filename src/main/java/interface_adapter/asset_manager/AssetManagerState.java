@@ -7,5 +7,7 @@ public class AssetManagerState {
         return isDarkMode;
     }
 
-    public void setDarkMode(boolean darkMode) { isDarkMode = darkMode; }
+    public void setDarkMode(boolean darkMode) {
+        isDarkMode = darkMode;
+    }
 }

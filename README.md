@@ -77,6 +77,7 @@ input edge case.
 These are the entities that are stored for the user.
 - `name`: String
 - `password`: String
+- `isDarkMode`: boolean
 - `characterName`: String
 - `age`: int
 - `avatar`: Avatar
@@ -85,6 +86,7 @@ These are the entities that are stored for the user.
 - `assets`: Assets
 - `liabilities`: Liabilities
 - `decisions`: List<HashMap<String, Decision>>
+- `questionBank`: Map<Integer, Question>
 
 
 ### Avatar:
@@ -113,11 +115,18 @@ These are the entities that are stored for the user's character stocks.
 
 ### Decision:
 These are the entities that are stored for the user's decisions.
-- `timestamp`: LocalDateTime
+- `age`: int
 - `decisionText`: String
-- `decisionResponse`: String
+- `response`: String
 - `netWorthChange`: double
-- `happinessChange`: double
+- `happinessChange`: int
+- `salaryChange`: double
+
+### Question:
+- `age`: int
+- `questionText`: String
+- `decisions`: List\<Decision>
+- `selectedDecision`: Decision
 
 ---
 
