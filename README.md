@@ -48,7 +48,7 @@ financial challenges, the game aims to empower users with practical financial kn
   - Create a personalized and appropriate character name, verified using the NameAPI. Also accounts for empty name
 input edge case.
   - Updates home page character image and name.
-  - 
+
 
 **3. Interactive Financial Decision-Making**:
   - Encounter realistic scenarios requiring financial decisions.
