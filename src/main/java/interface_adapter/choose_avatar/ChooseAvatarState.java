@@ -8,7 +8,7 @@ import entity.Avatar;
 public class ChooseAvatarState {
     private String username;
     private Avatar avatar;
-    private boolean isDarkMode = false;
+    private boolean isDarkMode;
 
     public String getUsername() {
         return username;

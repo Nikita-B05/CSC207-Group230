@@ -1,6 +1,5 @@
 package use_case.game_decision;
 
-import entity.Assets;
 import entity.Decision;
 import entity.Question;
 import entity.User;
@@ -75,7 +74,8 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
     @Override
     public void switchToHomeview(GameDecisionInputData inputData) {
         GameDecisionOutputData outputData = new GameDecisionOutputData(inputData.getUsername(), inputData.isDarkMode(),
-                inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge(), inputData.getHappiness(), inputData.getSalary());
+                inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge(),
+                inputData.getHappiness(), inputData.getSalary());
         outputBoundary.prepareHomepageView(outputData);
     }
 
@@ -84,7 +84,8 @@ public class GameDecisionInteractor implements GameDecisionInputBoundary {
         User user = userDataAccess.getCurrentUser();
         stockDataAccessObject.setDate(user.getAge());
         GameDecisionOutputData outputData = new GameDecisionOutputData(inputData.getUsername(), inputData.isDarkMode(),
-                inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge(), inputData.getHappiness(), inputData.getSalary(), stockDataAccessObject.getCodeToPrice());
+                inputData.getName(), inputData.getAssets(), inputData.getAvatar(), inputData.getAge(),
+                inputData.getHappiness(), inputData.getSalary(), stockDataAccessObject.getCodeToPrice());
         outputBoundary.prepareGameSuccessView(outputData);
     }
 }

@@ -6,8 +6,6 @@ public class ChangePasswordState {
     private String passwordError;
     private boolean darkModeEnabled;
 
-
-
     public ChangePasswordState(ChangePasswordState copy) {
         username = copy.username;
         password = copy.password;

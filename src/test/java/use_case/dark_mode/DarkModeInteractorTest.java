@@ -30,7 +30,7 @@ public class DarkModeInteractorTest {
     void toggleDarkModeTest() {
         DarkModeOutputBoundary darkModePresenter = new DarkModeOutputBoundary() {
             @Override
-            public void updateUIMode(DarkModeOutputData outputData) {
+            public void updateUiMode(DarkModeOutputData outputData) {
                 assertEquals(outputData.isDarkMode(), true);
             }
         };

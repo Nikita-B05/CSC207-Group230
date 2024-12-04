@@ -19,31 +19,31 @@ import java.util.Properties;
  */
 public class VantageStockDataAccessObject implements
         ChooseAssetStockDataAccessInterface,
-        ManageStockStockAccessInterface
-{
-    private static final String[] stockCodes = {"AAPL", "NVDA", "MSFT"};
-    private static final String[] companyNames = {"Apple", "Nvidia", "Microsoft"};
+        ManageStockStockAccessInterface {
+    private static final String[] STOCK_CODES = {"AAPL", "NVDA", "MSFT"};
+    private static final String[] COMPANY_NAMES = {"Apple", "Nvidia", "Microsoft"};
 
     // Static HashMaps
-    private static final Map<String, String> codeToCompanyMap = new HashMap<>();
-    private static final Map<String, String> companyToCodeMap = new HashMap<>();
+    private static final Map<String, String> CODE_TO_COMPANY_MAP = new HashMap<>();
+    private static final Map<String, String> COMPANY_TO_CODE_MAP = new HashMap<>();
 
     private final Map<String, Double> codeToPrice = new HashMap<>();
     private String date = "2000-01-31";
 
     static {
-        for (int i = 0; i < stockCodes.length; i++) {
-            codeToCompanyMap.put(stockCodes[i], companyNames[i]);
-            companyToCodeMap.put(companyNames[i], stockCodes[i]);
+        for (int i = 0; i < STOCK_CODES.length; i++) {
+            CODE_TO_COMPANY_MAP.put(STOCK_CODES[i], COMPANY_NAMES[i]);
+            COMPANY_TO_CODE_MAP.put(COMPANY_NAMES[i], STOCK_CODES[i]);
         }
     }
 
-    private static final String BASE_URL =
-            "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&outputsize=full";
+    private String baseUrl = "https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY&outputsize=full";
+
     private final String apiKey;
     private final OkHttpClient client;
 
-    public VantageStockDataAccessObject() {
+    public VantageStockDataAccessObject(String baseUrl) {
+        this.baseUrl = baseUrl;
         this.client = new OkHttpClient();
         this.apiKey = loadApiKey("config.properties");
         loadCodeToPrice();
@@ -57,24 +57,25 @@ public class VantageStockDataAccessObject implements
             }
             properties.load(input);
             return properties.getProperty("vantageApi.key");
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load API key from properties file", e);
+        }
+        catch (IOException exp) {
+            throw new RuntimeException("Failed to load API key from properties file", exp);
         }
     }
 
-//    @Override
+    @Override
     public Map<String, String> getCodeToName() {
-        return codeToCompanyMap;
+        return CODE_TO_COMPANY_MAP;
     }
 
     @Override
     public String[] getStockNames() {
-        return companyNames;
+        return COMPANY_NAMES;
     }
 
     @Override
     public Map<String, String> getNameToCode() {
-        return companyToCodeMap;
+        return COMPANY_TO_CODE_MAP;
     }
 
     @Override
@@ -83,11 +84,12 @@ public class VantageStockDataAccessObject implements
     }
 
     private void loadCodeToPrice() {
-        for (String code : stockCodes) {
+        for (String code : STOCK_CODES) {
             try {
                 codeToPrice.put(code, getPrice(code));
-            } catch (Exception e) {
-                throw new RuntimeException("Could not generate code to price map: ", e);
+            }
+            catch (Exception exp) {
+                throw new RuntimeException("Could not generate code to price map: ", exp);
             }
         }
     }
@@ -116,7 +118,7 @@ public class VantageStockDataAccessObject implements
     }
 
     private double fetchData(String ticker) throws IOException {
-        String url = BASE_URL + "&symbol=" + ticker + "&apikey=" + apiKey;
+        String url = baseUrl + "&symbol=" + ticker + "&apikey=" + apiKey;
 
         Request request = new Request.Builder()
                 .url(url)
@@ -133,19 +135,11 @@ public class VantageStockDataAccessObject implements
                 String priceString = timeSeries.get(date).getAsJsonObject().get("4. close").getAsString();
                 return Double.parseDouble(priceString);
 
-            } else {
+            }
+            else {
                 throw new RuntimeException("Could not retrieve stock price: "
                         + response.code() + " - " + response.message());
             }
-        }
-    }
-
-    public static void main(String[] args) {
-        VantageStockDataAccessObject vantageStockDataAccessObject = new VantageStockDataAccessObject();
-        try {
-            System.out.println(vantageStockDataAccessObject.getPrice("AAPL"));
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

@@ -90,7 +90,9 @@ public class GameDecisionState {
         return avatar;
     }
 
-    public void setAvatar(Avatar avatar) {this.avatar = avatar;}
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
+    }
 
     public void setHappiness(int happiness) {
         this.happiness = happiness;
@@ -116,7 +118,7 @@ public class GameDecisionState {
         this.stockPrices = stockPrices;
     }
 
-    public String getNetWorth(Map<String, Double> stockPrices) {
-        return String.format("%,.2f", Math.round(assets.getTotal(stockPrices) * 100.0) / 100.0);
+    public String getNetWorth(Map<String, Double> currentStockPrices) {
+        return String.format("%,.2f", Math.round(assets.getTotal(currentStockPrices) * 100.0) / 100.0);
     }
 }

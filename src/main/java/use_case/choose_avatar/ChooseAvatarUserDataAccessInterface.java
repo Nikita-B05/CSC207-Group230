@@ -16,5 +16,6 @@ public interface ChooseAvatarUserDataAccessInterface {
     User get(String username);
 
     User getCurrentUser();
+
     void updateAvatar(Avatar avatar);
 }

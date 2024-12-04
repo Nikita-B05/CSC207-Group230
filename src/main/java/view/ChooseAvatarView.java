@@ -71,7 +71,7 @@ public class ChooseAvatarView extends JPanel implements ActionListener, Property
 
         // Confirm Button
         JButton confirmButton = new JButton("Confirm");
-        confirmButton.addActionListener(e -> {
+        confirmButton.addActionListener(exp -> {
             int selectedIndex = getSelectedAvatarIndex();
             if (selectedIndex == -1) {
                 JOptionPane.showMessageDialog(this, "Please select an avatar.",
@@ -99,8 +99,8 @@ public class ChooseAvatarView extends JPanel implements ActionListener, Property
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             updateTheme(viewModel.getState().isDarkMode());
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (Exception exp) {
+            exp.printStackTrace();
         }
     }
 
@@ -140,21 +140,22 @@ public class ChooseAvatarView extends JPanel implements ActionListener, Property
     }
 
     private List<Avatar> loadAvatars() {
-        List<Avatar> avatars = new ArrayList<>();
+        List<Avatar> avatarList = new ArrayList<>();
         for (int i = 1; i <= 6; i++) {
             String imagePath = "/images/avatar" + i + ".png";
             ImageIcon icon = null;
             try {
                 icon = new ImageIcon(getClass().getResource(imagePath));
-            } catch (Exception e) {
+            }
+            catch (Exception exp) {
                 System.err.println("Could not load image: " + imagePath);
-                e.printStackTrace();
+                exp.printStackTrace();
             }
             if (icon != null) {
-                avatars.add(new Avatar("Avatar " + i, imagePath));
+                avatarList.add(new Avatar("Avatar " + i, imagePath));
             }
         }
-        return avatars;
+        return avatarList;
     }
 
     public String getViewName() {
