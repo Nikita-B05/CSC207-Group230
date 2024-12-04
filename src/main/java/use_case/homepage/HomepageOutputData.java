@@ -16,12 +16,14 @@ public class HomepageOutputData {
     private final ArrayList<Decision> decisions;
     private int age;
     private Question question;
-    int happiness;
-    double salary;
+    private int happiness;
+    private double salary;
     private Map<String, Double> stockPrices;
     private Assets assets;
 
-    public HomepageOutputData(String username, String characterName, Avatar avatar, boolean isDarkMode, ArrayList<Decision> decisions, int age, Question question, int happiness, double salary, Assets assets) {
+    public HomepageOutputData(String username, String characterName, Avatar avatar, boolean isDarkMode,
+                              ArrayList<Decision> decisions, int age, Question question, int happiness, double salary,
+                              Assets assets) {
         this.username = username;
         this.characterName = characterName;
         this.avatar = avatar;
@@ -58,7 +60,7 @@ public class HomepageOutputData {
         return characterName;
     }
 
-    public Question getQuestion(int age) {
+    public Question getQuestion() {
         return question;
     }
 

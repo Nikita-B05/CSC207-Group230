@@ -1,6 +1,6 @@
 package use_case.game_success;
+
 import entity.Assets;
-import entity.Decision;
 import entity.User;
 
 import java.util.ArrayList;

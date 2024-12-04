@@ -5,14 +5,13 @@ import entity.User;
 /**
  * The Manage Home Interactor.
  */
-public class ManageHomeInteractor implements ManageHomeInputBoundary{
+public class ManageHomeInteractor implements ManageHomeInputBoundary {
 
     private final ManageHomeDataAccessInterface userDataAccessObject;
     private final ManageHomeOutputBoundary manageHomePresenter;
 
     public ManageHomeInteractor(ManageHomeDataAccessInterface userDataAccessInterface,
-                                 ManageHomeOutputBoundary manageHomeOutputBoundary)
-    {
+                                 ManageHomeOutputBoundary manageHomeOutputBoundary) {
         this.userDataAccessObject = userDataAccessInterface;
         this.manageHomePresenter = manageHomeOutputBoundary;
     }
@@ -45,7 +44,8 @@ public class ManageHomeInteractor implements ManageHomeInputBoundary{
             // Fail if user does not have a house to sell
             if (user.getAssets().getHome() == 0.0) {
                 manageHomePresenter.prepareFailView("You don't own a house to sell.");
-            } else {
+            }
+            else {
                 userDataAccessObject.updateUserCash(user.getAssets().getCash() + user.getAssets().getHome());
                 userDataAccessObject.updateUserHome(0.0);
                 user = userDataAccessObject.getCurrentUser();

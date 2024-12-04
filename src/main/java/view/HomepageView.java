@@ -16,6 +16,7 @@ import java.beans.PropertyChangeListener;
  * The View for the HomePage Use Case.
  */
 public class HomepageView extends JPanel implements ActionListener, PropertyChangeListener {
+    public static final String HI = "Hi, ";
     private final String viewName = "homepage";
 
     private final HomepageViewModel homepageViewModel;
@@ -29,37 +30,11 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
     private final JButton decisionLog;
     private final JButton profileSettings;
 
-    public static void main(String[] args) {
-        final JFrame frame = new JFrame("Homepage Example");
-        frame.setSize(500, 600);  // Set frame size to 500x600px
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-
-        // Just to see the view
-        final JPanel cardPanel = new JPanel();
-        final CardLayout cardLayout = new CardLayout();
-        cardPanel.setLayout(cardLayout);
-        final ViewManagerModel viewManagerModel = new ViewManagerModel();
-
-        final HomepageViewModel homepageViewModel = new HomepageViewModel();
-        final HomepageState homepageState = homepageViewModel.getState();
-        homepageState.setUsername("Example UserName");
-        final HomepageView homePageView = new HomepageView(homepageViewModel);
-        cardPanel.add(homePageView, homePageView.getViewName());
-
-        frame.add(cardPanel);
-
-        viewManagerModel.setState(homepageViewModel.getViewName());
-        viewManagerModel.firePropertyChanged();
-
-        frame.pack();
-        frame.setVisible(true);
-    }
-
     public HomepageView(HomepageViewModel homepageViewModel) {
         this.homepageViewModel = homepageViewModel;
         this.homepageViewModel.addPropertyChangeListener(this);
 
-        HomepageState homepageState = homepageViewModel.getState();
+        final HomepageState homepageState = homepageViewModel.getState();
 
         chooseAvatar = new JButton(HomepageViewModel.CHOOSE_AVATAR_LABEL);
         playGame = new JButton(HomepageViewModel.PLAY_GAME_LABEL);
@@ -72,9 +47,10 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
 
         // Add greeting at the top
         if (homepageState.getName() != null) {
-            greetingLabel = new JLabel("Hi, " + homepageState.getName());
-        } else {
-            greetingLabel = new JLabel("Hi, " + homepageState.getUsername());
+            greetingLabel = new JLabel(HI + homepageState.getName());
+        }
+        else {
+            greetingLabel = new JLabel(HI + homepageState.getUsername());
         }
         greetingLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the greeting
         this.add(greetingLabel); // Add greeting at the top
@@ -133,15 +109,43 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             updateTheme(homepageState.isDarkMode());
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        catch (Exception exp) {
+            exp.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        final JFrame frame = new JFrame("Homepage Example");
+        frame.setSize(500, 600);  // Set frame size to 500x600px
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
+        // Just to see the view
+        final JPanel cardPanel = new JPanel();
+        final CardLayout cardLayout = new CardLayout();
+        cardPanel.setLayout(cardLayout);
+        final ViewManagerModel viewManagerModel = new ViewManagerModel();
+
+        final HomepageViewModel homepageViewModel = new HomepageViewModel();
+        final HomepageState homepageState = homepageViewModel.getState();
+        homepageState.setUsername("Example UserName");
+        final HomepageView homePageView = new HomepageView(homepageViewModel);
+        cardPanel.add(homePageView, homePageView.getViewName());
+
+        frame.add(cardPanel);
+
+        viewManagerModel.setState(homepageViewModel.getViewName());
+        viewManagerModel.firePropertyChanged();
+
+        frame.pack();
+        frame.setVisible(true);
     }
 
     private void updateTheme(boolean isDarkMode) {
         if (isDarkMode) {
             ColorTheme.applyDarkMode(this);
-        } else {
+        }
+        else {
             ColorTheme.applyLightMode(this);
         }
         SwingUtilities.updateComponentTreeUI(this);
@@ -161,9 +165,10 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
 
     private void setFields(HomepageState state) {
         if (state.getName() != null) {
-            greetingLabel.setText("Hi, " + state.getName());
-        } else {
-            greetingLabel.setText("Hi, " + state.getUsername());
+            greetingLabel.setText(HI + state.getName());
+        }
+        else {
+            greetingLabel.setText(HI + state.getUsername());
         }
 
         // Update the displayed avatar
@@ -176,7 +181,8 @@ public class HomepageView extends JPanel implements ActionListener, PropertyChan
             ImageIcon imageIcon = new ImageIcon(imagePath);
             Image scaledImage = imageIcon.getImage().getScaledInstance(150, 150, Image.SCALE_SMOOTH);
             imageLabel.setIcon(new ImageIcon(scaledImage));
-        } catch (Exception e) {
+        }
+        catch (Exception exp) {
             System.err.println("Error loading image: " + avatar.getImagePath());
             imageLabel.setIcon(null);
         }

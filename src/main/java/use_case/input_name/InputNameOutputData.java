@@ -8,12 +8,12 @@ import entity.Avatar;
 public class InputNameOutputData {
     private final String username;
     private final String characterName;
-    private final Avatar Avatar;
+    private final Avatar avatar;
 
     public InputNameOutputData(String username, String characterName, Avatar avatar) {
         this.username = username;
         this.characterName = characterName;
-        this.Avatar = avatar;
+        this.avatar = avatar;
     }
 
     public String getUsername() {
@@ -24,5 +24,7 @@ public class InputNameOutputData {
         return characterName;
     }
 
-    public Avatar getAvatar() {return Avatar;}
+    public Avatar getAvatar() {
+        return avatar;
+    }
 }

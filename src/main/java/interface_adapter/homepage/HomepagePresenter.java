@@ -15,10 +15,7 @@ import use_case.homepage.HomepageOutputData;
 public class HomepagePresenter implements HomepageOutputBoundary {
     private final HomepageViewModel homepageViewModel;
     private final DecisionLogViewModel decisionLogViewModel;
-//    private final ChooseAvatarViewModel chooseAvatarViewModel;
-//    private final PlayGameViewModel playGameViewModel;
     private ChooseAvatarViewModel chooseAvatarViewModel = new ChooseAvatarViewModel();
-//    private final DecisionLogViewModel decisionLogViewModel;
     private final SettingsViewModel settingsViewModel;
     private final ViewManagerModel viewManagerModel;
     private final GameDecisionViewModel gameDecisionViewModel;
@@ -29,15 +26,13 @@ public class HomepagePresenter implements HomepageOutputBoundary {
         SettingsViewModel settingsViewModel,
         ChooseAvatarViewModel chooseAvatarViewModel,
         GameDecisionViewModel gameDecisionViewModel,
-        DecisionLogViewModel decisionLogViewModel
-        ) {
+        DecisionLogViewModel decisionLogViewModel) {
         this.viewManagerModel = viewManagerModel;
         this.homepageViewModel = homepageViewModel;
         this.settingsViewModel = settingsViewModel;
         this.chooseAvatarViewModel = chooseAvatarViewModel;
         this.gameDecisionViewModel = gameDecisionViewModel;
         this.decisionLogViewModel = decisionLogViewModel;
-//        this.playGameViewModel = playGameViewModel;
     }
 
     @Override
@@ -57,7 +52,7 @@ public class HomepagePresenter implements HomepageOutputBoundary {
         gameDecisionViewModel.getState().setAge(homepageOutputData.getAge());
         gameDecisionViewModel.getState().setDarkModeEnabled(homepageOutputData.isDarkMode());
         gameDecisionViewModel.getState().setAvatar(homepageOutputData.getAvatar());
-        gameDecisionViewModel.getState().setQuestion(homepageOutputData.getQuestion(homepageOutputData.getAge()));
+        gameDecisionViewModel.getState().setQuestion(homepageOutputData.getQuestion());
         gameDecisionViewModel.getState().setHappiness(homepageOutputData.getHappiness());
         gameDecisionViewModel.getState().setSalary(homepageOutputData.getSalary());
         gameDecisionViewModel.getState().setAssets(homepageOutputData.getAssets());

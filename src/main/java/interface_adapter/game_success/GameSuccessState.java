@@ -54,7 +54,7 @@ public class GameSuccessState {
         this.happiness = happiness;
     }
 
-    public void setDarkMode(boolean isDarkMode) {
-        this.isDarkMode = isDarkMode;
+    public void setDarkMode(boolean darkMode) {
+        this.isDarkMode = darkMode;
     }
 }

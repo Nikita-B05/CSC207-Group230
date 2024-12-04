@@ -39,7 +39,7 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
         this.viewModel = manageHomeViewModel;
         this.viewModel.addPropertyChangeListener(this);
 
-        ManageHomeState state = viewModel.getState();
+        final ManageHomeState state = viewModel.getState();
 
         // Set the layout to GridBagLayout for centering
         this.setLayout(new GridBagLayout());
@@ -100,7 +100,8 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
         buttonPanel.add(backButton);
         if (state.hasHome()) {
             buttonPanel.add(sellButton);
-        } else {
+        }
+        else {
             buttonPanel.add(buyButton);
         }
         constraints.gridy++;
@@ -110,8 +111,9 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             updateTheme(state.isDarkMode());
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+        catch (Exception exp) {
+            exp.printStackTrace();
         }
 
         backButton.addActionListener(evt -> {
@@ -145,7 +147,8 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
     private void updateTheme(boolean isDarkMode) {
         if (isDarkMode) {
             ColorTheme.applyDarkMode(this);
-        } else {
+        }
+        else {
             ColorTheme.applyLightMode(this);
         }
         SwingUtilities.updateComponentTreeUI(this);
@@ -155,11 +158,14 @@ public class ManageHomeView extends JPanel implements ActionListener, PropertyCh
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("state")) {
             handleStateChange(evt);
-        } else if (evt.getPropertyName().equals("manageHomeError")) {
+        }
+        else if (evt.getPropertyName().equals("manageHomeError")) {
             handleErrorInput(evt);
-        } else if (evt.getPropertyName().equals("manageHomeBuySuccess")) {
+        }
+        else if (evt.getPropertyName().equals("manageHomeBuySuccess")) {
             handleSuccessInput(evt);
-        } else if (evt.getPropertyName().equals("manageHomeSellSuccess")) {
+        }
+        else if (evt.getPropertyName().equals("manageHomeSellSuccess")) {
             handleSuccessInput(evt);
         }
     }

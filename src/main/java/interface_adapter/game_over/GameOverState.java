@@ -7,6 +7,7 @@ public class GameOverState {
     private String username;
     private String characterName;
     private int age;
+    private int happiness;
     private boolean darkModeEnabled;
     private Assets assets;
     private String gameOverError;
@@ -75,9 +76,4 @@ public class GameOverState {
     public void setHappiness(int happiness) {
         this.happiness = happiness;
     }
-
-    private int happiness;
-
-
-
 }

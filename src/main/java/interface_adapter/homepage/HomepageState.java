@@ -1,19 +1,16 @@
 package interface_adapter.homepage;
 
 import entity.Avatar;
-import entity.Decision;
-
-import java.util.ArrayList;
 
 /**
  * The state for the Signup View Model.
  */
 public class HomepageState {
 
-    private String username = null;
+    private String username;
     private Avatar avatar = new Avatar();
-    private String name = null;
-    private boolean isDarkMode = false;
+    private String name;
+    private boolean isDarkMode;
 
     public String getUsername() {
         return username;

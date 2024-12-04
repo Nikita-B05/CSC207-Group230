@@ -1,13 +1,9 @@
 package use_case.manage_stock;
 
 import entity.Assets;
-import entity.Stock;
 import entity.User;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.stream.Stream;
 
 /**
  * The Manage Stock Interactor.
@@ -20,8 +16,7 @@ public class ManageStockInteractor implements ManageStockInputBoundary {
 
     public ManageStockInteractor(ManageStockDataAccessInterface userDataAccessInterface,
                                  ManageStockStockAccessInterface stockDataAccessInterface,
-                                 ManageStockOutputBoundary manageStockPresenter)
-    {
+                                 ManageStockOutputBoundary manageStockPresenter) {
         this.userDataAccessObject = userDataAccessInterface;
         this.stockDataAccessObject = stockDataAccessInterface;
         this.manageStockPresenter = manageStockPresenter;
@@ -34,7 +29,8 @@ public class ManageStockInteractor implements ManageStockInputBoundary {
         String stockCode = manageStockInputData.getStockCode();
         try {
             quantity = Integer.parseInt(manageStockInputData.getQuantity());
-        } catch (NumberFormatException e) {
+        }
+        catch (NumberFormatException exp) {
             manageStockPresenter.prepareFailView("Please enter a number for the quantity.");
             return;
         }
@@ -50,9 +46,8 @@ public class ManageStockInteractor implements ManageStockInputBoundary {
                 assets.buyStock(stockCode, quantity, stockPrices.get(stockCode));
                 userDataAccessObject.updateAssets(assets);
                 user = userDataAccessObject.getCurrentUser();
-                manageStockPresenter.prepareBuySuccessView(
-                "Successfully bought " + quantity + " shares of " + codeToName.get(stockCode) + ".",
-                        user.getAssets().getCash()
+                manageStockPresenter.prepareBuySuccessView("Successfully bought " + quantity +
+                        " shares of " + codeToName.get(stockCode) + ".", user.getAssets().getCash()
                 );
             }
             else {

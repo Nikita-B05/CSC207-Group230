@@ -1,6 +1,5 @@
 package interface_adapter.manage_stock;
 
-import use_case.manage_home.ManageHomeInputData;
 import use_case.manage_stock.ManageStockInputBoundary;
 import use_case.manage_stock.ManageStockInputData;
 
