@@ -13,7 +13,8 @@ public class GameOverOutputData {
 
     private final int happiness;
 
-    public GameOverOutputData(String username, String characterName, boolean isDarkMode, Assets assets, Avatar avatar, int age, int happiness) {
+    public GameOverOutputData(String username, String characterName, boolean isDarkMode, Assets assets, Avatar avatar,
+                              int age, int happiness) {
         this.username = username;
         this.characterName = characterName;
         this.isDarkMode = isDarkMode;

@@ -8,7 +8,7 @@ import entity.Avatar;
 public class InputNameState {
     private String username;
     private String characterName;
-    private boolean isDarkMode = false;
+    private boolean isDarkMode;
     private Avatar avatar = new Avatar();
 
     public String getUsername() {
@@ -27,11 +27,19 @@ public class InputNameState {
         this.characterName = characterName;
     }
 
-    public boolean isDarkMode() {return isDarkMode;}
+    public boolean isDarkMode() {
+        return isDarkMode;
+    }
 
-    public void setDarkMode(boolean darkMode) {isDarkMode = darkMode; }
+    public void setDarkMode(boolean darkMode) {
+        isDarkMode = darkMode;
+    }
 
-    public Avatar getAvatar() {return avatar;}
+    public Avatar getAvatar() {
+        return avatar;
+    }
 
-    public void setAvatar(Avatar avatar) {this.avatar = avatar;}
+    public void setAvatar(Avatar avatar) {
+        this.avatar = avatar;
+    }
 }

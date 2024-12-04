@@ -12,6 +12,7 @@ public interface ManageStockStockAccessInterface {
      * Gets price for one unit of stock.
      * @param stockCode the stock code to retrieve for.
      * @return price for one unit of stock.
+     * @throws IOException cause of stuff.
      */
     double getPrice(String stockCode) throws IOException;
 

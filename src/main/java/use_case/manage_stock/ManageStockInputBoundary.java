@@ -1,7 +1,5 @@
 package use_case.manage_stock;
 
-import use_case.logout.LogoutInputData;
-
 /**
  * Input Boundary for actions which are related to managing stock in.
  */

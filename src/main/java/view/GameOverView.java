@@ -15,6 +15,7 @@ import java.beans.PropertyChangeListener;
 
 public class GameOverView extends JPanel implements ActionListener, PropertyChangeListener {
 
+    public static final String ARIAL = "Arial";
     private final String viewName = "gameOver";
     private final GameOverViewModel gameOverViewModel;
     private GameOverController gameOverController;
@@ -36,17 +37,17 @@ public class GameOverView extends JPanel implements ActionListener, PropertyChan
 
     private void initializeComponents() {
         messageLabel = new JLabel("", SwingConstants.CENTER);
-        messageLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        messageLabel.setFont(new Font(ARIAL, Font.BOLD, 18));
 
         avatarLabel = new JLabel("", SwingConstants.CENTER);
         avatarLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         statsLabel = new JLabel("", SwingConstants.CENTER);
-        statsLabel.setFont(new Font("Arial", Font.PLAIN, 16));
+        statsLabel.setFont(new Font(ARIAL, Font.PLAIN, 16));
         statsLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         restartButton = new JButton("Restart");
-        restartButton.setFont(new Font("Arial", Font.PLAIN, 16));
+        restartButton.setFont(new Font(ARIAL, Font.PLAIN, 16));
         restartButton.addActionListener(this);
     }
 
@@ -86,7 +87,6 @@ public class GameOverView extends JPanel implements ActionListener, PropertyChan
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
-
     // Handle restart button click
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -113,9 +113,11 @@ public class GameOverView extends JPanel implements ActionListener, PropertyChan
             // Set game over message based on failure condition
             if (state.getHappiness() <= 0) {
                 messageLabel.setText("Game Over: Your happiness has hit 0.");
-            } else if (state.getAssets() != null && state.getAssets().getCash() < 0) {
+            }
+            else if (state.getAssets() != null && state.getAssets().getCash() < 0) {
                 messageLabel.setText("Game Over: Your net worth is in the negative!!");
-            } else {
+            }
+            else {
                 messageLabel.setText("Game Over: Your net worth is negative.");
             }
 
@@ -124,21 +126,41 @@ public class GameOverView extends JPanel implements ActionListener, PropertyChan
             if (avatar != null && avatar.getIcon() != null) {
                 avatarLabel.setIcon(avatar.getIcon());
                 avatarLabel.setText("");
-            } else {
+            }
+            else {
                 avatarLabel.setIcon(null);
                 avatarLabel.setText("No Avatar Available");
             }
 
             // Set stats label
             Assets assets = state.getAssets();
-            final String statName = state.getCharacterName() != null ? state.getCharacterName() : state.getUsername();
-            statsLabel.setText(String.format(
-                    "<html><div style='text-align: center;'>Character: %s<br>Age: %d<br>Net Worth: $%.2f<br>Happiness: %d</div></html>",
-                    statName,
-                    state.getAge(),
-                    assets != null ? assets.getCash() : 0.0,
-                    state.getHappiness()
-            ));
+            final String statName;
+            if (state.getCharacterName() != null) {
+                statName = state.getCharacterName();
+            }
+            else {
+                statName = state.getUsername();
+            }
+            if (assets != null) {
+                statsLabel.setText(String.format(
+                        "<html><div style='text-align: center;'>Character: %s<br>Age:" +
+                                " %d<br>Net Worth: $%.2f<br>Happiness: %d</div></html>",
+                        statName,
+                        state.getAge(),
+                        assets.getCash(),
+                        state.getHappiness()
+                ));
+            }
+            else {
+                statsLabel.setText(String.format(
+                        "<html><div style='text-align: center;'>Character: %s<br>Age:" +
+                                " %d<br>Net Worth: $%.2f<br>Happiness: %d</div></html>",
+                        statName,
+                        state.getAge(),
+                        0.0,
+                        state.getHappiness()
+                ));
+            }
 
             // Update theme
             updateTheme(state.isDarkModeEnabled());
@@ -149,7 +171,8 @@ public class GameOverView extends JPanel implements ActionListener, PropertyChan
     private void updateTheme(boolean isDarkMode) {
         if (isDarkMode) {
             ColorTheme.applyDarkMode(this);
-        } else {
+        }
+        else {
             ColorTheme.applyLightMode(this);
         }
         SwingUtilities.updateComponentTreeUI(this);
@@ -161,7 +184,7 @@ public class GameOverView extends JPanel implements ActionListener, PropertyChan
     }
 
     // Setter for game over controller
-    public void setController(GameOverController gameOverController) {
-        this.gameOverController = gameOverController;
+    public void setController(GameOverController controller) {
+        this.gameOverController = controller;
     }
 }

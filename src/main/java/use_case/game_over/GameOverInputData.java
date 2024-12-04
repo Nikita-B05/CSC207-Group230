@@ -15,7 +15,8 @@ public class GameOverInputData {
     private final int happiness;
     private final Assets assets;
 
-    public GameOverInputData(Assets assets, int happiness, Avatar avatar, boolean darkMode, int age, String characterName, String username) {
+    public GameOverInputData(Assets assets, int happiness, Avatar avatar, boolean darkMode, int age,
+                             String characterName, String username) {
         this.assets = assets;
         this.happiness = happiness;
         this.avatar = avatar;

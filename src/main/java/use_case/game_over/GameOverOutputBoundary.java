@@ -1,7 +1,5 @@
 package use_case.game_over;
 
-import use_case.game_decision.GameDecisionOutputData;
-
 /**
  * The output boundary for the Game Decision Use Case.
  */

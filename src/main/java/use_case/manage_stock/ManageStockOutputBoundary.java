@@ -1,7 +1,5 @@
 package use_case.manage_stock;
 
-import entity.Stock;
-
 /**
  * The output boundary for the Manage Stock Use Case.
  */

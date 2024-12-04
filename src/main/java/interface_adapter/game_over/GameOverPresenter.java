@@ -11,8 +11,8 @@ public class GameOverPresenter implements GameOverOutputBoundary {
     private final ViewManagerModel viewManagerModel;
     private final HomepageViewModel homepageViewModel;
 
-
-    public GameOverPresenter(GameOverViewModel gameOverViewModel, ViewManagerModel viewManagerModel, HomepageViewModel homepageViewModel) {
+    public GameOverPresenter(GameOverViewModel gameOverViewModel, ViewManagerModel viewManagerModel,
+                             HomepageViewModel homepageViewModel) {
         this.gameOverViewModel = gameOverViewModel;
         this.viewManagerModel = viewManagerModel;
         this.homepageViewModel = homepageViewModel;
