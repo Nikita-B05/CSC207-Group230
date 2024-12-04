@@ -66,7 +66,6 @@ public class PolygonStockDataAccessObject implements
                 codeToPrice.put(code, getPrice(code));
             }
             catch (Exception exp) {
-                throw new RuntimeException("Could not generate code to price map: ", exp);
                 // Fail silently
             }
         }
