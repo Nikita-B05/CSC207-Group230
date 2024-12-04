@@ -109,7 +109,6 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
 
         // Initial update
         updateTableData();
-        updateStatsLabels();
     }
 
     private void updateTableData() {
@@ -130,14 +129,6 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
 
     }
 
-    private void updateStatsLabels() {
-        DecisionLogState state = decisionLogViewModel.getState();
-        netWorthLabel.setText(String.format("Total Net Worth Change: $%.2f", 
-            state.getTotalNetWorthChange()));
-        happinessLabel.setText(String.format("Total Happiness Change: %d", 
-            state.getTotalHappinessChange()));
-    }
-
     public void setDecisionLogController(DecisionLogController decisionLogController) {
         this.decisionLogController = decisionLogController;
     }
@@ -152,7 +143,6 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         updateTableData();
-        updateStatsLabels();
         DecisionLogState state = decisionLogViewModel.getState();
         if (state.isDarkMode()) {
             ColorTheme.applyDarkMode(this);
