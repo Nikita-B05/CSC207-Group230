@@ -66,7 +66,7 @@ input edge case.
 
 **6. Winning and Losing Conditions**:
   - Win by navigating through all decisions without going bankrupt or having happiness hit 0.
-  - Lose if net worth or happiness drops below zero.
+  - Lose if net worth or happiness drops below zero (they get one extra turn to bounce back though).
   - Game resets after a win or loss.
 
 ---
