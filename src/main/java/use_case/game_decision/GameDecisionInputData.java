@@ -5,8 +5,6 @@ import entity.Avatar;
 import entity.Decision;
 import entity.Question;
 
-import java.util.Map;
-
 /**
  * Input Data for the Game Decision use case.
  */
@@ -17,12 +15,13 @@ public class GameDecisionInputData {
     private final boolean darkMode;
     private final Question question;
     private final Decision decision;
-    public Assets assets;
     private Avatar avatar;
     private int happiness;
+    private Assets assets;
     private double salary;
 
-    public GameDecisionInputData(String username, int age, String name, boolean darkMode, Question question, Assets assets, Avatar avatar, Decision decision, int happiness, double salary) {
+    public GameDecisionInputData(String username, int age, String name, boolean darkMode, Question question,
+                                 Assets assets, Avatar avatar, Decision decision, int happiness, double salary) {
         this.username = username;
         this.age = age;
         this.name = name;

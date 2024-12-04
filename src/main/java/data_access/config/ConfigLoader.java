@@ -6,20 +6,21 @@ import java.util.Properties;
 
 public class ConfigLoader {
 
-    private static final Properties properties = new Properties();
+    private static final Properties PROPERTIES = new Properties();
 
     static {
         try (InputStream input = ConfigLoader.class.getClassLoader().getResourceAsStream("config.properties")) {
             if (input == null) {
                 throw new RuntimeException("config.properties file not found");
             }
-            properties.load(input);
-        } catch (IOException e) {
-            throw new RuntimeException("Error loading config.properties", e);
+            PROPERTIES.load(input);
+        }
+        catch (IOException exp) {
+            throw new RuntimeException("Error loading config.properties", exp);
         }
     }
 
     public static String getProperty(String key) {
-        return properties.getProperty(key);
+        return PROPERTIES.getProperty(key);
     }
 }

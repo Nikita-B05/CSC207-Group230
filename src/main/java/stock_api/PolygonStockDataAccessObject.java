@@ -19,24 +19,24 @@ public class PolygonStockDataAccessObject implements
         ChooseAssetStockDataAccessInterface,
         HomepageStockAccessInterface,
         ManageStockStockAccessInterface {
-    private static final String[] stockCodes = {"AAPL", "NVDA"};
-    private static final String[] companyNames = {"Apple", "Nvidia"};
+    private static final String[] STOCK_CODES = {"AAPL", "NVDA"};
+    private static final String[] COMPANY_NAMES = {"Apple", "Nvidia"};
 
     // Static HashMaps
-    private static final Map<String, String> codeToCompanyMap = new HashMap<>();
-    private static final Map<String, String> companyToCodeMap = new HashMap<>();
+    private static final Map<String, String> CODE_TO_COMPANY_MAP = new HashMap<>();
+    private static final Map<String, String> COMPANY_TO_CODE_MAP = new HashMap<>();
 
     private final Map<String, Double> codeToPrice = new HashMap<>();
     private String date = "2024-11-01";
 
     static {
-        for (int i = 0; i < stockCodes.length; i++) {
-            codeToCompanyMap.put(stockCodes[i], companyNames[i]);
-            companyToCodeMap.put(companyNames[i], stockCodes[i]);
+        for (int i = 0; i < STOCK_CODES.length; i++) {
+            CODE_TO_COMPANY_MAP.put(STOCK_CODES[i], COMPANY_NAMES[i]);
+            COMPANY_TO_CODE_MAP.put(COMPANY_NAMES[i], STOCK_CODES[i]);
         }
     }
 
-    private static final String BASE_URL = "https://api.polygon.io";
+    private final String baseUrl = "https://api.polygon.io";
     private String apiKey;
     private final OkHttpClient client;
 
@@ -55,43 +55,43 @@ public class PolygonStockDataAccessObject implements
             properties.load(input);
             return properties.getProperty("polygonApi.key");
         }
-        catch (IOException e) {
-            throw new RuntimeException("Failed to load API key from properties file", e);
+        catch (IOException exp) {
+            throw new RuntimeException("Failed to load API key from properties file", exp);
         }
     }
 
     private void loadCodeToPrice() {
-        for (String code : stockCodes) {
+        for (String code : STOCK_CODES) {
             try {
                 codeToPrice.put(code, getPrice(code));
             }
-            catch (Exception e) {
-                // throw new RuntimeException("Could not generate code to price map: ", e);
+            catch (Exception exp) {
+                throw new RuntimeException("Could not generate code to price map: ", exp);
                 // Fail silently
             }
         }
     }
 
     public String[] getStockCodes() {
-        return stockCodes;
+        return STOCK_CODES;
     }
 
     public String[] getCompanyNames() {
-        return companyNames;
+        return COMPANY_NAMES;
     }
 
     public Map<String, String> getCodeToName() {
-        return codeToCompanyMap;
+        return CODE_TO_COMPANY_MAP;
     }
 
     @Override
     public String[] getStockNames() {
-        return companyNames;
+        return COMPANY_NAMES;
     }
 
     @Override
     public Map<String, String> getNameToCode() {
-        return companyToCodeMap;
+        return COMPANY_TO_CODE_MAP;
     }
 
     @Override
@@ -102,24 +102,6 @@ public class PolygonStockDataAccessObject implements
     @Override
     public Map<String, Double> getStockPrices() {
         return codeToPrice;
-    }
-
-    public void fetchStockData(String ticker) throws IOException {
-        String url = BASE_URL + "/v3/reference/tickers/" + ticker + "?apiKey=" + apiKey;
-
-        Request request = new Request.Builder()
-                .url(url)
-                .get()
-                .build();
-
-        try (Response response = client.newCall(request).execute()) {
-            if (response.isSuccessful()) {
-                String responseBody = response.body().string();
-                JsonObject jsonResponse = JsonParser.parseString(responseBody).getAsJsonObject();
-            } else {
-                System.out.println("Request failed: " + response.code() + " - " + response.message());
-            }
-        }
     }
 
     public String getDate() {
@@ -151,8 +133,8 @@ public class PolygonStockDataAccessObject implements
         }
     }
 
-    private double fetchPrice(String ticker, String date) throws IOException {
-        String url = BASE_URL + "/v1/open-close/" + ticker + "/" + date + "?adjusted=true&apiKey=" + apiKey;
+    private double fetchPrice(String ticker, String queryDate) throws IOException {
+        String url = baseUrl + "/v1/open-close/" + ticker + "/" + queryDate + "?adjusted=true&apiKey=" + apiKey;
 
         Request request = new Request.Builder()
                 .url(url)
@@ -164,10 +146,9 @@ public class PolygonStockDataAccessObject implements
                 String responseBody = response.body().string();
                 JsonObject jsonResponse = JsonParser.parseString(responseBody).getAsJsonObject();
 
-                // Extracting the last trade price
                 return jsonResponse.get("close").getAsDouble();
-
-            } else {
+            }
+            else {
                 throw new RuntimeException("Could not retrieve stock price: "
                         + response.code() + " - " + response.message());
             }
@@ -185,8 +166,9 @@ public class PolygonStockDataAccessObject implements
             apiClient.setDate(10);
             double price = apiClient.getPrice("AAPL");
             System.out.println(price);
-        } catch (IOException e) {
-            e.printStackTrace();
+        }
+        catch (IOException exp) {
+            exp.printStackTrace();
         }
     }
 }

@@ -18,24 +18,25 @@ public class QuestionReader {
      *
      * @param filePath The file location of the JSON file containing the questions.
      * @return A dictionary where keys are question numbers and values are Question objects.
+     * @throws RuntimeException in case of some nonsense.
      */
     public static Map<Integer, Question> parseQuestions(String filePath) {
         String jsonString;
         try {
             jsonString = Files.readString(Path.of(filePath));
         }
-        catch (IOException e) {
-            throw new RuntimeException(e);
+        catch (IOException exp) {
+            throw new RuntimeException(exp);
         }
 
         ObjectMapper objectMapper = new ObjectMapper();
         List<Map<String, Object>> jsonQuestions = List.of();
 
         try {
-            jsonQuestions = objectMapper.readValue(jsonString, new TypeReference<>() {});
+            jsonQuestions = objectMapper.readValue(jsonString, new TypeReference<>() { });
         }
-        catch (IOException e) {
-            e.printStackTrace();
+        catch (IOException exp) {
+            exp.printStackTrace();
         }
 
         Map<Integer, Question> questionMap = new LinkedHashMap<>();

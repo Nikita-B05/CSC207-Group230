@@ -9,8 +9,12 @@ public interface GameDecisionOutputBoundary {
      * @param errorMessage the explanation of the failure
      */
     void prepareFailView(String errorMessage);
+
     void prepareAssetsView(GameDecisionOutputData outputData);
+
     void prepareGameOverView(GameDecisionOutputData outputData);
+
     void prepareGameSuccessView(GameDecisionOutputData outputData);
+
     void prepareHomepageView(GameDecisionOutputData outputData);
 }

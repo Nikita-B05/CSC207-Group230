@@ -18,24 +18,25 @@ public class SettingsInteractor implements SettingsInputBoundary {
     @Override
     public void navigateToChangePassword(SettingsInputData inputData) {
         User user = userDataAccess.getCurrentUser();
-        SettingsOutputData settingsOutputData = new SettingsOutputData(inputData.getUsername(), inputData.isDarkMode(), user.getAvatar(), user.getCharacterName());
+        SettingsOutputData settingsOutputData = new SettingsOutputData(inputData.getUsername(), inputData.isDarkMode(),
+                user.getAvatar(), user.getCharacterName());
         outputBoundary.prepareChangePasswordView(settingsOutputData);
     }
-
-
 
     @Override
     public void logout(SettingsInputData inputData) {
         User user = userDataAccess.getCurrentUser();
         userDataAccess.setCurrentUsername(null);
-        SettingsOutputData outputData = new SettingsOutputData(inputData.getUsername(), inputData.isDarkMode(), user.getAvatar(), user.getCharacterName());
+        SettingsOutputData outputData = new SettingsOutputData(inputData.getUsername(), inputData.isDarkMode(),
+                user.getAvatar(), user.getCharacterName());
         outputBoundary.prepareLogoutView(outputData);
     }
 
     @Override
     public void navigateToHomePage(SettingsInputData inputData) {
         User user = userDataAccess.getCurrentUser();
-        SettingsOutputData outputData = new SettingsOutputData(inputData.getUsername(), inputData.isDarkMode(), user.getAvatar(), user.getCharacterName());
+        SettingsOutputData outputData = new SettingsOutputData(inputData.getUsername(), inputData.isDarkMode(),
+                user.getAvatar(), user.getCharacterName());
         outputBoundary.prepareHomepageView(outputData);
     }
 }

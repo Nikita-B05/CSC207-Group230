@@ -1,4 +1,4 @@
-package use_case.decision_log;;
+package use_case.decision_log;
 
 /**
  * The output boundary for the DecisionLog Use Case.
@@ -10,5 +10,4 @@ public interface DecisionLogOutputBoundary {
      * @param decisionLogOutputData the input data
      */
     void switchToHomepageView(DecisionLogOutputData decisionLogOutputData);
-
 }

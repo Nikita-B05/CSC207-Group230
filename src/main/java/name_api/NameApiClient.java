@@ -20,7 +20,8 @@ public class NameApiClient {
     public JsonObject validateName(String name) throws IOException {
         // Prepare the JSON payload
         String payload = "{ \"context\": {}, \"inputPerson\": { \"type\": \"NaturalInputPerson\", " +
-                "\"personName\": { \"nameFields\": [ { \"string\": \"" + name + "\", \"fieldType\": \"GIVENNAME\" } ] } } }";
+                "\"personName\": { \"nameFields\": [ { \"string\": \"" + name +
+                "\", \"fieldType\": \"GIVENNAME\" } ] } } }";
 
         // Set up the connection
         URL url = new URL("https://api.nameapi.org/rest/v5.3/riskdetector/person?apiKey=" + apiKey);

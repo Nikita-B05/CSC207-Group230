@@ -4,7 +4,6 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.input_name.InputNameViewModel;
 import use_case.choose_avatar.ChooseAvatarOutputBoundary;
 import use_case.choose_avatar.ChooseAvatarOutputData;
-import use_case.settings.SettingsOutputBoundary;
 
 /**
  * Presenter for the Choose Avatar Use Case.
@@ -15,7 +14,8 @@ public class ChooseAvatarPresenter implements ChooseAvatarOutputBoundary {
     private final ViewManagerModel viewManagerModel;
     private final InputNameViewModel inputNameViewModel;
 
-    public ChooseAvatarPresenter(ChooseAvatarViewModel viewModel, ViewManagerModel viewManagerModel, InputNameViewModel inputNameViewModel) {
+    public ChooseAvatarPresenter(ChooseAvatarViewModel viewModel, ViewManagerModel viewManagerModel,
+                                 InputNameViewModel inputNameViewModel) {
         this.viewModel = viewModel;
         this.viewManagerModel = viewManagerModel;
         this.inputNameViewModel = inputNameViewModel;

@@ -1,12 +1,10 @@
 package use_case.decision_log;
 
-import entity.Assets;
 import entity.Avatar;
 import entity.Decision;
 import entity.Question;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * The Output Data for the decision log Use Case.
@@ -19,7 +17,7 @@ public class DecisionLogOutputData {
     private Question question;
     private int happiness;
     private List<Decision> decisions;
-    Avatar Avatar;
+    private Avatar avatar;
 
     public DecisionLogOutputData(
             String username,
@@ -30,7 +28,9 @@ public class DecisionLogOutputData {
         this.isDarkMode = isDarkMode;
     }
 
-    public int getAge() { return age; }
+    public int getAge() {
+        return age;
+    }
 
     public List<Decision> getDecisions() {
         return decisions;
@@ -44,9 +44,15 @@ public class DecisionLogOutputData {
         return isDarkMode;
     }
 
-    public Object getHome() { return null; }
+    public Object getHome() {
+        return null;
+    }
 
-    public Avatar getAvatar() { return Avatar; }
+    public Avatar getAvatar() {
+        return avatar;
+    }
 
-    public String getName() { return null; }
+    public String getName() {
+        return null;
+    }
 }

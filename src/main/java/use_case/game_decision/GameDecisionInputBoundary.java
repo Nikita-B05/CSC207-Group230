@@ -5,8 +5,12 @@ package use_case.game_decision;
  */
 public interface GameDecisionInputBoundary {
     void pickDecision(GameDecisionInputData gameDecisionInputData);
+
     void switchToAssetsManager(GameDecisionInputData gameDecisionInputData);
+
     void switchToGameOver(GameDecisionInputData gameDecisionInputData);
+
     void switchToHomeview(GameDecisionInputData gameDecisionInputData);
+
     void switchToGameSuccess(GameDecisionInputData inputData);
 }

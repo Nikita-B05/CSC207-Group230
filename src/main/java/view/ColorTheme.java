@@ -10,16 +10,20 @@ public class ColorTheme {
         for (Component comp : panel.getComponents()) {
             if (comp instanceof JPanel) {
                 applyDarkMode((JPanel) comp);
-            } else if (comp instanceof JLabel) {
+            }
+            else if (comp instanceof JLabel) {
                 comp.setForeground(Color.WHITE);
                 comp.setBackground(Color.DARK_GRAY);
-            } else if (comp instanceof JButton || comp instanceof JToggleButton) {
+            }
+            else if (comp instanceof JButton || comp instanceof JToggleButton) {
                 comp.setBackground(Color.GRAY);
                 comp.setForeground(Color.WHITE);
-            } else if (comp instanceof JTextField || comp instanceof JPasswordField) {
+            }
+            else if (comp instanceof JTextField || comp instanceof JPasswordField) {
                 comp.setBackground(Color.DARK_GRAY);
                 comp.setForeground(Color.WHITE);
-            } else if (comp instanceof JCheckBox) {
+            }
+            else if (comp instanceof JCheckBox) {
                 comp.setForeground(Color.WHITE);
                 ((JCheckBox) comp).setBackground(Color.DARK_GRAY);
             }
@@ -32,16 +36,20 @@ public class ColorTheme {
         for (Component comp : panel.getComponents()) {
             if (comp instanceof JPanel) {
                 applyLightMode((JPanel) comp);
-            } else if (comp instanceof JLabel) {
+            }
+            else if (comp instanceof JLabel) {
                 comp.setForeground(Color.BLACK);
                 comp.setBackground(Color.WHITE);
-            } else if (comp instanceof JButton) {
+            }
+            else if (comp instanceof JButton) {
                 comp.setBackground(UIManager.getColor("Button.background"));
                 comp.setForeground(Color.BLACK);
-            } else if (comp instanceof JTextField || comp instanceof JPasswordField) {
+            }
+            else if (comp instanceof JTextField || comp instanceof JPasswordField) {
                 comp.setBackground(Color.WHITE);
                 comp.setForeground(Color.BLACK);
-            } else if (comp instanceof JCheckBox) {
+            }
+            else if (comp instanceof JCheckBox) {
                 comp.setForeground(Color.BLACK);
                 ((JCheckBox) comp).setBackground(Color.WHITE);
             }

@@ -89,6 +89,7 @@ public interface User {
 
     /**
      * Returns the dark mode UI config of the user.
+     * @param isDarkMode represents dark mode of user.
      */
     void setDarkMode(boolean isDarkMode);
 
@@ -130,7 +131,7 @@ public interface User {
 
     int getAge();
 
-    public void setAge(int Age);
+    public void setAge(int age);
 
     /**
      * Changes the user's happiness by happiness.
@@ -159,6 +160,4 @@ public interface User {
      * @param happiness the user's new happiness.
      */
     public void setHappiness(int happiness);
-
-    void setSalary(int salary);
 }
