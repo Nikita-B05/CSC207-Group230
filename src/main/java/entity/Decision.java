@@ -22,10 +22,17 @@ public class Decision {
         this.happinessChange = happinessChange;
         this.salaryChange = salaryChange;
     }
+
     // fromJson method to assign values from a Map
     public static Decision fromJson(Map<String, Object> json) {
         int age = (int) json.get("age");
-        String decisionText = (json.get("decisionText") != null) ? (String) json.get("decisionText") : "No decision";
+        String decisionText;
+        if (json.get("decisionText") != null) {
+            decisionText = (String) json.get("decisionText");
+        }
+        else {
+            decisionText = "No decision";
+        }
         String response = (String) json.get("response");
         double netWorthChange = (Integer) json.get("cashChange");
         int happinessChange = ((Number) json.get("happinessChange")).intValue();
@@ -50,10 +57,27 @@ public class Decision {
         return totals;
     }
 
-    public int getAge() { return age; }
-    public String getDecisionText() { return decisionText; }
-    public String getResponse() { return response; }
-    public double getNetWorthChange() { return netWorthChange; }
-    public int getHappinessChange() { return happinessChange; }
-    public double getSalaryChange() { return salaryChange; }
+    public int getAge() {
+        return age;
+    }
+
+    public String getDecisionText() {
+        return decisionText;
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public double getNetWorthChange() {
+        return netWorthChange;
+    }
+
+    public int getHappinessChange() {
+        return happinessChange;
+    }
+
+    public double getSalaryChange() {
+        return salaryChange;
+    }
 }

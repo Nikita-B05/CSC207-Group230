@@ -9,10 +9,10 @@ public class DarkModeDemo {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 400);
 
-        Color backgroundColor = new Color(45, 45, 45);
-        Color foregroundColor = new Color(220, 220, 220);
-        Color buttonColor = new Color(70, 70, 70);
-        Color buttonTextColor = foregroundColor;
+        final Color backgroundColor = new Color(45, 45, 45);
+        final Color foregroundColor = new Color(220, 220, 220);
+        final Color buttonColor = new Color(70, 70, 70);
+        final Color buttonTextColor = foregroundColor;
 
         JPanel panel = new JPanel();
         panel.setBackground(backgroundColor);

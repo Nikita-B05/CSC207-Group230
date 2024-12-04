@@ -271,7 +271,7 @@ public class AppBuilder {
 
         final DarkModeInputBoundary darkModeInteractor = new DarkModeInteractor(new DarkModeOutputBoundary() {
             @Override
-            public void updateUIMode(DarkModeOutputData outputData) {
+            public void updateUiMode(DarkModeOutputData outputData) {
                 settingsViewModel.setDarkMode(outputData.isDarkMode());
             }
         }, userDataAccessObject);

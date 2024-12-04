@@ -62,11 +62,12 @@ public class MongoDBUserDataAccessObject implements
     private static final String LIABILITIES = "liabilities";
     private static final String DECISIONS = "decisions";
     private static final Object QUESTION_BANK = "questionBank";
+    private static final String MUST_BE_EQUAL_TO_KEY = "Class of <value> must be equal to <key>.";
 
     private final UserFactory userFactory;
     private final MongoDBConnection mongoDBConnection;
     private final EntityConverterInterface converter;
-    private String currentUsername = null;
+    private String currentUsername;
 
     public MongoDBUserDataAccessObject(UserFactory userFactory) {
         this.userFactory = userFactory;
@@ -109,7 +110,8 @@ public class MongoDBUserDataAccessObject implements
                     liabilities,
                     decisions
             );
-        } else {
+        }
+        else {
             throw new RuntimeException("User not found");
         }
     }
@@ -143,7 +145,13 @@ public class MongoDBUserDataAccessObject implements
     @Override
     public void updateUserCash(double newCash) {
         User user = getCurrentUser();
-        Assets assets = user.getAssets() == null ? new Assets() : user.getAssets();
+        Assets assets;
+        if (user.getAssets() == null) {
+            assets = new Assets();
+        }
+        else {
+            assets = user.getAssets();
+        }
         Assets newAssets = new Assets(
                 assets.getHome(),
                 assets.getStocks(),
@@ -156,7 +164,13 @@ public class MongoDBUserDataAccessObject implements
     @Override
     public void updateUserHome(double newHome) {
         User user = getCurrentUser();
-        Assets assets = user.getAssets() == null ? new Assets() : user.getAssets();
+        Assets assets;
+        if (user.getAssets() == null) {
+            assets = new Assets();
+        }
+        else {
+            assets = user.getAssets();
+        }
         Assets newAssets = new Assets(
                 newHome,
                 assets.getStocks(),
@@ -167,36 +181,14 @@ public class MongoDBUserDataAccessObject implements
     }
 
     @Override
+    public void updateDecision(User user) {
+        updateUser(user, DECISIONS, user.getDecisions());
+    }
+
+    @Override
     public void updateAssets(Assets assets) {
         User user = getCurrentUser();
         updateUser(user, ASSETS, assets);
-    }
-
-    @Override
-    public String getCurrentUsername() {
-        if (currentUsername == null) {
-            throw new IllegalStateException("No current user is set");
-        }
-        return currentUsername;
-    }
-
-    @Override
-    public User getCurrentUser() {
-        if (currentUsername == null) {
-            throw new IllegalStateException("No current user is logged in");
-        }
-        return get(currentUsername);
-    }
-
-    @Override
-    public void incrementAge() {
-        User user = getCurrentUser();
-        updateUser(user, AGE, user.getAge() + 1);
-    }
-
-    @Override
-    public void updateDecision(User user) {
-        updateUser(user, DECISIONS, user.getDecisions());
     }
 
     @Override
@@ -222,6 +214,28 @@ public class MongoDBUserDataAccessObject implements
     @Override
     public void updateSalary(User user) {
         updateUser(user, SALARY, user.getSalary());
+    }
+
+    @Override
+    public String getCurrentUsername() {
+        if (currentUsername == null) {
+            throw new IllegalStateException("No current user is set");
+        }
+        return currentUsername;
+    }
+
+    @Override
+    public User getCurrentUser() {
+        if (currentUsername == null) {
+            throw new IllegalStateException("No current user is logged in");
+        }
+        return get(currentUsername);
+    }
+
+    @Override
+    public void incrementAge() {
+        User user = getCurrentUser();
+        updateUser(user, AGE, user.getAge() + 1);
     }
 
     @Override
@@ -275,16 +289,12 @@ public class MongoDBUserDataAccessObject implements
         updateUser(user, PASSWORD, user.getPassword());
     }
 
-    public void updateUserDarkMode(User user) {
-        updateUser(user, DARK_MODE, user.isDarkMode());
-    }
-
     private void updateUser(User user, String key, Object value) {
         MongoCollection<Document> usersCollection = mongoDBConnection.getCollection();
 
         if (Objects.equals(key, AVATAR)) {
             if (!(value instanceof Avatar)) {
-                throw new IllegalArgumentException("Class of <value> must be equal to <key>.");
+                throw new IllegalArgumentException(MUST_BE_EQUAL_TO_KEY);
             }
             usersCollection.updateOne(
                     Filters.eq(USERNAME, user.getUsername()),
@@ -293,7 +303,7 @@ public class MongoDBUserDataAccessObject implements
         }
         else if (Objects.equals(key, ASSETS)) {
             if (!(value instanceof Assets)) {
-                throw new IllegalArgumentException("Class of <value> must be equal to <key>.");
+                throw new IllegalArgumentException(MUST_BE_EQUAL_TO_KEY);
             }
             usersCollection.updateOne(
                     Filters.eq(USERNAME, user.getUsername()),
@@ -302,7 +312,7 @@ public class MongoDBUserDataAccessObject implements
         }
         else if (Objects.equals(key, LIABILITIES)) {
             if (!(value instanceof Liabilities)) {
-                throw new IllegalArgumentException("Class of <value> must be equal to <key>.");
+                throw new IllegalArgumentException(MUST_BE_EQUAL_TO_KEY);
             }
             usersCollection.updateOne(
                     Filters.eq(USERNAME, user.getUsername()),
@@ -311,7 +321,7 @@ public class MongoDBUserDataAccessObject implements
         }
         else if (Objects.equals(key, DECISIONS)) {
             if (!(value instanceof ArrayList)) {
-                throw new IllegalArgumentException("Class of <value> must be equal to <key>.");
+                throw new IllegalArgumentException(MUST_BE_EQUAL_TO_KEY);
             }
             for (Object o : (ArrayList) value) {
                 if (!(o instanceof Decision)) {
@@ -322,7 +332,8 @@ public class MongoDBUserDataAccessObject implements
                     Filters.eq(USERNAME, user.getUsername()),
                     Updates.set(key, converter.serialize((ArrayList<Decision>) value))
             );
-        } else {
+        }
+        else {
             usersCollection.updateOne(
                     Filters.eq(USERNAME, user.getUsername()),
                     Updates.set(key, value)

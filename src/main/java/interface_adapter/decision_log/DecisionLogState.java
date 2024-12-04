@@ -1,7 +1,6 @@
 package interface_adapter.decision_log;
 
 import entity.Decision;
-import view.DecisionLogView;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -78,6 +77,8 @@ public class DecisionLogState {
         }
     }
 
-    public void setDarkMode(boolean darkMode) { isDarkMode = darkMode; }
+    public void setDarkMode(boolean darkMode) {
+        isDarkMode = darkMode;
+    }
 
 }

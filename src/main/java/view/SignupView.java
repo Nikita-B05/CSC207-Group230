@@ -10,8 +10,6 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 
 public class SignupView extends JPanel {
@@ -159,14 +157,19 @@ public class SignupView extends JPanel {
         String username = currentState.getUsername();
         try {
             if (nameApiClient.validateName(username).get("score").getAsDouble() > 0) {
-                JOptionPane.showMessageDialog(this, "The username is invalid. Please try again.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(this,
+                        "The username is invalid. Please try again.", "Validation Error",
+                        JOptionPane.WARNING_MESSAGE);
                 return;
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "The username is invalid. Please try again.", "Validation Error", JOptionPane.WARNING_MESSAGE);
+        }
+        catch (Exception exp) {
+            JOptionPane.showMessageDialog(this, "The username is invalid. Please try again.",
+                    "Validation Error", JOptionPane.WARNING_MESSAGE);
             return;
         }
-        signupController.execute(currentState.getUsername(), currentState.getPassword(), currentState.getRepeatPassword());
+        signupController.execute(currentState.getUsername(), currentState.getPassword(),
+                currentState.getRepeatPassword());
     }
 
     private void handlePropertyChange(PropertyChangeEvent evt) {

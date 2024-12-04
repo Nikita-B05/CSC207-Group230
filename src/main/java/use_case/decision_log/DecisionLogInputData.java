@@ -20,5 +20,7 @@ public class DecisionLogInputData {
         return username;
     }
 
-    public List<Decision> getDecisions() { return new ArrayList<>(); }
+    public List<Decision> getDecisions() {
+        return new ArrayList<>();
+    }
 }

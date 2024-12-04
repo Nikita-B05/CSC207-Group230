@@ -18,8 +18,8 @@ public class GameDecisionOutputData {
     private final int happiness;
     private final double salary;
 
-
-    public GameDecisionOutputData(String username, boolean isDarkMode, String name, Assets assets, Avatar avatar, int age, int happiness, double salary, Map<String, Double> stockPrices) {
+    public GameDecisionOutputData(String username, boolean isDarkMode, String name, Assets assets, Avatar avatar,
+                                  int age, int happiness, double salary, Map<String, Double> stockPrices) {
         this.username = username;
         this.isDarkMode = isDarkMode;
         this.name = name;
@@ -31,7 +31,8 @@ public class GameDecisionOutputData {
         this.stockPrices = stockPrices;
     }
 
-    public GameDecisionOutputData(String username, boolean isDarkMode, String name, Assets assets, Avatar avatar, int age, int happiness, double salary) {
+    public GameDecisionOutputData(String username, boolean isDarkMode, String name, Assets assets, Avatar avatar,
+                                  int age, int happiness, double salary) {
         this.username = username;
         this.isDarkMode = isDarkMode;
         this.name = name;

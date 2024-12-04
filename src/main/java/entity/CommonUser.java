@@ -2,10 +2,7 @@ package entity;
 
 import question_reader.QuestionReader;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,6 +10,8 @@ import java.util.Map;
  */
 public class CommonUser implements User {
 
+    public static final String SRC_MAIN_JAVA_QUESTION_READER_SAMPLEQUESTIONJSON_TXT =
+            "src/main/java/question_reader/samplequestionjson.txt";
     private String username;
     private String password;
     private boolean isDarkMode;
@@ -39,7 +38,7 @@ public class CommonUser implements User {
         this.assets = new Assets();
         this.liabilities = new Liabilities();
         this.decisions = new ArrayList<>();
-        this.questionBank = QuestionReader.parseQuestions("src/main/java/question_reader/samplequestionjson.txt");
+        this.questionBank = QuestionReader.parseQuestions(SRC_MAIN_JAVA_QUESTION_READER_SAMPLEQUESTIONJSON_TXT);
     }
 
     public CommonUser(
@@ -66,7 +65,7 @@ public class CommonUser implements User {
         this.assets = assets;
         this.liabilities = liabilities;
         this.decisions = decisions;
-        this.questionBank = QuestionReader.parseQuestions("src/main/java/question_reader/samplequestionjson.txt");
+        this.questionBank = QuestionReader.parseQuestions(SRC_MAIN_JAVA_QUESTION_READER_SAMPLEQUESTIONJSON_TXT);
     }
 
     public CommonUser(String testUser) {
@@ -81,7 +80,7 @@ public class CommonUser implements User {
         this.liabilities = null;
         this.decisions = new ArrayList<>();
         this.questionBank = QuestionReader.parseQuestions(
-                "src/main/java/question_reader/samplequestionjson.txt");
+                SRC_MAIN_JAVA_QUESTION_READER_SAMPLEQUESTIONJSON_TXT);
     }
 
     @Override
@@ -157,15 +156,15 @@ public class CommonUser implements User {
     }
 
     @Override
-    public void changeHappiness(int happiness) {
-        if (this.happiness + happiness >= 100) {
+    public void changeHappiness(int happinessChange) { // Renamed parameter to avoid shadowing
+        if (this.happiness + happinessChange >= 100) {
             this.happiness = 100;
         }
-        else if (this.happiness + happiness <= 0) {
+        else if (this.happiness + happinessChange <= 0) {
             this.happiness = 0; // if happiness is less than 0, call Game Over
         }
-        else{
-            this.happiness += happiness;
+        else {
+            this.happiness += happinessChange;
         }
     }
 
@@ -191,7 +190,7 @@ public class CommonUser implements User {
     }
 
     @Override
-    public void setSalary(int salary) {
+    public void setSalary(double salary) {
         this.salary = salary;
     }
 
@@ -212,10 +211,6 @@ public class CommonUser implements User {
         return assets.canBuyStock(stockCode, quantity, stockPrices);
     }
 
-    public boolean canBuyStock(String stockCode, int quantity, HashMap<String, Double> stockPrices) {
-        return assets.canBuyStock(stockCode, quantity, stockPrices);
-    }
-
     public double sellStock(String stockCode, int quantity, double sellPrice) {
         assets.sellStock(stockCode, quantity, sellPrice);
         return sellPrice;
@@ -233,11 +228,6 @@ public class CommonUser implements User {
     @Override
     public Map<Integer, Question> getQuestion() {
         return this.questionBank;
-    }
-
-    @Override
-    public void setSalary(double salary) {
-        this.salary = salary;
     }
 
     @Override

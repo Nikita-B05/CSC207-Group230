@@ -31,24 +31,35 @@ public interface EntityConverterInterface {
     static final String SALARY_CHANGE = "salaryChange";
     static final String AGE = "age";
 
-
-    public Avatar toAvatar(String jsonString);
-    public Avatar toAvatar(JSONObject object);
     public String serialize(Avatar avatar);
+
+    public String serialize(Assets assets);
+
+    public String serialize(ArrayList<Decision> decisions);
+
+    public String serialize(Liabilities liabilities);
+
     public JSONObject toJSONObject(Avatar avatar);
 
-    public Assets toAssets(String jsonString);
-    public Assets toAssets(JSONObject object);
-    public String serialize(Assets assets);
-    public JSONObject toJSONObject(Assets assets);
-
-    public Liabilities toLiabilities(String jsonString);
-    public Liabilities toLiabilities(JSONObject object);
-    public String serialize(Liabilities liabilities);
     public JSONObject toJSONObject(Liabilities liabilities);
 
+    public JSONObject toJSONObject(Assets assets);
+
+    public Avatar toAvatar(String jsonString);
+
+    public Avatar toAvatar(JSONObject object);
+
+    public Assets toAssets(String jsonString);
+
+    public Assets toAssets(JSONObject object);
+
+    public Liabilities toLiabilities(String jsonString);
+
+    public Liabilities toLiabilities(JSONObject object);
+
     public ArrayList<Decision> toArrayListOfDecision(String jsonString);
+
     public ArrayList<Decision> toArrayListOfDecision(JSONArray array);
-    public String serialize(ArrayList<Decision> decisions);
+
     public JSONArray toJSONArray(ArrayList<Decision> decisions);
 }

@@ -31,7 +31,6 @@ public class Question {
         return question;
     }
 
-
     public int getAge() {
         return age;
     }

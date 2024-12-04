@@ -5,7 +5,6 @@ import interface_adapter.homepage.HomepageViewModel;
 import interface_adapter.homepage.HomepageState;
 import use_case.decision_log.DecisionLogOutputBoundary;
 import use_case.decision_log.DecisionLogOutputData;
-import use_case.game_decision.GameDecisionOutputData;
 
 /**
  * Presenter for the Decision Log Use Case.

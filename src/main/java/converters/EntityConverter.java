@@ -4,21 +4,22 @@ import entity.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Map;
 
 public class EntityConverter implements EntityConverterInterface {
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
-    public Avatar toAvatar(String jsonString) {
-        if (jsonString == null) {
-            return new Avatar();
+    public String serialize(Liabilities liabilities) {
+        if (liabilities == null) {
+            return null;
         }
-        JSONObject object = new JSONObject(jsonString);
-        return toAvatar(object);
+        final JSONObject object = new JSONObject();
+        object.put(LOAN, liabilities.getLoan());
+        object.put(CREDIT_CARD, liabilities.getCreditCard());
+
+        return object.toString();
     }
 
     @Override
@@ -34,35 +35,15 @@ public class EntityConverter implements EntityConverterInterface {
     }
 
     @Override
-    public Avatar toAvatar(JSONObject object) {
-        if (object == null) {
+    public String serialize(ArrayList<Decision> decisions) {
+        if (decisions == null) {
             return null;
         }
-        final String id = object.getString(AVATAR_ID);
-        final String imagePath = object.getString(IMAGE_PATH);
-
-        return new Avatar(id, imagePath);
-    }
-
-    @Override
-    public JSONObject toJSONObject(Avatar avatar) {
-        if (avatar == null) {
-            return null;
+        final JSONArray array = new JSONArray();
+        for (Decision decision : decisions) {
+            array.put(toJSONObject(decision));
         }
-        final JSONObject object = new JSONObject();
-        object.put(AVATAR_ID, avatar.getId());
-        object.put(IMAGE_PATH, avatar.getImagePath());
-
-        return object;
-    }
-
-    @Override
-    public Assets toAssets(String jsonString) {
-        if (jsonString == null) {
-            return null;
-        }
-        JSONObject object = new JSONObject(jsonString);
-        return toAssets(object);
+        return array.toString();
     }
 
     @Override
@@ -80,32 +61,127 @@ public class EntityConverter implements EntityConverterInterface {
     }
 
     @Override
+    public JSONObject toJSONObject(Assets assets) {
+        if (assets == null) {
+            return null;
+        }
+        final JSONObject object = new JSONObject();
+        object.put(HOME, assets.getHome());
+        object.put(STOCKS, listOfStockToJSONArray(assets.getStocks()));
+        object.put(CASH, assets.getCash());
+        object.put(CAR, assets.getCar());
+
+        return object;
+    }
+
+    @Override
+    public JSONObject toJSONObject(Liabilities liabilities) {
+        if (liabilities == null) {
+            return null;
+        }
+        final JSONObject object = new JSONObject();
+        object.put(LOAN, liabilities.getLoan());
+        object.put(CREDIT_CARD, liabilities.getCreditCard());
+
+        return object;
+    }
+
+    private JSONObject toJSONObject(Stock stock) {
+        if (stock == null) {
+            throw new RuntimeException("stock is null");
+        }
+        final JSONObject object = new JSONObject();
+        object.put(STOCK_CODE, stock.getStockCode());
+        object.put(QUANTITY, stock.getQuantity());
+        object.put(BUY_PRICE, stock.getBuyPrice());
+        object.put(MULTIPLIER, stock.getMultiplier());
+
+        return object;
+    }
+
+    private JSONObject toJSONObject(Decision decision) {
+        if (decision == null) {
+            throw new RuntimeException("decision is null");
+        }
+        final JSONObject object = new JSONObject();
+        object.put(AGE, decision.getAge());
+        object.put(DECISION_TEXT, decision.getDecisionText());
+        object.put(DECISION_RESPONSE, decision.getResponse());
+        object.put(NET_WORTH_CHANGE, decision.getNetWorthChange());
+        object.put(HAPPINESS_CHANGE, decision.getHappinessChange());
+        object.put(SALARY_CHANGE, decision.getSalaryChange());
+
+        return object;
+    }
+
+    @Override
+    public JSONObject toJSONObject(Avatar avatar) {
+        if (avatar == null) {
+            return null;
+        }
+        final JSONObject object = new JSONObject();
+        object.put(AVATAR_ID, avatar.getId());
+        object.put(IMAGE_PATH, avatar.getImagePath());
+
+        return object;
+    }
+
+    @Override
+    public Avatar toAvatar(JSONObject object) {
+        if (object == null) {
+            return null;
+        }
+        final String id = object.getString(AVATAR_ID);
+        final String imagePath = object.getString(IMAGE_PATH);
+
+        return new Avatar(id, imagePath);
+    }
+
+    @Override
+    public Avatar toAvatar(String jsonString) {
+        if (jsonString == null) {
+            return new Avatar();
+        }
+        JSONObject object = new JSONObject(jsonString);
+        return toAvatar(object);
+    }
+
+    @Override
+    public Assets toAssets(String jsonString) {
+        if (jsonString == null) {
+            return null;
+        }
+        JSONObject object = new JSONObject(jsonString);
+        return toAssets(object);
+    }
+
+    @Override
     public Assets toAssets(JSONObject object) {
         if (object == null) {
             return null;
         }
         final double home = object.getDouble(HOME);
-        final ArrayList<Stock> stocks = JSONArrayToListOfStock(object.getJSONArray(STOCKS));
+        final ArrayList<Stock> stocks = jsonArrayToListOfStock(object.getJSONArray(STOCKS));
         final double cash = object.getDouble(CASH);
         final double car = object.getDouble(CAR);
 
         return new Assets(home, stocks, cash, car);
     }
 
-    private ArrayList<Stock> JSONArrayToListOfStock(JSONArray array) {
+    private ArrayList<Stock> jsonArrayToListOfStock(JSONArray array) {
         final ArrayList<Stock> stocks = new ArrayList<>();
         if (array == null) {
             return stocks;
         }
         for (int i = 0; i < array.length(); i++) {
             final JSONObject jsonStockObject = array.getJSONObject(i);
-            final Stock stock = JSONObjectToStock(jsonStockObject);
+            final Stock stock = jsonObjectToStock(jsonStockObject);
             stocks.add(stock);
         }
         return stocks;
     }
 
-    private Stock JSONObjectToStock(JSONObject object) {
+    private Stock jsonObjectToStock(JSONObject object) {
         if (object == null) {
             throw new RuntimeException("JSONObject could not be converted to Stock, because JSONObject is null.");
         }
@@ -131,33 +207,6 @@ public class EntityConverter implements EntityConverterInterface {
         return array;
     }
 
-    private JSONObject toJSONObject(Stock stock) {
-        if (stock == null) {
-            throw new RuntimeException("stock is null");
-        }
-        final JSONObject object = new JSONObject();
-        object.put(STOCK_CODE, stock.getStockCode());
-        object.put(QUANTITY, stock.getQuantity());
-        object.put(BUY_PRICE, stock.getBuyPrice());
-        object.put(MULTIPLIER, stock.getMultiplier());
-
-        return object;
-    }
-
-    @Override
-    public JSONObject toJSONObject(Assets assets) {
-        if (assets == null) {
-            return null;
-        }
-        final JSONObject object = new JSONObject();
-        object.put(HOME, assets.getHome());
-        object.put(STOCKS, listOfStockToJSONArray(assets.getStocks()));
-        object.put(CASH, assets.getCash());
-        object.put(CAR, assets.getCar());
-
-        return object;
-    }
-
     @Override
     public Liabilities toLiabilities(String jsonString) {
         if (jsonString == null) {
@@ -165,18 +214,6 @@ public class EntityConverter implements EntityConverterInterface {
         }
         JSONObject object = new JSONObject(jsonString);
         return toLiabilities(object);
-    }
-
-    @Override
-    public String serialize(Liabilities liabilities) {
-        if (liabilities == null) {
-            return null;
-        }
-        final JSONObject object = new JSONObject();
-        object.put(LOAN, liabilities.getLoan());
-        object.put(CREDIT_CARD, liabilities.getCreditCard());
-
-        return object.toString();
     }
 
     @Override
@@ -191,36 +228,12 @@ public class EntityConverter implements EntityConverterInterface {
     }
 
     @Override
-    public JSONObject toJSONObject(Liabilities liabilities) {
-        if (liabilities == null) {
-            return null;
-        }
-        final JSONObject object = new JSONObject();
-        object.put(LOAN, liabilities.getLoan());
-        object.put(CREDIT_CARD, liabilities.getCreditCard());
-
-        return object;
-    }
-
-    @Override
     public ArrayList<Decision> toArrayListOfDecision(String jsonString) {
         if (jsonString == null) {
             return new ArrayList<>();
         }
         JSONArray array = new JSONArray(jsonString);
         return toArrayListOfDecision(array);
-    }
-
-    @Override
-    public String serialize(ArrayList<Decision> decisions) {
-        if (decisions == null) {
-            return null;
-        }
-        final JSONArray array = new JSONArray();
-        for (Decision decision : decisions) {
-            array.put(toJSONObject(decision));
-        }
-        return array.toString();
     }
 
     @Override
@@ -231,10 +244,11 @@ public class EntityConverter implements EntityConverterInterface {
         }
         for (int i = 0; i < array.length(); i++) {
             final JSONObject jsonDecisionObject = array.getJSONObject(i);
-            final Decision decision = JSONObjectToDecision(jsonDecisionObject);
+            final Decision decision = jsonObjectToDecision(jsonDecisionObject);
             if (decision != null) {
                 decisions.add(decision);
-            } else {
+            }
+            else {
                 throw new RuntimeException(
                         "JSONObject could not be converted to Decision: " + jsonDecisionObject.toString());
             }
@@ -242,7 +256,7 @@ public class EntityConverter implements EntityConverterInterface {
         return decisions;
     }
 
-    private Decision JSONObjectToDecision(JSONObject object) {
+    private Decision jsonObjectToDecision(JSONObject object) {
         if (object == null) {
             return null;
         }
@@ -254,21 +268,6 @@ public class EntityConverter implements EntityConverterInterface {
         final int salaryChange = object.getInt(SALARY_CHANGE);
 
         return new Decision(age, decisionText, response, netWorthChange, happinessChange, salaryChange);
-    }
-
-    private JSONObject toJSONObject(Decision decision) {
-        if (decision == null) {
-            throw new RuntimeException("decision is null");
-        }
-        final JSONObject object = new JSONObject();
-        object.put(AGE, decision.getAge());
-        object.put(DECISION_TEXT, decision.getDecisionText());
-        object.put(DECISION_RESPONSE, decision.getResponse());
-        object.put(NET_WORTH_CHANGE, decision.getNetWorthChange());
-        object.put(HAPPINESS_CHANGE, decision.getHappinessChange());
-        object.put(SALARY_CHANGE, decision.getSalaryChange());
-
-        return object;
     }
 
     @Override
