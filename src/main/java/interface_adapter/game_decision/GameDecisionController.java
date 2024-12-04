@@ -29,7 +29,6 @@ public class GameDecisionController {
         final GameDecisionInputData inputData =
                 new GameDecisionInputData(
                         username, age, characterName, darkMode, question, assets, avatar, decision, happiness, salary);
-        gameDecisionInteractor.pickDecision(inputData);
         gameDecisionInteractor.switchToAssetsManager(inputData);
     }
 

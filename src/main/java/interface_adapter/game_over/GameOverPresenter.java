@@ -19,18 +19,9 @@ public class GameOverPresenter implements GameOverOutputBoundary {
     }
 
     @Override
-    public void prepareFailView(String errorMessage) {
-        final GameOverState state = gameOverViewModel.getState();
-        state.setGameOverError(errorMessage);
-        gameOverViewModel.firePropertyChanged();
-        state.setGameOverError(null);
-        gameOverViewModel.firePropertyChanged();
-    }
-
-    @Override
     public void prepareHomepageView(GameOverOutputData outputData) {
         homepageViewModel.getState().setUsername(outputData.getUsername());
-        homepageViewModel.getState().setDarkMode(outputData.isDarkMode());
+        homepageViewModel.getState().setDarkMode(gameOverViewModel.getState().isDarkModeEnabled());
         homepageViewModel.getState().setAvatar(outputData.getAvatar());
         homepageViewModel.getState().setName(outputData.getCharacterName());
         homepageViewModel.firePropertyChanged();
