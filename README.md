@@ -44,8 +44,8 @@ knowledge and decision-making skills.
   - Secure sign-up and login system with password validation and appropriate username input verification.
   - Unique usernames for each account.
 
-[![IEmpty Decision Log](https://img.youtube.com/vi/0jlWSw7Wobw/0.jpg)](https://youtu.be/0jlWSw7Wobw) 
-[![IEmpty Decision Log](https://img.youtube.com/vi/NgneATj-fWM/0.jpg)](https://youtu.be/NgneATj-fWM)
+[![Sign Up Logic](https://img.youtube.com/vi/0jlWSw7Wobw/0.jpg)](https://youtu.be/0jlWSw7Wobw) 
+[![Log in Logic](https://img.youtube.com/vi/NgneATj-fWM/0.jpg)](https://youtu.be/NgneATj-fWM)
 
 **2. Character Customization**:
   - Select from six avatar options.
@@ -54,7 +54,7 @@ knowledge and decision-making skills.
 input edge case.
   - Updates home page character image and name.
 
-[![IEmpty Decision Log](https://img.youtube.com/vi/TemxoObo320/0.jpg)](https://youtu.be/TemxoObo320)
+[![Character Customization](https://img.youtube.com/vi/TemxoObo320/0.jpg)](https://youtu.be/TemxoObo320)
 
 **3. Interactive Financial Decision-Making**:
   - Encounter realistic scenarios requiring financial decisions.
@@ -62,28 +62,28 @@ input edge case.
   - Saves user's progress and lets them go back to the home page.
   - Decisions impact net worth and happiness.
 
-[![IEmpty Decision Log](https://img.youtube.com/vi/gnQ5zyQGHok/0.jpg)](https://youtu.be/gnQ5zyQGHok)
+[![Game Logic](https://img.youtube.com/vi/gnQ5zyQGHok/0.jpg)](https://youtu.be/gnQ5zyQGHok)
 
 **4. Settings Management**:
   - Change password feature.
   - Dark/light mode toggle.
   - Allows the user to log out.
 
-[![IEmpty Decision Log](https://img.youtube.com/vi/MUh8WqHguHc/0.jpg)](https://youtu.be/MUh8WqHguHc)
-[![IEmpty Decision Log](https://img.youtube.com/vi/W0GuZnnetiY/0.jpg)](https://youtu.be/W0GuZnnetiY)
+[![Dark Mode Logic](https://img.youtube.com/vi/MUh8WqHguHc/0.jpg)](https://youtu.be/MUh8WqHguHc)
+[![Log Out Logic](https://img.youtube.com/vi/W0GuZnnetiY/0.jpg)](https://youtu.be/W0GuZnnetiY)
 
 **5. Decision Logs**:
   - View logs of past decisions chronologically and their effects on net worth and happiness metrics.
   - Logs are updated in real-time as decisions are made.
 
-[![IEmpty Decision Log](https://img.youtube.com/vi/FZyCNlNhKzI/0.jpg)](https://youtu.be/FZyCNlNhKzI)
+[![Decision Log](https://img.youtube.com/vi/FZyCNlNhKzI/0.jpg)](https://youtu.be/FZyCNlNhKzI)
 
 **6. Winning and Losing Conditions**:
   - Win by navigating through all decisions without going bankrupt or having happiness hit 0.
   - Lose if net worth or happiness drops below zero (they get one extra turn to bounce back though).
   - Game resets after a win or loss so that the player can start again.
 
-[![IEmpty Decision Log](https://img.youtube.com/vi/5qjDkEEoXD0/0.jpg)](https://youtu.be/5qjDkEEoXD0)
+[![Losing Condition](https://img.youtube.com/vi/5qjDkEEoXD0/0.jpg)](https://youtu.be/5qjDkEEoXD0)
 
 ---
 
@@ -217,7 +217,6 @@ well.
   mongo.database=mydatabase  
   mongo.collection=users
   ```
-[![IEmpty Decision Log](https://img.youtube.com/vi/ywLh2dBpDUk/0.jpg)](https://youtu.be/ywLh2dBpDUk)
 
 ---
 
@@ -231,7 +230,7 @@ well.
 
   It should start the game as shown below:
 
-  
+[![Start Application](https://img.youtube.com/vi/ywLh2dBpDUk/0.jpg)](https://youtu.be/ywLh2dBpDUk)
 
 
 ---
@@ -296,7 +295,7 @@ We welcome contributions to the Financial Literacy Game! Whether you are fixing 
 - Reviewers may request changes or tests. Address these promptly.
 
 **4. Merge Protocols**:
-- Approved PRs will be merged by a maintainer. Contributors should not self-merge.
+- Approved pull requests will be merged by a maintainer. Contributors should not self-merge.
 
 ---
 
