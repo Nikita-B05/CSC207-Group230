@@ -48,7 +48,7 @@ financial challenges, the game aims to empower users with practical financial kn
   - Create a personalized and appropriate character name, verified using the NameAPI. Also accounts for empty name
 input edge case.
   - Updates home page character image and name.
-  - 
+
 
 **3. Interactive Financial Decision-Making**:
   - Encounter realistic scenarios requiring financial decisions.
@@ -66,7 +66,7 @@ input edge case.
 
 **6. Winning and Losing Conditions**:
   - Win by navigating through all decisions without going bankrupt or having happiness hit 0.
-  - Lose if net worth or happiness drops below zero.
+  - Lose if net worth or happiness drops below zero (they get one extra turn to bounce back though).
   - Game resets after a win or loss.
 
 ---
@@ -151,7 +151,7 @@ To install and run the Financial Literacy Game, ensure that you are on Mac or Wi
 To ensure that the game runs, you need to check that your settings are configured correctly.
 - Check that you have Java installed on your system.
 - Ensure that you are using Java version 11 or higher.
-- Use SDK: "corretto-11" (Amazon Corretto 11.0.25 - aarch64).This can be selected by going to "File" ->
+- Use SDK: "corretto-22" (Amazon Corretto 22.0.2 - aarch64).This can be selected by going to "File" ->
 "Project Structure" -> "Project" and then seek for the "SDK" dropdown and 
 select it. If you don't have it installed, you can select the download SDK option in SDK selector and get it from there.
 
