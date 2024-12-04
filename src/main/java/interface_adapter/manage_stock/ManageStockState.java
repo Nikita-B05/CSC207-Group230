@@ -25,8 +25,8 @@ public class ManageStockState {
         return isDarkMode;
     }
 
-    public void setDarkMode(boolean isDarkMode) {
-        this.isDarkMode = isDarkMode;
+    public void setDarkMode(boolean darkMode) {
+        this.isDarkMode = darkMode;
     }
 
     public double getCash() {

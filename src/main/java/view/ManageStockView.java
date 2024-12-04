@@ -1,7 +1,6 @@
 package view;
 
 import interface_adapter.ViewManagerModel;
-import interface_adapter.manage_home.ManageHomeState;
 import interface_adapter.manage_stock.ManageStockController;
 import interface_adapter.manage_stock.ManageStockState;
 import interface_adapter.manage_stock.ManageStockViewModel;
@@ -21,6 +20,10 @@ import java.util.Map;
  * The View for the Manage Stock Use Case.
  */
 public class ManageStockView extends JPanel implements ActionListener, PropertyChangeListener {
+    public static final String CASH_AVAILABLE = "Cash Available: $";
+    public static final String STOCK_1 = "Stock1";
+    public static final String STOCK_2 = "Stock2";
+    public static final String STOCK_3 = "Stock3";
     private final String viewName = "manageStock";
 
     private final ManageStockViewModel viewModel;
@@ -40,7 +43,7 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
         this.viewModel = manageStockViewModel;
         this.viewModel.addPropertyChangeListener(this);
 
-        ManageStockState state = viewModel.getState();
+        final ManageStockState state = viewModel.getState();
 
         // Set the layout to GridBagLayout for centering
         this.setLayout(new GridBagLayout());
@@ -78,7 +81,7 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
         this.add(quantityPanel, gbc);
 
         // Cash Available
-        cashAvailable = new JLabel("Cash Available: $" + state.getCash());
+        cashAvailable = new JLabel(CASH_AVAILABLE + state.getCash());
         cashAvailable.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridy = 3;
         this.add(cashAvailable, gbc);
@@ -105,8 +108,9 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             updateTheme(state.isDarkMode());
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+        catch (Exception exp) {
+            exp.printStackTrace();
         }
 
         // Add action listeners for buttons
@@ -125,7 +129,8 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
                     state.setCode(stockCode);
                     double totalAmount = quantity * state.getCodeToPrice().get(state.getCode());
                     totalField.setText("Total: $" + totalAmount);
-                } catch (NumberFormatException e) {
+                }
+                catch (NumberFormatException exp) {
                     // Don't update
                 }
             }
@@ -147,7 +152,8 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
                                     .getCodeToPrice()
                                     .get(state.getNameToCode().get((String) stockSelector.getSelectedItem()));
                     totalField.setText("Total: $" + totalAmount);
-                } catch (NumberFormatException e) {
+                }
+                catch (NumberFormatException exp) {
                     // Don't update
                 }
             }
@@ -190,7 +196,8 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
     private void updateTheme(boolean isDarkMode) {
         if (isDarkMode) {
             ColorTheme.applyDarkMode(this);
-        } else {
+        }
+        else {
             ColorTheme.applyLightMode(this);
         }
         SwingUtilities.updateComponentTreeUI(this);
@@ -214,7 +221,7 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
 
     private void handleStateChange(PropertyChangeEvent evt) {
         final ManageStockState state = (ManageStockState) evt.getNewValue();
-        cashAvailable.setText("Cash Available: $" + state.getCash());
+        cashAvailable.setText(CASH_AVAILABLE + state.getCash());
         updateTheme(state.isDarkMode());
         setItems(state.getStockNames());
     }
@@ -235,7 +242,7 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
             throw new RuntimeException("Success message cannot be null.");
         }
         else {
-            cashAvailable.setText("Cash Available: $" + state.getCash());
+            cashAvailable.setText(CASH_AVAILABLE + state.getCash());
             JOptionPane.showMessageDialog(this, state.getSuccessMessage());
         }
     }
@@ -270,17 +277,17 @@ public class ManageStockView extends JPanel implements ActionListener, PropertyC
         final ManageStockViewModel viewModel = new ManageStockViewModel();
         final ManageStockState state = viewModel.getState();
         state.setDarkMode(false);
-        String[] stockNames = {"Stock1", "Stock2", "Stock3"};
+        String[] stockNames = {STOCK_1, STOCK_2, STOCK_3};
         state.setStockNames(stockNames);
         Map<String, Double> nameToPrice = new HashMap<>();
-        nameToPrice.put("Stock1", 1.0);
-        nameToPrice.put("Stock2", 2.0);
-        nameToPrice.put("Stock3", 3.0);
+        nameToPrice.put(STOCK_1, 1.0);
+        nameToPrice.put(STOCK_2, 2.0);
+        nameToPrice.put(STOCK_3, 3.0);
         state.setCodeToPrice(nameToPrice);
         Map<String, String> nameToCode = new HashMap<>();
-        nameToCode.put("Stock1", "Stock1");
-        nameToCode.put("Stock2", "Stock2");
-        nameToCode.put("Stock3", "Stock3");
+        nameToCode.put(STOCK_1, STOCK_1);
+        nameToCode.put(STOCK_2, STOCK_2);
+        nameToCode.put(STOCK_3, STOCK_3);
         state.setNameToCode(nameToCode);
         final ManageStockView view = new ManageStockView(viewModel);
         cardPanel.add(view, view.getViewName());

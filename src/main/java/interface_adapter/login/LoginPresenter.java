@@ -2,7 +2,6 @@ package interface_adapter.login;
 
 import interface_adapter.ViewManagerModel;
 import interface_adapter.signup.SignupViewModel;
-import interface_adapter.settings.SettingsViewModel;
 import interface_adapter.settings.SettingsState;
 import interface_adapter.homepage.HomepageState;
 import interface_adapter.homepage.HomepageViewModel;

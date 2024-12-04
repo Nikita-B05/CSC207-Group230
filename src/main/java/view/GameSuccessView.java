@@ -5,7 +5,6 @@ import interface_adapter.ViewManagerModel;
 import interface_adapter.game_success.GameSuccesController;
 import interface_adapter.game_success.GameSuccessState;
 import interface_adapter.game_success.GameSuccessViewModel;
-import use_case.game_success.GameSuccessInteractor;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,10 +52,9 @@ public class GameSuccessView extends JPanel implements PropertyChangeListener {
         netWorthLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         userInfoPanel.add(netWorthLabel);
 
-        // Return button
         JButton returnButton = new JButton("Return to Homepage");
         returnButton.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        returnButton.addActionListener(e -> controller.switchToHomepageView());
+        returnButton.addActionListener(exp -> controller.switchToHomepageView());
         returnButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         // Set the layout to BoxLayout and add padding
@@ -74,8 +72,9 @@ public class GameSuccessView extends JPanel implements PropertyChangeListener {
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             updateTheme(state.isDarkMode());
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+        catch (Exception exp) {
+            exp.printStackTrace();
         }
     }
 
@@ -91,7 +90,7 @@ public class GameSuccessView extends JPanel implements PropertyChangeListener {
         if (state.getCharacterName() != null) {
             charName = state.getCharacterName();
         }
-        else{
+        else {
             charName = state.getUsername();
         }
         successLabel.setText("Congratulations " + charName + "!");
@@ -100,7 +99,8 @@ public class GameSuccessView extends JPanel implements PropertyChangeListener {
     private void updateTheme(boolean isDarkMode) {
         if (isDarkMode) {
             ColorTheme.applyDarkMode(this);
-        } else {
+        }
+        else {
             ColorTheme.applyLightMode(this);
         }
         SwingUtilities.updateComponentTreeUI(this);

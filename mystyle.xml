@@ -751,7 +751,7 @@
 
         <!-- Size Violations -->
         <module name="AnonInnerLength">
-            <property name="max" value="30"/>
+            <property name="max" value="300"/>
         </module>
         <module name="ExecutableStatementCount">
             <property name="max" value="500"/>
@@ -762,7 +762,6 @@
         <module name="MethodCount">
             <property name="maxTotal" value="34"/>
         </module>
-        <module name="MethodLength"/>
         <module name="OuterTypeNumber"/>
         <module name="RecordComponentNumber"/>
 

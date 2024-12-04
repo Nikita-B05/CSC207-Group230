@@ -1,7 +1,5 @@
 package interface_adapter.manage_home;
 
-import use_case.login.LoginInputBoundary;
-import use_case.login.LoginInputData;
 import use_case.manage_home.ManageHomeInputBoundary;
 import use_case.manage_home.ManageHomeInputData;
 

@@ -77,15 +77,17 @@ public class InputNameView extends JPanel implements ActionListener, PropertyCha
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
             updateTheme(false); // Assuming default is light mode
-        } catch (Exception e) {
-            e.printStackTrace();
+        }
+        catch (Exception exp) {
+            exp.printStackTrace();
         }
     }
 
     private void updateTheme(boolean isDarkMode) {
         if (isDarkMode) {
             ColorTheme.applyDarkMode(this);
-        } else {
+        }
+        else {
             ColorTheme.applyLightMode(this);
         }
         SwingUtilities.updateComponentTreeUI(this);
@@ -124,7 +126,8 @@ public class InputNameView extends JPanel implements ActionListener, PropertyCha
                     InputNameState state = viewModel.getState();
                     controller.inputCharacterName(state.getUsername(), characterName);
                 }
-            } catch (Exception ex) {
+            }
+            catch (Exception ex) {
                 JOptionPane.showMessageDialog(
                         this,
                         "That's an invalid name. Please try again.",

@@ -1,7 +1,5 @@
 package use_case.manage_home;
 
-import use_case.logout.LogoutInputData;
-
 /**
  * Input Boundary for actions which are related to managing home.
  */
