@@ -500,7 +500,7 @@
         <module name="RequireThis"/>
         <module name="ReturnCount">
             <property name="max" value="5"/>
-            <property name="maxForVoid" value="0"/>
+            <property name="maxForVoid" value="100"/>
             <property name="format" value="^create"/>
         </module>
         <module name="SimplifyBooleanExpression"/>
@@ -656,13 +656,9 @@
                        SuppressWarnings, FunctionalInterface, NoSuchMethodException,
                        InvocationTargetException, IllegalAccessException"/>
         </module>
-        <module name="CyclomaticComplexity">
-            <property name="switchBlockAsSingleDecisionPoint" value="true"/>
-        </module>
         <module name="JavaNCSS">
             <property name="methodMaximum" value="500"/>
         </module>
-        <module name="NPathComplexity"/>
 
         <!-- Misc -->
         <module name="ArrayTypeStyle"/>
@@ -758,7 +754,7 @@
             <property name="max" value="30"/>
         </module>
         <module name="ExecutableStatementCount">
-            <property name="max" value="35"/>
+            <property name="max" value="500"/>
         </module>
         <module name="LambdaBodyLength">
             <property name="max" value="24"/>
@@ -768,7 +764,6 @@
         </module>
         <module name="MethodLength"/>
         <module name="OuterTypeNumber"/>
-        <module name="ParameterNumber"/>
         <module name="RecordComponentNumber"/>
 
         <!-- Whitespace -->

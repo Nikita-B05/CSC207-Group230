@@ -1,6 +1,5 @@
 package view;
 
-import data_access.MongoDBUserDataAccessObject;
 import entity.Decision;
 
 import javax.swing.*;
@@ -15,10 +14,10 @@ import java.util.List;
 import interface_adapter.decision_log.DecisionLogController;
 import interface_adapter.decision_log.DecisionLogViewModel;
 import interface_adapter.decision_log.DecisionLogState;
-import interface_adapter.homepage.HomepageController;
 
 public class DecisionLogView extends JPanel implements ActionListener, PropertyChangeListener {
 
+    public static final String ARIAL = "Arial";
     private final String viewName = "decisionLog";
     private final DecisionLogViewModel decisionLogViewModel;
     private DecisionLogController decisionLogController;
@@ -42,7 +41,7 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
     private void initializeComponents() {
         // Initialize title
         titleLabel = new JLabel(DecisionLogViewModel.TITLE, SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setFont(new Font(ARIAL, Font.BOLD, 24));
 
         // Initialize table
         String[] columns = {"Age", "Decision", "Your Response", "Net Worth Change", "Happiness Change"};
@@ -56,9 +55,9 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
 
         // Initialize stats labels
         netWorthLabel = new JLabel();
-        netWorthLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        netWorthLabel.setFont(new Font(ARIAL, Font.BOLD, 14));
         happinessLabel = new JLabel();
-        happinessLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        happinessLabel.setFont(new Font(ARIAL, Font.BOLD, 14));
 
         // Initialize button
         backButton = new JButton("Return to Homepage");
@@ -75,7 +74,7 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
         // Center the title both horizontally and vertically
         titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
         titleLabel.setVerticalAlignment(SwingConstants.CENTER);
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setFont(new Font(ARIAL, Font.BOLD, 24));
         
         titlePanel.add(titleLabel, BorderLayout.CENTER);
         add(titlePanel, BorderLayout.NORTH);
@@ -117,16 +116,17 @@ public class DecisionLogView extends JPanel implements ActionListener, PropertyC
         
         DecisionLogState state = decisionLogViewModel.getState();
         List<Decision> decisions = state.getDecisions();
-        
+
         for (Decision decision : decisions) {
             tableModel.addRow(new Object[]{
-                String.format("%d", decision.getAge()),
-                decision.getDecisionText(),
-                decision.getResponse(),
-                String.format("$%.2f", decision.getNetWorthChange()),
-                String.format("%d", decision.getHappinessChange())
+                    String.format("%d", decision.getAge()),
+                    decision.getDecisionText(),
+                    decision.getResponse(),
+                    String.format("$%.2f", decision.getNetWorthChange()),
+                    String.format("%d", decision.getHappinessChange()),
             });
         }
+
     }
 
     public void setDecisionLogController(DecisionLogController decisionLogController) {

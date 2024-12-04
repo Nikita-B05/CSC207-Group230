@@ -15,6 +15,7 @@ import java.beans.PropertyChangeListener;
 
 public class GameDecisionView extends JPanel implements ActionListener, PropertyChangeListener {
 
+    public static final String ARIAL = "Arial";
     private final String viewName = "game decision";
     private final GameDecisionViewModel gameDecisionViewModel;
     private GameDecisionController gameDecisionController;
@@ -42,35 +43,35 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
 
     private void initializeComponents() {
         questionLabel = new JLabel();
-        questionLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        questionLabel.setFont(new Font(ARIAL, Font.BOLD, 20));
         questionLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         ageLabel = new JLabel();
-        ageLabel.setFont(new Font("Arial", Font.BOLD, 14));
+        ageLabel.setFont(new Font(ARIAL, Font.BOLD, 14));
         ageLabel.setHorizontalAlignment(SwingConstants.RIGHT);
 
         avatarLabel = new JLabel("User Avatar Img or Abstract");
         avatarLabel.setHorizontalAlignment(SwingConstants.CENTER);
-        avatarLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        avatarLabel.setFont(new Font(ARIAL, Font.PLAIN, 14));
 
         statsTitleLabel = new JLabel();
-        statsTitleLabel.setFont(new Font("Arial", Font.BOLD, 16));
+        statsTitleLabel.setFont(new Font(ARIAL, Font.BOLD, 16));
         statsTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
         netWorthLabel = new JLabel("Net Worth: $happiness is true wealth");
-        netWorthLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        netWorthLabel.setFont(new Font(ARIAL, Font.PLAIN, 14));
 
         happinessLabel = new JLabel("Happiness: 0");
-        happinessLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        happinessLabel.setFont(new Font(ARIAL, Font.PLAIN, 14));
 
         salaryLabel = new JLabel("Salary: $0.00");
-        salaryLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+        salaryLabel.setFont(new Font(ARIAL, Font.PLAIN, 14));
 
         decisionButtons = new JButton[4];
         for (int i = 0; i < 4; i++) {
             decisionButtons[i] = new JButton("Option " + (i + 1));
             decisionButtons[i].addActionListener(this);
-            decisionButtons[i].setFont(new Font("Arial", Font.PLAIN, 14));
+            decisionButtons[i].setFont(new Font(ARIAL, Font.PLAIN, 14));
             decisionButtons[i].setPreferredSize(new Dimension(150, 50));
         }
 
@@ -146,8 +147,8 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
         add(finalPanel, BorderLayout.SOUTH);
     }
 
-    public void setController(GameDecisionController gameDecisionController) {
-        this.gameDecisionController = gameDecisionController;
+    public void setController(GameDecisionController controller) {
+        this.gameDecisionController = controller;
     }
 
     @Override
@@ -179,7 +180,7 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
             int happiness = state.getHappiness();
             double netWorth = state.getAssets().getTotal(state.getStockPrices());
 
-            if ((age >= 22 && (happiness <= 0 || netWorth < 0))) {
+            if (age >= 22 && (happiness <= 0 || netWorth < 0)) {
                 gameDecisionController.switchToGameOver(
                         state.getUsername(),
                         age,
@@ -241,7 +242,6 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
         }
     }
 
-
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         GameDecisionState state = gameDecisionViewModel.getState();
@@ -252,31 +252,50 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
             button.setBackground(null);  // Ensure no buttons are highlighted
         }
 
-        questionLabel.setText(state.getQuestion() != null ? state.getQuestion().getQuestionText() : "");
+        if (state.getQuestion() != null) {
+            questionLabel.setText(state.getQuestion().getQuestionText());
+        }
+        else {
+            questionLabel.setText("");
+        }
 
         ageLabel.setText("Age: " + state.getAge());
 
         if (state.getAvatar() != null && state.getAvatar().getIcon() != null) {
             avatarLabel.setIcon(state.getAvatar().getIcon());
             avatarLabel.setText("");
-        } else {
+        }
+        else {
             avatarLabel.setIcon(null);
             avatarLabel.setText("No Avatar Available");
         }
 
-        String characterName = state.getCharacterName() != null ? state.getCharacterName() : state.getUsername();
+        String characterName;
+        if (state.getCharacterName() != null) {
+            characterName = state.getCharacterName();
+        }
+        else {
+            characterName = state.getUsername();
+        }
         statsTitleLabel.setText(characterName + "'s Stats");
         netWorthLabel.setText("Net Worth: $" + state.getNetWorth(state.getStockPrices()));
         happinessLabel.setText(String.format("Happiness: %d", state.getHappiness()));
         salaryLabel.setText(String.format("Salary: $%,.2f", state.getSalary()));
 
-        List<Decision> decisions = state.getQuestion() != null ? state.getQuestion().getDecisions() : List.of();
+        List<Decision> decisions;
+        if (state.getQuestion() != null) {
+            decisions = state.getQuestion().getDecisions();
+        }
+        else {
+            decisions = List.of();
+        }
         for (int i = 0; i < decisionButtons.length; i++) {
             if (i < decisions.size()) {
                 decisionButtons[i].setEnabled(true);
                 decisionButtons[i].setText(decisions.get(i).getDecisionText());
                 decisionButtons[i].setBackground(null); // Ensure no buttons are highlighted
-            } else {
+            }
+            else {
                 decisionButtons[i].setEnabled(false);
                 decisionButtons[i].setText("");
             }
@@ -284,7 +303,8 @@ public class GameDecisionView extends JPanel implements ActionListener, Property
 
         if (state.isDarkModeEnabled()) {
             ColorTheme.applyDarkMode(this);
-        } else {
+        }
+        else {
             ColorTheme.applyLightMode(this);
         }
 

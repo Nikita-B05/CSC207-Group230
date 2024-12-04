@@ -27,25 +27,32 @@ public class Avatar {
         return imagePath;
     }
 
-    public boolean equals(Avatar avatar) {
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null || getClass() != obj.getClass()) {
+            return false;
+        }
+        Avatar avatar = (Avatar) obj;
         return id.equals(avatar.id);
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return id.hashCode(); // Use id's hashCode
     }
 
     public void setName(String selectedAvatarName) {
         this.id = selectedAvatarName;
     }
 
-    public void setImagePath(String s) {
-        this.imagePath = s;
+    public void setImagePath(String str) {
+        this.imagePath = str;
     }
 
     public ImageIcon getIcon() {
         return new ImageIcon(getClass().getResource(imagePath));
     }
 }
-

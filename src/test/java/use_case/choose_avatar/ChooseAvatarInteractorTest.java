@@ -1,16 +1,17 @@
-package use_case.dark_mode;
+package use_case.choose_avatar;
 
 import data_access.MongoDBUserDataAccessObject;
+import entity.Avatar;
 import entity.CommonUser;
 import entity.CommonUserFactory;
 import entity.User;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DarkModeInteractorTest {
+public class ChooseAvatarInteractorTest {
     private static MongoDBUserDataAccessObject userRepository;
 
     @BeforeAll
@@ -27,15 +28,20 @@ public class DarkModeInteractorTest {
     }
 
     @Test
-    void toggleDarkModeTest() {
-        DarkModeOutputBoundary darkModePresenter = new DarkModeOutputBoundary() {
+    void selectAvatarTest() {
+        ChooseAvatarOutputBoundary avatarPresenter = new ChooseAvatarOutputBoundary() {
+
             @Override
-            public void updateUiMode(DarkModeOutputData outputData) {
-                assertEquals(outputData.isDarkMode(), true);
+            public void presentAvatarSelection(ChooseAvatarOutputData outputData) {
+                assertEquals("testing", outputData.getUsername());
             }
         };
 
-        DarkModeInputBoundary interactor = new DarkModeInteractor(darkModePresenter, userRepository);
-        interactor.toggleDarkMode(new DarkModeInputData(true));
+        ChooseAvatarInputBoundary interactor = new ChooseAvatarInteractor(
+                userRepository,
+                avatarPresenter
+        );
+        ChooseAvatarInputData inputData = new ChooseAvatarInputData("testing", new Avatar());
+        interactor.selectAvatar(inputData);
     }
 }

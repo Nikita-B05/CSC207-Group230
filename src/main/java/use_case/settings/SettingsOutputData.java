@@ -1,7 +1,6 @@
 package use_case.settings;
 
 import entity.Avatar;
-import okhttp3.internal.http2.Settings;
 
 /**
  * Output Data for the Settings Use Case.

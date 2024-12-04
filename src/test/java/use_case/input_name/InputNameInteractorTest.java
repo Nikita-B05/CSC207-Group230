@@ -1,4 +1,4 @@
-package use_case.dark_mode;
+package use_case.input_name;
 
 import data_access.MongoDBUserDataAccessObject;
 import entity.CommonUser;
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DarkModeInteractorTest {
+public class InputNameInteractorTest {
     private static MongoDBUserDataAccessObject userRepository;
 
     @BeforeAll
@@ -27,15 +27,16 @@ public class DarkModeInteractorTest {
     }
 
     @Test
-    void toggleDarkModeTest() {
-        DarkModeOutputBoundary darkModePresenter = new DarkModeOutputBoundary() {
+    void inputCharacterNameTest() {
+        InputNameOutputBoundary namePresenter = new InputNameOutputBoundary() {
             @Override
-            public void updateUiMode(DarkModeOutputData outputData) {
-                assertEquals(outputData.isDarkMode(), true);
+            public void presentCharacterNameInput(InputNameOutputData outputData) {
+                assertEquals("testing", outputData.getUsername());
+                assertEquals("example", outputData.getCharacterName());
             }
         };
 
-        DarkModeInputBoundary interactor = new DarkModeInteractor(darkModePresenter, userRepository);
-        interactor.toggleDarkMode(new DarkModeInputData(true));
+        InputNameInputBoundary interactor = new InputNameInteractor(userRepository, namePresenter);
+        interactor.inputCharacterName(new InputNameInputData("testing", "example"));
     }
 }

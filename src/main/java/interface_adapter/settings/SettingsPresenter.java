@@ -7,7 +7,6 @@ import use_case.settings.SettingsOutputData;
 import interface_adapter.change_password.ChangePasswordViewModel;
 import interface_adapter.homepage.HomepageViewModel;
 
-
 /**
  * Presenter for the Settings Use Case.
  */
@@ -18,7 +17,9 @@ public class SettingsPresenter implements SettingsOutputBoundary {
     private final HomepageViewModel homepageViewModel;
     private final LoginViewModel loginViewModel;
 
-    public SettingsPresenter(SettingsViewModel viewModel, ViewManagerModel viewManagerModel, ChangePasswordViewModel changePasswordViewModel, HomepageViewModel homepageViewModel, LoginViewModel loginViewModel) {
+    public SettingsPresenter(SettingsViewModel viewModel, ViewManagerModel viewManagerModel,
+                             ChangePasswordViewModel changePasswordViewModel, HomepageViewModel homepageViewModel,
+                             LoginViewModel loginViewModel) {
         this.viewModel = viewModel;
         this.viewManagerModel = viewManagerModel;
         this.changePasswordViewModel = changePasswordViewModel;

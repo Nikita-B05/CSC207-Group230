@@ -15,6 +15,7 @@ public class DarkModeController {
 
     /**
      * Toggles the dark mode setting.
+     * @param darkMode toggles dark mode on the product
      */
     public void toggleDarkMode(boolean darkMode) {
         DarkModeInputData inputData = new DarkModeInputData(darkMode);
