@@ -217,23 +217,21 @@ well.
   mongo.database=mydatabase  
   mongo.collection=users
   ```
-
-
-**5. Run the game:**  
-    Run the game by opening the Main.java file in the following directory: 
-
-```bash
-src/main/java/app/Main.java
-```
+[![IEmpty Decision Log](https://img.youtube.com/vi/ywLh2dBpDUk/0.jpg)](https://youtu.be/ywLh2dBpDUk)
 
 ---
 
 ## Usage Guide
 
-Give a clear, accurate guide on how to use the software, once downloaded
-• Use code examples (EX: how to start up or use the code), screenshots, .gif files, or
-videos to make the README file clear and easy-to-use
-Reference(s): Sullivan
+  Once all required software has been installed, run the game by opening the Main.java file in the following directory: 
+
+  ```bash
+  src/main/java/app/Main.java
+  ```
+
+  It should start the game as shown below:
+
+  
 
 
 ---
